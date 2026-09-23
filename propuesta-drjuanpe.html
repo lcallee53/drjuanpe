@@ -1,461 +1,281 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- PLANTILLA · PROPUESTA / PRESENTACIÓN · ia con lala.
-     Slides de 1280x720 para exportar a PDF (Cmd/Ctrl+P → Guardar como PDF → Horizontal → Márgenes: ninguno).
-     Duplica <section class="slide"> por cada lámina. Cambia solo el contenido, nunca el CSS.
-     Componentes disponibles (ver ejemplos abajo): .panel (caja verde), .numlist, .stats/.stat.g,
-     .two/.card.g, .rows/.row, .grid6/.cat.g, .inv/.price, .stats4. -->
-<title>Propuesta · IA para Dr. Juanpe · ia con lala</title>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propuesta · Sistema Dr. Juanpe · ia con lala</title>
 <style>
-  :root{
-    --crema:#f5f1e6; --crema-card:#fbf9f2; --verde:#1e3a2f; --verde-2:#24473a;
-    --terracota:#c0502a; --gris:#6b6b60; --tinta:#324439; --borde:#e3ddc9;
-    --oro:#b9a96b; --sage:#8fa08a;
-  }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html,body{background:#2a2a26;}
-  body{font-family:Georgia,"Times New Roman",serif; color:var(--verde);}
-  .mono{font-family:"SF Mono","Roboto Mono","Courier New",monospace;}
-
-  .ayuda{color:#d8d2c0; text-align:center; font:13px/1.5 -apple-system,sans-serif; padding:16px;}
-  .ayuda b{color:#fff;}
-
-  .deck{display:flex; flex-direction:column; align-items:center; gap:22px; padding-bottom:40px;}
-
-  .slide{
-    width:1280px; height:720px; background:var(--crema);
-    padding:44px 60px 56px; position:relative; overflow:hidden;
-    display:flex; flex-direction:column;
-  }
-
-  .top{display:flex; justify-content:space-between; align-items:baseline;}
-  .brand{font-size:21px; letter-spacing:.3px;}
-  .brand b{font-weight:700;} .brand i{font-style:italic; color:var(--verde);}
-  .brand .d{color:var(--terracota); font-weight:700;}
-  .top-eye{font-size:11px; letter-spacing:2.5px; color:var(--gris);}
-  .top-eye .dot{color:var(--terracota);}
-  .rule{height:1px; background:var(--borde); margin:14px 0 0;}
-
-  .sec{display:flex; align-items:center; gap:12px; margin-top:30px;}
-  .chip{background:var(--verde); color:#fff; font-size:11px; letter-spacing:1px; padding:3px 7px;}
-  .sec-lbl{font-size:12px; letter-spacing:3px; color:var(--terracota);}
-
-  h1.tit{font-size:47px; line-height:1.05; font-weight:700; letter-spacing:-.5px; margin-top:14px;}
-  h1.tit i, .tit em{font-style:italic; color:var(--terracota); font-weight:700;}
-  .lead{font-size:16px; line-height:1.6; color:var(--tinta); max-width:1000px; margin-top:16px;}
-  .lead b{color:var(--verde);}
-
-  .foot{position:absolute; left:60px; right:60px; bottom:22px; display:flex; justify-content:space-between;
-        font-size:10.5px; letter-spacing:2px; color:#a79f8c; border-top:1px solid var(--borde); padding-top:10px;}
-
-  .fill{flex:1;}
-
-  .grid2{display:grid; grid-template-columns:1.02fr .98fr; gap:46px; flex:1; margin-top:26px;}
-  .panel{background:var(--verde); color:var(--crema); padding:46px; display:flex; flex-direction:column; justify-content:center;}
-  .panel.center{align-items:flex-start;}
-
-  .cover-eye{font-size:12px; letter-spacing:3px; color:var(--terracota); line-height:1.5;}
-  .cover-tit{font-size:56px; line-height:1.04; font-weight:700; margin-top:14px; letter-spacing:-1px;}
-  .cover-tit i{font-style:italic; color:var(--terracota);}
-  .cover-sub{font-size:16px; line-height:1.6; color:var(--tinta); margin-top:20px; max-width:520px;}
-  .cover-sub b{color:var(--verde);}
-  .cover-meta{display:flex; gap:60px; margin-top:34px;}
-  .cover-meta .k{font-size:11px; letter-spacing:2px; color:var(--gris);}
-  .cover-meta .v{font-size:16px; font-style:italic; margin-top:5px;}
-  .cover-logo{font-size:52px; line-height:1.15; color:var(--crema);}
-  .cover-logo i{font-style:italic; color:#c9c3ac;}
-  .cover-logo .d{color:var(--terracota);}
-
-  .numlist{display:flex; flex-direction:column; justify-content:center; gap:2px;}
-  .numrow{display:grid; grid-template-columns:56px 1fr; gap:16px; padding:18px 0; border-top:1px solid var(--borde); align-items:start;}
-  .numrow:first-child{border-top:none;}
-  .numrow .n{font-size:30px; font-style:italic; color:var(--oro);}
-  .numrow h4{font-size:18px; font-weight:700;}
-  .numrow p{font-size:13.5px; line-height:1.5; color:var(--gris); margin-top:4px;}
-
-  .bignum-eye{font-size:11px; letter-spacing:3px; color:var(--sage);}
-  .bignum{font-size:96px; font-style:italic; color:var(--oro); line-height:1; margin-top:14px; letter-spacing:-2px;}
-  .panel .divi{height:1px; background:rgba(255,255,255,.18); margin:26px 0;}
-  .panel .txt{font-size:15.5px; line-height:1.55; color:#e7e2d2;}
-  .tags{font-size:12px; letter-spacing:2.5px; color:var(--sage); margin-top:26px;}
-
-  .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-top:30px; border:1px solid var(--borde);}
-  .stat{padding:26px 28px; border-left:1px solid var(--borde);}
-  .stat:first-child{border-left:none;}
-  .stat.g{background:var(--verde); color:var(--crema);}
-  .stat .lbl{font-size:11px; letter-spacing:2.5px; color:var(--terracota);}
-  .stat.g .lbl{color:var(--sage);}
-  .stat .big{font-size:52px; font-weight:700; margin:10px 0 6px; letter-spacing:-1px;}
-  .stat .cap{font-size:15px; font-weight:700;}
-  .stat .sub{font-size:12.5px; line-height:1.45; color:var(--gris); margin-top:8px;}
-  .stat.g .sub{color:#cdd4c6;}
-
-  .two{display:grid; grid-template-columns:1fr 1fr; gap:30px; flex:1; margin-top:26px;}
-  .card{border:1px solid var(--borde); padding:34px; display:flex; flex-direction:column;}
-  .card.g{background:var(--verde); color:var(--crema); border-color:var(--verde);}
-  .card .k{font-size:11px; letter-spacing:2.5px; color:var(--terracota);}
-  .card.g .k{color:var(--sage);}
-  .card h3{font-size:30px; font-style:italic; font-weight:700; margin-top:20px;}
-  .card p{font-size:14.5px; line-height:1.55; color:var(--tinta); margin-top:16px;}
-  .card.g p{color:#dfe0d4;}
-  .card .ent{font-size:11px; letter-spacing:2px; color:var(--terracota); margin-top:auto; padding-top:22px; border-top:1px solid var(--borde);}
-  .card.g .ent{color:var(--sage); border-color:rgba(255,255,255,.15);}
-  .card .ent b{display:block; color:var(--verde); font-family:Georgia,serif; letter-spacing:0; font-size:14px; margin-top:6px; font-weight:400;}
-  .card.g .ent b{color:var(--crema);}
-
-  .rows{margin-top:22px;}
-  .row{display:grid; grid-template-columns:22px 1fr auto; gap:14px; padding:15px 0; border-top:1px solid var(--borde); align-items:baseline;}
-  .row .di{color:var(--terracota); font-size:13px;}
-  .row h4{font-size:17px; font-weight:700;}
-  .row p{font-size:13px; line-height:1.45; color:var(--gris); margin-top:3px;}
-  .row .mes{font-size:11px; letter-spacing:2px; color:#a79f8c; white-space:nowrap;}
-
-  .grid6{display:grid; grid-template-columns:repeat(3,1fr); gap:20px; flex:1; margin-top:26px;}
-  .cat{border:1px solid var(--borde); padding:20px 22px;}
-  .cat .k{font-size:11px; letter-spacing:2px; color:var(--terracota);}
-  .cat ul{list-style:none; margin-top:12px; display:flex; flex-direction:column; gap:8px;}
-  .cat li{font-size:13px; line-height:1.35; padding-left:16px; position:relative; color:var(--tinta);}
-  .cat li::before{content:"◆"; position:absolute; left:0; color:var(--terracota); font-size:9px; top:3px;}
-  .cat.g{background:var(--verde); color:var(--crema); border-color:var(--verde); display:flex; flex-direction:column; justify-content:center;}
-  .cat.g h3{font-size:23px; font-style:italic; font-weight:700;}
-  .cat.g p{font-size:13px; line-height:1.5; color:#dfe0d4; margin-top:12px;}
-
-  .inv{display:grid; grid-template-columns:1.05fr .95fr; gap:46px; flex:1; margin-top:26px;}
-  .inv .grp{font-size:14px; font-style:italic; color:var(--terracota); margin:6px 0 10px;}
-  .inv .item{display:flex; gap:12px; padding:8px 0; font-size:14.5px; color:var(--tinta); align-items:baseline;}
-  .inv .item .di{color:var(--terracota); font-size:11px;}
-  .price-eye{font-size:11px; letter-spacing:2.5px; color:var(--sage);}
-  .price{font-size:60px; font-weight:700; color:var(--oro); line-height:1; margin-top:8px; letter-spacing:-1px;}
-  .price-sub{font-size:12.5px; letter-spacing:1px; color:#cdd4c6; margin-top:8px;}
-  .cond{font-size:11px; line-height:1.5; color:var(--gris); margin-top:18px;}
-
-  .stats4{display:grid; grid-template-columns:repeat(4,1fr); border:1px solid var(--borde); margin-top:30px;}
-  .s4{padding:24px 24px; border-left:1px solid var(--borde);}
-  .s4:first-child{border-left:none;}
-  .s4 .big{font-size:40px; font-weight:700; letter-spacing:-1px;}
-  .s4 .lbl{font-size:10.5px; letter-spacing:1.5px; color:var(--gris); margin-top:10px; line-height:1.4;}
-
-  @media print{
-    html,body{background:#fff;}
-    .ayuda{display:none;}
-    .deck{gap:0; padding:0;}
-    .slide{page-break-after:always; box-shadow:none;}
-    @page{size:1280px 720px; margin:0;}
-  }
-  @media screen{ .slide{box-shadow:0 10px 40px rgba(0,0,0,.35);} }
-</style>
-</head>
-<body>
-<div class="ayuda">Vista de la propuesta · <b>Dr. Juanpe</b>. Para exportar a PDF: <b>Cmd/Ctrl + P → Guardar como PDF → Horizontal → Márgenes: ninguno</b>.</div>
+:root{--bg:#f4f4f5;--card:#fff;--ink:#1d1d1f;--gris:#6e6e73;--gris2:#9aa0ab;--teal:#0a93b8;--teal2:#16b8de;--cyan:#7fe9ff;--tint:#e9f6fa;--line:#e6e8ec;--ok:#28a05a;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#d9dadf}
+body{font-family:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+.ayuda{text-align:center;font-size:13px;color:#555;padding:14px}
+.deck{display:flex;flex-direction:column;align-items:center;gap:22px;padding-bottom:40px}
+.slide{width:1280px;height:720px;background:var(--bg);position:relative;overflow:hidden;padding:64px 84px 70px;display:flex;flex-direction:column;justify-content:center}
+.pie{position:absolute;left:70px;bottom:26px;font-size:10.5px;font-weight:700;letter-spacing:1.6px;color:var(--gris2)}
+.eye{font-size:13px;font-weight:700;letter-spacing:3px;color:var(--teal);text-transform:uppercase}
+h1{font-size:46px;line-height:1.08;font-weight:700;letter-spacing:-1.6px;margin-top:14px}
+h1 em{font-style:normal;color:var(--teal)}
+h1.xl{font-size:54px}
+h1.m{font-size:44px}
+.lead{font-size:17.5px;line-height:1.6;color:var(--gris);margin-top:14px;max-width:960px}
+.lead b{color:var(--ink)}
+.lead.c{text-align:center;margin-left:auto;margin-right:auto;font-weight:600;font-size:19px}
+.center{display:flex;flex-direction:column;align-items:center;text-align:center}
+.center .eye{margin-top:26px}
+.foto{width:130px;height:130px;border-radius:50%;border:4px solid #fff;box-shadow:0 12px 40px rgba(0,0,0,.12);overflow:hidden}
+.foto img{width:100%;height:100%;object-fit:cover;display:block}
+.pills{display:flex;gap:12px;margin-top:30px}
+.pills span{background:#fff;border:1px solid var(--line);border-radius:30px;padding:10px 18px 10px 16px;font-size:14px;font-weight:700}
+.pills span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--cyan));margin-right:10px;vertical-align:1px}
+.quote{background:#fff;border-radius:22px;padding:30px 36px;margin-top:28px;box-shadow:0 8px 30px rgba(0,0,0,.05);border-left:5px solid var(--teal)}
+.quote p{font-size:24px;line-height:1.4;font-weight:700;letter-spacing:-.4px}
+.quote .who{font-size:14px;color:var(--gris);margin-top:12px;line-height:1.5}
+.card{background:var(--card);border-radius:22px;padding:18px 20px 20px;box-shadow:0 8px 30px rgba(0,0,0,.05);border:2px solid transparent}
+.card.hi{border:2px solid transparent;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(135deg,var(--teal),var(--cyan)) border-box}
+.ic{width:46px;height:46px;border-radius:12px;background:var(--tint);display:flex;align-items:center;justify-content:center}
+.ic svg{width:24px;height:24px;fill:none;stroke:var(--teal);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.card h4{font-size:16.5px;font-weight:700;letter-spacing:-.3px;margin-top:12px}
+.card p{font-size:13.5px;line-height:1.5;color:var(--gris);margin-top:5px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
+.g4 .card{padding:24px 24px 26px}
+.g3.tall .card{padding:28px 28px 30px}
+.g3.tall h4{font-size:20px}
+.g3.tall p{font-size:15px}
+.n{font-size:40px;font-weight:700;color:var(--teal);letter-spacing:-1px}
+.stats{display:flex;gap:12px;margin-top:20px}
+.stat{background:#fff;border-radius:18px;padding:14px 22px;box-shadow:0 8px 30px rgba(0,0,0,.05)}
+.stat b{display:block;font-size:28px;color:var(--teal);letter-spacing:-.5px}
+.stat span{display:block;font-size:10.5px;font-weight:700;letter-spacing:1.4px;color:var(--gris);margin-top:5px;line-height:1.5}
+.slide .stats+.g3{margin-top:14px}
+.slide .stats+.g3 .card{padding:14px 18px 16px}
+.slide .stats+.g3 .ic{width:38px;height:38px}
+.slide .stats+.g3 .card h4{margin-top:8px;font-size:15.5px}
+.slide .stats+.g3 .card p{font-size:12.5px}
+.hecha{display:inline-flex;align-self:flex-start;align-items:center;gap:12px;background:var(--ink);color:#fff;border-radius:30px;padding:12px 20px;margin-top:16px;font-size:14px;font-weight:700}
+.hecha span{white-space:nowrap;color:var(--cyan);font-size:11px;letter-spacing:1.8px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.big-k{font-size:20px;font-weight:700;color:var(--gris);margin-top:24px}
+.phases{display:flex;flex-direction:column;gap:12px}
+.phases div{background:#fff;border-radius:18px;padding:18px 22px;display:flex;align-items:center;gap:18px;font-size:20px;font-weight:700;box-shadow:0 8px 30px rgba(0,0,0,.05)}
+.phases span{width:40px;height:40px;border-radius:12px;background:var(--tint);color:var(--teal);display:flex;align-items:center;justify-content:center;font-size:18px}
+.phases small{margin-left:auto;font-size:12px;letter-spacing:1.5px;color:var(--gris2);text-transform:uppercase}
+.sem .dot{width:22px;height:22px;border-radius:50%}
+.dot.g{background:var(--ok)} .dot.y{background:#e8b21e} .dot.r{background:#d64541}
+.list{background:#fff;border-radius:22px;margin-top:22px;box-shadow:0 8px 30px rgba(0,0,0,.05);padding:6px 28px}
+.list div{display:grid;grid-template-columns:52px 1fr;grid-template-rows:auto auto;column-gap:10px;padding:12px 0;border-top:1px solid var(--line)}
+.list div:first-child{border-top:none}
+.list span{grid-row:span 2;font-size:24px;font-weight:700;color:var(--teal)}
+.list b{font-size:16px}
+.list p{font-size:13.5px;color:var(--gris);margin-top:3px}
+.inv{display:grid;grid-template-columns:1.55fr 1fr;gap:26px;margin-top:22px;align-items:start}
+.tabla{background:#fff;border-radius:22px;box-shadow:0 12px 40px rgba(0,0,0,.07);overflow:hidden}
+.th{display:flex;align-items:center;gap:8px;padding:16px 20px;border-bottom:1px solid var(--line);background:#fafafc}
+.th b{font-size:15px;margin-right:auto}
+.pl{font-size:12.5px;font-weight:700;color:var(--gris);padding:6px 12px;border-radius:20px}
+.pl.on{background:var(--tint);color:var(--teal)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-size:10.5px;letter-spacing:1.5px;color:var(--gris);text-align:left;padding:10px 14px;border-bottom:1px solid var(--line)}
+td{padding:12px 14px;border-bottom:1px solid var(--line);color:var(--gris);vertical-align:middle;line-height:1.35}
+td b{color:var(--ink)}
+td:first-child{width:26%} td:nth-child(3){width:11%;white-space:nowrap}
+.r{text-align:right;white-space:nowrap}
+tr.sum td{border-bottom:none}
+.dark{background:var(--ink);color:#fff;border-radius:22px;padding:26px 26px;box-shadow:0 12px 40px rgba(0,0,0,.15)}
+.dark .k{font-size:11.5px;font-weight:700;letter-spacing:2px;color:#c9ccd3}
+.dark .price{font-size:44px;font-weight:700;color:var(--teal2);letter-spacing:-1.5px;margin-top:6px}
+.dark .s,.dark .s2{font-size:13.5px;font-weight:700;color:#c9ccd3;margin-top:4px}
+.dark .s2{color:#e6e8ec;margin-top:6px}
+.dark .hr{height:1px;background:rgba(255,255,255,.15);margin:16px 0}
+.dark .acomp{display:flex;justify-content:space-between;font-size:15px}
+.dark p{font-size:11.5px;line-height:1.55;color:#9aa0ab}
+.tools{background:#fff;border-radius:22px;box-shadow:0 12px 40px rgba(0,0,0,.07);margin-top:22px}
+.tools div{display:grid;grid-template-columns:auto 1fr auto;grid-template-rows:auto auto;column-gap:16px;align-items:center;padding:14px 20px;border-top:1px solid var(--line)}
+.tools div:first-child{border-top:none}
+.tag{grid-row:span 2;font-size:11px;font-weight:700;letter-spacing:1.2px;padding:6px 10px;border-radius:8px;text-align:center;min-width:92px}
+.tag.t{background:var(--tint);color:var(--teal)} .tag.u{background:#e6f5ec;color:var(--ok)} .tag.f{background:#eef0f4;color:var(--gris)}
+.tools b{font-size:15px}
+.tools small{font-size:12.5px;color:var(--gris);font-weight:600}
+.tools em{grid-row:1 / span 2;grid-column:3;font-style:normal;font-weight:700;font-size:15px;text-align:right}
+.tools em i{display:block;font-style:normal;font-size:10.5px;letter-spacing:1.3px;color:var(--gris);margin-top:3px}
+.nota{text-align:center;font-size:12px;font-weight:700;letter-spacing:1.8px;color:var(--gris);margin-top:16px}
+.btn{background:var(--ink);color:#fff;border-radius:30px;padding:15px 32px;font-size:17px;font-weight:700;margin-top:26px}
+.contact{display:flex;gap:16px;margin-top:30px}
+.contact div{background:#fff;border-radius:18px;padding:18px 28px;text-align:left;box-shadow:0 8px 30px rgba(0,0,0,.05);min-width:190px}
+.contact small{display:block;font-size:11px;font-weight:700;letter-spacing:2px;color:var(--gris)}
+.contact b{display:block;font-size:17px;margin-top:6px}
+.contact b.t{color:var(--teal)}
+.foot2{font-size:16px;color:var(--gris);margin-top:24px}
+.center h1.m{margin-top:26px}
+@media print{html,body{background:var(--bg)}.ayuda{display:none}.deck{gap:0;padding:0}.slide{page-break-after:always}@page{size:1280px 720px;margin:0}}
+@media screen{.slide{box-shadow:0 10px 40px rgba(0,0,0,.18)}}
+</style></head>
+<body><div class="ayuda">Propuesta · <b>Dr. Juanpe</b>. Para PDF: <b>Cmd/Ctrl + P → Guardar como PDF → Márgenes: ninguno</b>.</div>
 <div class="deck">
-
-<!-- 1 · PORTADA -->
-<section class="slide">
-  <div class="top">
-    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
-    <div class="top-eye"><span class="dot">●</span> PROPUESTA&nbsp;&nbsp;&nbsp;SEPTIEMBRE 2026</div>
-  </div>
-  <div class="rule"></div>
-  <div class="grid2" style="align-items:center;">
-    <div>
-      <div class="cover-eye mono">— PROPUESTA · UN EXPEDIENTE VIVO POR PACIENTE</div>
-      <div class="cover-tit">Tu consulta,<br>con <i>memoria</i><br>propia</div>
-      <div class="cover-sub">Un documento maestro por paciente que se llena solo, un asistente que te prepara cada sesión y te señala lo que se te está pasando, y una operación que deja de depender de <b>juntar información de seis lugares distintos</b>.</div>
-      <div class="cover-meta">
-        <div><div class="k mono">PREPARADO POR</div><div class="v">Laura Calle · ia con lala</div></div>
-        <div><div class="k mono">PARA</div><div class="v">Juan Pedro Montoya · Dr. Juanpe + Vital</div></div>
-      </div>
-    </div>
-    <div class="panel" style="height:520px; justify-content:center;">
-      <div class="cover-logo"><b style="font-weight:700;">ia</b> <i>con lala</i><span class="d">.</span></div>
-      <div class="divi" style="width:100%;"></div>
-      <div class="txt" style="font-style:italic;">"Un expediente clínico vivo por paciente, que me prepare para cada sesión y me señale lo que se me está pasando."</div>
-      <div class="tags mono">— JUANPE, EN NUESTRA REUNIÓN</div>
-    </div>
-  </div>
-</section>
-
-<!-- 2 · RESUMEN EJECUTIVO -->
-<section class="slide">
-  <div class="top">
-    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
-    <div class="top-eye mono">01 — RESUMEN EJECUTIVO&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
-  </div>
-  <div class="rule"></div>
-  <div class="sec"><span class="chip mono">01</span><span class="sec-lbl mono">RESUMEN EJECUTIVO</span></div>
-  <div class="grid2">
-    <div>
-      <h1 class="tit">Primero la <i>memoria</i>, después todo lo demás.</h1>
-      <p class="lead">Tu proceso ya está muy bien pensado y documentado en Miro. Lo que falta es que todo viva en un solo lugar y que la IA haga las partes manuales. Por eso arrancamos por lo que tú mismo marcaste como prioridad: <b>la fuente única de verdad de cada paciente</b>, y sobre ella montamos los entregables y la operación.</p>
-    </div>
-    <div class="numlist">
-      <div class="numrow"><div class="n">01</div><div><h4>Fase 1 · El expediente vivo</h4><p>Documento maestro por paciente que se actualiza solo con el onboarding, cada sesión y cada examen, más el reporte pre-sesión con tu criterio médico.</p></div></div>
-      <div class="numrow"><div class="n">02</div><div><h4>Fase 2 · Entregables que enamoran</h4><p>Diagnóstico inicial con puntajes, plan macro a 4 meses, informe visual de exámenes por órganos y check-ins pre-leídos.</p></div></div>
-      <div class="numrow"><div class="n">03</div><div><h4>Fase 3 · Tu agente de operación <span style="font-size:13px; color:#a79f8c; font-weight:400; font-style:italic;">— lo que sigue</span></h4><p>Agenda y reagendamiento por instrucción, CRM al día solo, posteos en Circle y alertas de renovación.</p></div></div>
-    </div>
-  </div>
-  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>02 / 13</span></div>
-</section>
-
-<!-- 3 · DÓNDE ESTÁ HOY -->
-<section class="slide">
-  <div class="top">
-    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
-    <div class="top-eye mono">02 — DÓNDE ESTÁ HOY&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
-  </div>
-  <div class="rule"></div>
-  <div class="sec"><span class="chip mono">02</span><span class="sec-lbl mono">DÓNDE ESTÁ HOY</span></div>
-  <h1 class="tit">Mucho sistema, pero la información está <i>regada.</i></h1>
-  <p class="lead">Tienes Meet, Fathom, Drive, Circle, Monday, GoHighLevel, Stripe, formularios y firma electrónica. Cada uno hace bien su parte, pero cuando llega un caso complejo te toca <b>reunir el rompecabezas a mano</b> antes de poder pensar, y con más pacientes se empiezan a escapar detalles.</p>
-  <div class="stats">
-    <div class="stat"><div class="lbl mono">PACIENTES ACTIVOS</div><div class="big">41</div><div class="cap">Cada uno con su historia</div><div class="sub">Mínimo 4 meses, 2 sesiones al mes, más continuaciones mensuales o semestrales.</div></div>
-    <div class="stat g"><div class="lbl mono">HERRAMIENTAS</div><div class="big">9+</div><div class="cap">Y ninguna tiene la foto completa</div><div class="sub">Onboarding, resúmenes, exámenes, mensajes y avances viven en lugares distintos.</div></div>
-    <div class="stat"><div class="lbl mono">CHECK-INS</div><div class="big">2–3 h</div><div class="cap">Cada ronda de respuestas</div><div class="sub">Leer, entender y grabar el Tella de cada persona, más la extracción manual de exámenes.</div></div>
-  </div>
-  <div class="fill"></div>
-  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>03 / 13</span></div>
-</section>
-
-<!-- 4 · EL CORAZÓN DEL SISTEMA -->
-<section class="slide">
-  <div class="top">
-    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
-    <div class="top-eye mono">03 — EL CORAZÓN DEL SISTEMA&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
-  </div>
-  <div class="rule"></div>
-  <div class="sec"><span class="chip mono">03</span><span class="sec-lbl mono">EL EXPEDIENTE VIVO</span></div>
-  <h1 class="tit">Un documento por paciente que se <i>llena solo.</i></h1>
-  <p class="lead">Es la "single source of truth" que describiste: un documento maestro en Google Drive por cada persona. Tú no lo alimentas, <b>lo alimenta el sistema</b>, y de él sale todo lo demás.</p>
-  <div class="two">
-    <div class="card">
-      <div class="k mono">LO QUE ENTRA · AUTOMÁTICO</div>
-      <h3>Todo lo de la persona, en un lugar.</h3>
-      <p>El formulario de onboarding, el resumen de cada sesión de Fathom, los exámenes que te mandan en PDF, los check-ins, los medicamentos y suplementos con dosis, y los acuerdos de cada sesión.</p>
-      <div class="ent mono">FUENTES<b>Formulario · Fathom · Drive · Circle · Check-ins</b></div>
-    </div>
-    <div class="card g">
-      <div class="k mono">LO QUE SALE · LISTO PARA TI</div>
-      <h3>Contexto sin buscar nada.</h3>
-      <p>Un reporte antes de cada sesión: "hoy tienes tres pacientes, con fulanito acuérdate de esto, con Pepita revisa esto". Y cuando quieras consultar un caso difícil con la IA, ya tiene toda la historia.</p>
-      <div class="ent mono">RESULTADO<b>Llegas a cada sesión preparado en minutos.</b></div>
-    </div>
-  </div>
-  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>04 / 13</span></div>
-</section>
-
-<!-- 5 · FASE 1 -->
-<section class="slide">
-  <div class="top">
-    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
-    <div class="top-eye mono">04 — FASE 1 · EL EXPEDIENTE VIVO&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
-  </div>
-  <div class="rule"></div>
-  <div class="sec"><span class="chip mono">04</span><span class="sec-lbl mono">FASE 1 · EL ARRANQUE</span></div>
-  <h1 class="tit">Con lo que <i>empezamos.</i></h1>
-  <p class="lead">Todo lo que marcaste como prioritario. Arrancamos con un grupo pequeño de pacientes para probar y luego pasamos a los 41.</p>
-  <div class="rows">
-    <div class="row"><div class="di">◆</div><div><h4>Documento maestro por paciente</h4><p>Plantilla única que se crea sola al entrar el paciente y se alimenta del onboarding, las sesiones, los exámenes y los check-ins.</p></div><div class="mes mono">MES 1</div></div>
-    <div class="row"><div class="di">◆</div><div><h4>Actualización automática después de cada sesión</h4><p>El resumen de Fathom se ordena y se agrega al expediente: temas, acuerdos, cambios de plan y próximos pasos.</p></div><div class="mes mono">MES 1</div></div>
-    <div class="row"><div class="di">◆</div><div><h4>Lectura de exámenes con tu criterio</h4><p>Le enseñamos a la IA cómo lees tú los resultados. Extrae los valores del PDF, los pasa a tu tabla y te dice "ten especial cuidado con esto".</p></div><div class="mes mono">MES 1–2</div></div>
-    <div class="row"><div class="di">◆</div><div><h4>Reporte pre-sesión diario</h4><p>Cada mañana, un resumen ejecutivo de tus sesiones del día: contexto, puntos clave de seguimiento, alertas y temas sugeridos.</p></div><div class="mes mono">MES 2</div></div>
-  </div>
-  <div class="fill"></div>
-  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>05 / 13</span></div>
-</section>
-
-<!-- 6 · FASE 2 -->
-<section class="slide">
-  <div class="top">
-    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
-    <div class="top-eye mono">05 — FASE 2 · ENTREGABLES&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
-  </div>
-  <div class="rule"></div>
-  <div class="sec"><span class="chip mono">05</span><span class="sec-lbl mono">FASE 2 · ENTREGABLES QUE ENAMORAN</span></div>
-  <h1 class="tit">Que el paciente <i>vea</i> su avance.</h1>
-  <div class="grid6">
-    <div class="cat"><div class="k mono">DIAGNÓSTICO INICIAL</div><ul><li>Formulario de onboarding estandarizado</li><li>PDF con puntaje en nutrición, sueño, ejercicio, energía y más</li><li>Visual, fácil de entender</li></ul></div>
-    <div class="cat"><div class="k mono">PLAN MACRO A 4 MESES</div><ul><li>La hoja de ruta de lo que van a trabajar</li><li>Responde a lo que te pidieron: más claridad en el día a día</li><li>Tú lo revisas antes de enviarlo</li></ul></div>
-    <div class="cat"><div class="k mono">INFORME DE EXÁMENES</div><ul><li>Histórico con gráficas por área</li><li>Organizado por órganos: corazón, riñones, hígado</li><li>Reemplaza la tabla que hoy haces a mano</li></ul></div>
-    <div class="cat"><div class="k mono">RE-DIAGNÓSTICO</div><ul><li>El mismo reporte cada tercer mes</li><li>Comparado contra el inicial</li><li>Perfecto para renovar y pedir testimonio</li></ul></div>
-    <div class="cat g" style="grid-column:span 2;"><h3>Check-ins pre-leídos</h3><p>El sistema envía el check-in, le recuerda a la persona que lo llene, resume sus respuestas y te deja listo el borrador de qué ajustar. Tú abres, vas al grano y grabas tu Tella. Lo que hoy te toma dos o tres horas, pasa a ser una revisión rápida.</p></div>
-  </div>
-  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>06 / 13</span></div>
-</section>
-
-<!-- 7 · SEMÁFORO MÉDICO -->
-<section class="slide">
-  <div class="top">
-    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
-    <div class="top-eye mono">06 — SEGURIDAD MÉDICA&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
-  </div>
-  <div class="rule"></div>
-  <div class="sec"><span class="chip mono">06</span><span class="sec-lbl mono">EL FILTRO: CUÁNDO SÍ Y CUÁNDO NO</span></div>
-  <h1 class="tit">La IA ayuda, pero <i>tú decides</i> lo médico.</h1>
-  <p class="lead">Tienes pacientes con medicamentos y dosis específicas, así que no todo se puede automatizar. Montamos un semáforo: cada mensaje se clasifica antes de responder, y <b>nada sensible sale sin tu aprobación</b>.</p>
-  <div class="stats">
-    <div class="stat"><div class="lbl mono">VERDE · SE RESPONDE SOLO</div><div class="big" style="font-size:40px;">Lo simple</div><div class="cap">Dudas que ya respondiste mil veces</div><div class="sub">Horarios de un suplemento sencillo, recetas, lista de mercado, logística, agenda. Con tus respuestas y, si quieres, tu voz clonada en ElevenLabs.</div></div>
-    <div class="stat g"><div class="lbl mono">AMARILLO · BORRADOR PARA TI</div><div class="big" style="font-size:40px;">Lo delicado</div><div class="cap">La IA escribe, tú apruebas</div><div class="sub">Ajustes de plan, síntomas nuevos, dudas de suplementación con matices. Te llega el borrador listo, lo apruebas o lo corriges.</div></div>
-    <div class="stat"><div class="lbl mono">ROJO · SOLO JUANPE</div><div class="big" style="font-size:40px;">Lo clínico</div><div class="cap">La IA no responde, te avisa</div><div class="sub">Medicamentos, dosis, interacciones, resultados alterados o cualquier señal de alarma. Te llega una alerta con el contexto.</div></div>
-  </div>
-  <div class="fill"></div>
-  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>07 / 13</span></div>
-</section>
-
-<!-- 8 · FASE 3 -->
-<section class="slide">
-  <div class="top">
-    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
-    <div class="top-eye mono">07 — FASE 3 · OPERACIÓN&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
-  </div>
-  <div class="rule"></div>
-  <div class="sec"><span class="chip mono">07</span><span class="sec-lbl mono">FASE 3 · TU AGENTE DE OPERACIÓN</span></div>
-  <h1 class="tit">Lo del día a día, <i>sin manualidades.</i></h1>
-  <p class="lead">Un agente (un asistente de IA que ejecuta tareas, no solo responde) que trabaja de la mano con Carly y conecta tus herramientas actuales. No cambiamos de plataforma, las ponemos a hablar entre sí.</p>
-  <div class="rows">
-    <div class="row"><div class="di">◆</div><div><h4>Agenda por instrucción</h4><p>"La otra semana viajo el 16, bloquéalo y reacomoda a los que tenían cita". El agente mueve las citas y avisa a cada persona.</p></div><div class="mes mono">MES 3</div></div>
-    <div class="row"><div class="di">◆</div><div><h4>CRM al día y onboarding estandarizado</h4><p>Monday se actualiza solo, se crean y asignan tareas, y un checklist deja claro si ya se enviaron exámenes, suplementos e invitación a Circle.</p></div><div class="mes mono">MES 3</div></div>
-    <div class="row"><div class="di">◆</div><div><h4>Circle automático</h4><p>Al terminar cada sesión se postea el resumen, los próximos pasos y el video en el espacio privado de la persona.</p></div><div class="mes mono">MES 3</div></div>
-    <div class="row"><div class="di">◆</div><div><h4>Alertas de renovación y testimonio</h4><p>"Esta persona entra a su último mes": te avisa a tiempo para planear la continuación o pedir el testimonio.</p></div><div class="mes mono">MES 3</div></div>
-  </div>
-  <div class="fill"></div>
-  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>08 / 13</span></div>
-</section>
-
-<!-- 9 · CÓMO TRABAJAMOS -->
-<section class="slide">
-  <div class="top">
-    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
-    <div class="top-eye mono">08 — CÓMO TRABAJAMOS&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
-  </div>
-  <div class="rule"></div>
-  <div class="sec"><span class="chip mono">08</span><span class="sec-lbl mono">CÓMO TRABAJAMOS</span></div>
-  <h1 class="tit">Lo construyo yo, lo operan <i>tú y Carly.</i></h1>
-  <p class="lead">Trabajamos 100% virtual, así estés en Portugal o en Indonesia. Antes de tocar un solo dato firmamos un <b>acuerdo de confidencialidad (NDA)</b>: la información de tus pacientes y tu conocimiento médico son tuyos y no salen de tu sistema.</p>
-  <div class="two">
-    <div class="card">
-      <div class="k mono">CONSTRUCCIÓN</div>
-      <h3>Yo construyo y conecto.</h3>
-      <p>Diseño el expediente, conecto tus herramientas, entreno a la IA con tu forma de leer exámenes y de responder, y lo probamos con pocos pacientes antes de abrirlo a todos.</p>
-      <div class="ent mono">ENTREGABLE<b>Sistema funcionando sobre tus herramientas actuales.</b></div>
-    </div>
-    <div class="card g">
-      <div class="k mono">CAPACITACIÓN</div>
-      <h3>Ustedes lo operan.</h3>
-      <p>Sesiones cortas contigo y con Carly para que sepan usarlo, corregirlo y pedirle cosas nuevas. Todo queda documentado en videos y guías paso a paso.</p>
-      <div class="ent mono">ENTREGABLE<b>Equipo capacitado + documentación + 30 días de ajustes.</b></div>
-    </div>
-  </div>
-  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>09 / 13</span></div>
-</section>
-
-<!-- 10 · MÉTRICAS -->
-<section class="slide">
-  <div class="top">
-    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
-    <div class="top-eye mono">09 — CÓMO MEDIMOS&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
-  </div>
-  <div class="rule"></div>
-  <div class="sec"><span class="chip mono">09</span><span class="sec-lbl mono">CÓMO SABEMOS QUE FUNCIONA</span></div>
-  <h1 class="tit">Menos tiempo operando, más tiempo <i>con la persona.</i></h1>
-  <div class="grid6">
-    <div class="cat"><div class="k mono">PREPARACIÓN</div><ul><li>Minutos que te toma prepararte para una sesión</li><li>Casos complejos resueltos sin buscar información</li></ul></div>
-    <div class="cat"><div class="k mono">CHECK-INS</div><ul><li>Horas por ronda de check-ins</li><li>Porcentaje de pacientes que lo llenan a tiempo</li></ul></div>
-    <div class="cat"><div class="k mono">EXÁMENES</div><ul><li>Tiempo de extracción e interpretación por PDF</li><li>Alertas que la IA te señaló a tiempo</li></ul></div>
-    <div class="cat"><div class="k mono">EXPERIENCIA</div><ul><li>Satisfacción con el diagnóstico y el plan</li><li>Tasa de renovación al cumplir los 4 meses</li></ul></div>
-    <div class="cat g" style="grid-column:span 2;"><h3>Lo que garantizo vs. lo que perseguimos</h3><p>Garantizo que cada paciente tenga su expediente completo y actualizado, que recibas tu reporte pre-sesión y que nada clínico salga sin tu aprobación. Lo que perseguimos juntos es que el tiempo que hoy se va en operación vuelva a ti, y que la experiencia de tus pacientes suba al nivel de tu contenido.</p></div>
-  </div>
-  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>10 / 13</span></div>
-</section>
-
-<!-- 11 · INVERSIÓN -->
-<section class="slide">
-  <div class="top">
-    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
-    <div class="top-eye mono">10 — INVERSIÓN&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
-  </div>
-  <div class="rule"></div>
-  <div class="sec"><span class="chip mono">10</span><span class="sec-lbl mono">INVERSIÓN</span></div>
-  <h1 class="tit">Tres fases, <i>un solo sistema.</i></h1>
-  <p class="lead">Puedes arrancar solo con la Fase 1 o tomar el sistema completo. Sin mensualidades obligatorias.</p>
-  <div class="inv">
-    <div>
-      <div class="grp">— Fase 1 · El expediente vivo</div>
-      <div class="item"><span class="di">◆</span> Documento maestro, actualización post-sesión, lectura de exámenes y reporte pre-sesión</div>
-      <div class="grp" style="margin-top:13px;">— Fase 2 · Entregables que enamoran</div>
-      <div class="item"><span class="di">◆</span> Diagnóstico con puntajes, plan a 4 meses, informe de exámenes, check-ins pre-leídos y semáforo</div>
-      <div class="grp" style="margin-top:13px;">— Fase 3 · Agente de operación</div>
-      <div class="item"><span class="di">◆</span> Agenda, CRM, onboarding estandarizado, Circle y alertas de renovación</div>
-      <div class="item" style="color:#8a8578; font-size:13px; margin-top:10px;">Incluye diagnóstico, NDA, capacitación, documentación y 30 días de ajustes.</div>
-    </div>
-    <div class="panel" style="justify-content:center;">
-      <div class="price-eye mono">SISTEMA COMPLETO · 3 FASES</div>
-      <div class="price">US$ 7.500</div>
-      <div class="price-sub mono">USD · EL EXPEDIENTE VIVO + ENTREGABLES + OPERACIÓN</div>
-      <div class="divi" style="width:100%;"></div>
-      <div style="font-size:14px; line-height:2; color:#cdd4c6;">
-        Fase 1 · El expediente vivo&nbsp;&nbsp;<b style="color:#b9a96b;">US$ 3.500</b><br>
-        Fase 2 · Entregables&nbsp;&nbsp;<b style="color:#b9a96b;">US$ 2.500</b><br>
-        Fase 3 · Operación&nbsp;&nbsp;<b style="color:#b9a96b;">US$ 2.000</b><br>
-        <span style="font-size:12.5px;">Por separado sumarían US$ 8.000</span>
-      </div>
-      <div class="cond" style="color:#a9b3a4;">No incluye herramientas de terceros (IA, ElevenLabs, automatizaciones). Pago: 50% al iniciar y 50% contra entrega de cada fase.</div>
-    </div>
-  </div>
-  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>11 / 13</span></div>
-</section>
-
-<!-- 12 · SOBRE LA CONSULTORA -->
-<section class="slide">
-  <div class="top">
-    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
-    <div class="top-eye mono">11 — SOBRE LA CONSULTORA&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
-  </div>
-  <div class="rule"></div>
-  <div class="sec"><span class="chip mono">11</span><span class="sec-lbl mono">SOBRE LA CONSULTORA</span></div>
-  <h1 class="tit">Automatizo lo que yo misma uso <i>todos los días.</i></h1>
-  <p class="lead">Abogada y administradora de negocios, con maestría en sistemas de información e innovación digital. Como gerente regional de una multinacional, <b>automaticé procesos que llevaron a la compañía de cero a más de un millón de dólares</b>. Llevo más de un año diseñando agentes, integraciones y sistemas con IA para empresas y creación de contenido.</p>
-  <div class="stats4">
-    <div class="s4"><div class="big">0 → 1M</div><div class="lbl mono">USD GENERADOS CON AUTOMATIZACIÓN</div></div>
-    <div class="s4"><div class="big">+42</div><div class="lbl mono">ALUMNOS EN MASTERCLASSES</div></div>
-    <div class="s4"><div class="big">+145K</div><div class="lbl mono">SEGUIDORES EN @LEE_CON_LALA</div></div>
-    <div class="s4"><div class="big">2</div><div class="lbl mono">PREGRADOS + MAESTRÍA</div></div>
-  </div>
-  <div class="fill"></div>
-  <div class="foot mono"><span>IA CON LALA · @IA_CON_LALA · @LEE_CON_LALA</span><span>12 / 13</span></div>
-</section>
-
-<!-- 13 · PRÓXIMOS PASOS -->
-<section class="slide">
-  <div class="top">
-    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
-    <div class="top-eye mono"><span class="dot">●</span> PRÓXIMOS PASOS&nbsp;&nbsp;13 / 13</div>
-  </div>
-  <div class="rule"></div>
-  <div class="grid2" style="margin-top:34px;">
-    <div>
-      <div class="sec-lbl mono" style="margin-bottom:6px;">— PRÓXIMOS PASOS</div>
-      <h1 class="tit" style="margin-bottom:20px;">Empecemos <i>por la memoria.</i></h1>
-      <div class="numlist" style="gap:0;">
-        <div class="numrow"><div class="n">01</div><div><p style="font-size:15px; color:var(--tinta); margin:0;">Revisas la propuesta y nos vemos 30 minutos para ajustar alcance y fases.</p></div></div>
-        <div class="numrow"><div class="n">02</div><div><p style="font-size:15px; color:var(--tinta); margin:0;">Firmamos NDA y contrato, y me das acceso a tus herramientas y a tu prompt de exámenes.</p></div></div>
-        <div class="numrow"><div class="n">03</div><div><p style="font-size:15px; color:var(--tinta); margin:0;">Arrancamos la Fase 1 con 3 a 5 pacientes piloto y en semanas lo abrimos a los 41.</p></div></div>
-      </div>
-      <div class="cover-meta" style="margin-top:26px;">
-        <div><div class="k mono" style="font-size:10px; letter-spacing:2px; color:var(--gris);">CONTACTO</div><div class="v" style="font-size:14px;">Laura Calle</div></div>
-        <div><div class="k mono" style="font-size:10px; letter-spacing:2px; color:var(--gris);">CORREO</div><div class="v" style="font-size:14px; font-style:normal; font-weight:700;">lcalle@lauracalle.co</div></div>
-        <div><div class="k mono" style="font-size:10px; letter-spacing:2px; color:var(--gris);">REDES</div><div class="v" style="font-size:14px; font-style:normal; font-weight:700;">@ia_con_lala</div></div>
-      </div>
-    </div>
-    <div class="panel" style="height:540px; justify-content:flex-end;">
-      <div class="bignum-eye mono" style="margin-bottom:16px;">IA CON LALA</div>
-      <div style="font-size:34px; font-style:italic; line-height:1.25; color:var(--crema);">Gracias por abrirnos tu consulta, Juanpe.</div>
-    </div>
-  </div>
-</section>
-
+<section class="slide cov">
+<div class="center">
+  <div class="foto"><img src="data:image/jpeg;base64,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" alt="Laura Calle"></div>
+  <div class="eye">PROPUESTA · SISTEMA DR. JUANPE</div>
+  <h1 class="xl">Un expediente vivo por paciente<br><em>y un asistente al que no se le pasa nada.</em></h1>
+  <p class="lead c">Tu proceso ya está muy bien armado. Esto lo pone en un solo lugar: la historia de cada persona siempre al día,
+  la sesión preparada antes de entrar, y un asistente que agenda, persigue pendientes, cuida la renovación y cobra.</p>
+  <div class="pills"><span>Preparado para Juan Pedro Montoya · Dr. Juanpe + Vital</span><span>Por Laura Calle · ia con lala</span><span>Medellín · septiembre 2026</span></div>
+</div><div class="pie">IA CON LALA. · PROPUESTA DR. JUANPE · SEPTIEMBRE 2026</div></section><section class="slide ">
+<div class="eye">POR QUÉ ESTA PROPUESTA</div><h1>Tú ya dijiste qué quieres. Esto es <em>cuánto cuesta y en qué orden.</em></h1>
+<div class="quote">
+  <p>“Un expediente clínico vivo por paciente, que me prepare para cada sesión y me señale lo que se me está pasando.”</p>
+  <div class="who">— Juanpe, en nuestra reunión. Y el complemento: un asistente que agende, haga seguimiento, ayude a que la gente se quede y ayude a cobrar.</div>
 </div>
-</body>
-</html>
+<p class="lead">No arrancamos de cero: tienes el proceso documentado en Miro y nueve herramientas funcionando. Lo que falta es que todo viva
+en un solo lugar y que la IA haga lo manual. Lo organizamos en <b>cuatro fases de un mes</b>, cada una con su precio y un criterio claro de
+“quedó hecho”. Puedes aprobarlas una por una o todas juntas.</p>
+<div class="pie">IA CON LALA. · PROPUESTA DR. JUANPE · SEPTIEMBRE 2026</div></section><section class="slide ">
+<div class="eye">DÓNDE ESTÁ HOY</div><h1>No arrancamos de cero: <em>tu proceso ya existe.</em></h1><p class="lead">Lo que funciona se queda. El sistema se monta encima de tus herramientas actuales, no las reemplaza.</p>
+<div class="stats">
+  <div class="stat"><b>41</b><span>PACIENTES ACTIVOS<br>CON SU PROPIA HISTORIA</span></div>
+  <div class="stat"><b>9+</b><span>HERRAMIENTAS, NINGUNA<br>CON LA FOTO COMPLETA</span></div>
+  <div class="stat"><b>2–3 h</b><span>POR CADA RONDA<br>DE CHECK-INS</span></div>
+  <div class="stat"><b>4</b><span>MESES MÍNIMO POR PACIENTE<br>CON 2 SESIONES AL MES</span></div>
+</div>
+<div class="g3">
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><h4>Agenda y venta</h4><p>El formulario de GoHighLevel agenda la llamada de venta y actualizas tu hoja de seguimiento de closer.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div><h4>Contrato y consentimiento</h4><p>Firma electrónica y pipeline en GoHighLevel. Pagos por Stripe.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg></div><h4>Onboarding y Circle</h4><p>Invitación a Circle, espacio privado por persona. Los datos básicos todavía los llenan tú y Carly a mano.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div><h4>Carpeta por cliente</h4><p>Google Drive con los archivos de cada persona, que hoy se crean a mano.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M22 8l-6 4 6 4z"/></svg></div><h4>Sesiones grabadas</h4><p>Google Meet y Fathom para grabar y resumir cada sesión.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M9 2h6M10 2v6L4.5 18a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 8V2"/><path d="M7 15h10"/></svg></div><h4>Exámenes</h4><p>Un prompt que extrae los resultados del PDF a una tabla. Funciona, pero es manual y se ve feo.</p></div>
+</div>
+<div class="pie">IA CON LALA. · PROPUESTA DR. JUANPE · SEPTIEMBRE 2026</div></section><section class="slide ">
+<div class="eye">TRES DEFINICIONES</div><h1>Tres cosas que quedan <em>claras desde ya.</em></h1><p class="lead">Para no perder tiempo ni plata, esta propuesta parte de aquí.</p>
+<div class="g3 tall">
+  <div class="card"><div class="n">1</div><h4>La fuente de verdad es el expediente</h4><p>Un documento maestro por paciente en tu Google Drive. Todo lo demás (Circle, Monday, los reportes) se alimenta de ahí, así no hay dos versiones de la misma historia.</p></div>
+  <div class="card hi"><div class="n">2</div><h4>Lo clínico lo decides tú</h4><p>Tienes pacientes con medicamentos y dosis específicas. La IA prepara, resume y sugiere, pero nada sobre medicamentos, dosis o resultados alterados le llega al paciente sin tu aprobación.</p></div>
+  <div class="card"><div class="n">3</div><h4>Cuatro fases, una a una</h4><p>Cada fase dura un mes, se paga y se cierra con su propio criterio de “hecho”, y ninguna arranca sin que la anterior esté funcionando con pacientes reales.</p></div>
+</div>
+<div class="pie">IA CON LALA. · PROPUESTA DR. JUANPE · SEPTIEMBRE 2026</div></section><section class="slide ">
+<div class="split">
+  <div><div class="eye">LO CONCRETO</div><div class="big-k">Cuatro fases</div><h1 class="m">De la memoria de cada paciente a <em>la operación completa.</em></h1></div>
+  <div class="phases">
+    <div><span>1</span>El expediente vivo<small>Mes 1</small></div>
+    <div><span>2</span>Tu asistente personal<small>Mes 2</small></div>
+    <div><span>3</span>Entregables para el paciente<small>Mes 3</small></div>
+    <div><span>4</span>Check-ins y respuestas<small>Mes 4</small></div>
+  </div>
+</div>
+<div class="pie">IA CON LALA. · PROPUESTA DR. JUANPE · SEPTIEMBRE 2026</div></section><section class="slide ">
+<div class="eye">FASE 1 · EL EXPEDIENTE VIVO · MES 1</div><h1>Que cada paciente tenga <em>su historia en un solo lugar.</em></h1>
+<div class="g3">
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></svg></div><h4>Documento maestro por paciente</h4><p>Se crea solo cuando la persona entra, con la carpeta y los archivos. Plantilla única para los 41.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><h4>Onboarding que cae solo</h4><p>Las respuestas del formulario se ordenan en el expediente: historia, hábitos, medicamentos, suplementos y objetivos.</p></div>
+  <div class="card hi"><div class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M22 8l-6 4 6 4z"/></svg></div><h4>Se actualiza después de cada sesión</h4><p>El resumen de Fathom se agrega al expediente: temas, acuerdos, cambios de plan y próximos pasos.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M9 2h6M10 2v6L4.5 18a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 8V2"/><path d="M7 15h10"/></svg></div><h4>Exámenes leídos con tu criterio</h4><p>Le enseñamos cómo lees tú los resultados. Extrae los valores del PDF, los pasa a tu tabla y te dice “ten cuidado con esto”.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></div><h4>Reporte pre-sesión cada mañana</h4><p>“Hoy tienes tres sesiones: con fulanito acuérdate de esto, con Pepita revisa esto.” Contexto, alertas y temas sugeridos.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><h4>Consulta de casos complejos</h4><p>Cuando quieras pensar un caso con la IA, ya tiene toda la historia. No tienes que juntar nada.</p></div>
+</div>
+<div class="hecha"><span>QUEDA HECHA CUANDO</span>los 41 pacientes tienen expediente completo y cada sesión nueva se agrega sola, sin que nadie copie nada.</div>
+<div class="pie">IA CON LALA. · PROPUESTA DR. JUANPE · SEPTIEMBRE 2026</div></section><section class="slide ">
+<div class="eye">FASE 2 · TU ASISTENTE PERSONAL · MES 2</div><h1>Un asistente que agenda, persigue <em>y te avisa a tiempo.</em></h1>
+<div class="g3">
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><h4>Agenda y reagenda por instrucción</h4><p>“El 16 viajo, bloquéalo y acomoda a los que tenían cita.” Mueve las citas a otros días disponibles y le avisa a cada persona.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M9 2h6M10 2v6L4.5 18a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 8V2"/><path d="M7 15h10"/></svg></div><h4>Seguimiento de exámenes</h4><p>Sabe a quién se le pidieron exámenes y quién no los ha enviado. Le recuerda al paciente y te avisa si ya se demoró.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><h4>Qué le falta a cada paciente</h4><p>Checklist estándar de entrada y de cierre: ¿ya se enviaron exámenes, suplementos, invitación a Circle? Monday se actualiza solo.</p></div>
+  <div class="card hi"><div class="ic"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21.2l8.8-8.8a5.5 5.5 0 0 0 0-7.8z"/></svg></div><h4>Que se queden</h4><p>Detecta señales de que alguien se está enfriando: no llena el check-in, cancela sesiones o deja de escribir. Te avisa antes de que se vaya.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><h4>Último mes y renovación</h4><p>“Esta persona entra a su último mes.” Te recuerda planear la continuación, la oferta de renovación o pedir el testimonio.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg></div><h4>Te ayuda a cobrar</h4><p>Recordatorios antes de cada cobro, seguimiento amable de pagos fallidos en Stripe y links de pago de la renovación, sin que tú persigas a nadie.</p></div>
+</div>
+<div class="hecha"><span>QUEDA HECHA CUANDO</span>tú o Carly le piden un cambio de agenda en un mensaje y queda hecho, y cada lunes reciben la lista de pendientes, renovaciones y cobros.</div>
+<div class="pie">IA CON LALA. · PROPUESTA DR. JUANPE · SEPTIEMBRE 2026</div></section><section class="slide ">
+<div class="eye">EL FILTRO MÉDICO · APLICA A TODO EL SISTEMA</div><h1>La IA ayuda, pero <em>tú decides lo médico.</em></h1><p class="lead">Cada mensaje se clasifica antes de responder. Así sabemos cuándo sí se automatiza y cuándo no.</p>
+<div class="g3 tall">
+  <div class="card sem"><div class="dot g"></div><h4>Verde · se responde solo</h4><p>Lo que ya respondiste mil veces: a qué hora tomar un suplemento sencillo, recetas, lista de mercado, agenda, logística, dónde está un video.</p></div>
+  <div class="card sem hi"><div class="dot y"></div><h4>Amarillo · borrador para ti</h4><p>Ajustes de plan, síntomas nuevos, dudas de suplementación con matices. La IA escribe el borrador y tú lo apruebas o lo corriges en segundos.</p></div>
+  <div class="card sem"><div class="dot r"></div><h4>Rojo · solo Juanpe</h4><p>Medicamentos, dosis, interacciones, resultados alterados o cualquier señal de alarma. La IA no responde, te llega una alerta con todo el contexto.</p></div>
+</div>
+<div class="pie">IA CON LALA. · PROPUESTA DR. JUANPE · SEPTIEMBRE 2026</div></section><section class="slide ">
+<div class="eye">FASE 3 · ENTREGABLES PARA EL PACIENTE · MES 3</div><h1>Que el paciente <em>vea su avance.</em></h1>
+<div class="g3">
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><h4>Formulario de onboarding estandarizado</h4><p>Lo ajustamos contigo para que cada respuesta alimente el diagnóstico y el expediente.</p></div>
+  <div class="card hi"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 16v-4M12 16V8M17 16v-7"/></svg></div><h4>Diagnóstico inicial con puntajes</h4><p>PDF con score en nutrición, sueño, ejercicio, energía y más. Visual y fácil de entender.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/></svg></div><h4>Plan macro a 4 meses</h4><p>La hoja de ruta de lo que van a trabajar. Responde a lo que te pidieron: más claridad en el día a día.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21.2l8.8-8.8a5.5 5.5 0 0 0 0-7.8z"/></svg></div><h4>Informe de exámenes por órganos</h4><p>Histórico con gráficas: corazón, riñones, hígado, glucosa. Reemplaza la tabla que hoy haces a mano.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div><h4>Re-diagnóstico cada tercer mes</h4><p>El mismo reporte comparado contra el inicial. Perfecto para renovar y pedir testimonio.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div><h4>Tú apruebas antes de enviar</h4><p>Nada sale al paciente sin tu visto bueno. Revisas, ajustas y se envía.</p></div>
+</div>
+<div class="hecha"><span>QUEDA HECHA CUANDO</span>cada paciente nuevo recibe su diagnóstico y su plan en su primera semana, y los exámenes se ven en gráficas, no en tablas.</div>
+<div class="pie">IA CON LALA. · PROPUESTA DR. JUANPE · SEPTIEMBRE 2026</div></section><section class="slide ">
+<div class="eye">FASE 4 · CHECK-INS Y RESPUESTAS · MES 4</div><h1>Lo que hoy toma tres horas, <em>en una revisión rápida.</em></h1>
+<div class="g3">
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><h4>Envío y recordatorio del check-in</h4><p>Se envía solo en la fecha que toca y le recuerda a la persona hasta que lo llene.</p></div>
+  <div class="card hi"><div class="ic"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></svg></div><h4>Check-in pre-leído</h4><p>Resume las respuestas contra el expediente y te deja qué cambió, qué preocupa y qué ajustar.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M22 8l-6 4 6 4z"/></svg></div><h4>Tú grabas tu Tella</h4><p>Abres, vas al grano y grabas tus dos o tres minutos. Sin leer todo desde cero.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><h4>Preguntas frecuentes resueltas</h4><p>Las dudas verdes del semáforo se responden solas con tus respuestas de siempre.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4M8 22h8"/></svg></div><h4>Notas de voz con tu voz (opcional)</h4><p>Con ElevenLabs, respuestas simples en audio con tu voz clonada, solo para lo verde.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg></div><h4>Circle al día</h4><p>Al terminar cada sesión se postea el resumen, los próximos pasos y el video en el espacio de la persona.</p></div>
+</div>
+<div class="hecha"><span>QUEDA HECHA CUANDO</span>una ronda completa de check-ins te toma menos de una hora y cada sesión queda posteada en Circle sin que nadie la suba.</div>
+<div class="pie">IA CON LALA. · PROPUESTA DR. JUANPE · SEPTIEMBRE 2026</div></section><section class="slide ">
+<div class="eye">CÓMO TRABAJAMOS</div><h1>Lo construyo yo, <em>lo operan tú y Carly.</em></h1>
+<div class="g4">
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9z"/></svg></div><h4>Yo construyo y conecto</h4><p>Cada módulo se monta sobre tus herramientas actuales. Antes de cada fase te presento lo que falta definir en un solo mensaje, con opciones y recomendación.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M11 18h2"/></svg></div><h4>Ustedes lo operan</h4><p>Tú y Carly le escriben al asistente como le escribirían a una persona. Capacitación en cada fase y guía de uso en lenguaje simple.</p></div>
+  <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><h4>Confidencialidad primero</h4><p>Firmamos un acuerdo de confidencialidad (NDA) antes de tocar un solo dato. La información de tus pacientes y tu conocimiento son tuyos.</p></div>
+  <div class="card hi"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div><h4>Nada se inventa</h4><p>Si un dato no está en el expediente, el sistema lo dice. Lo que falta queda marcado como pendiente, no adivinado. Y lo clínico siempre pasa por ti.</p></div>
+</div>
+<p class="lead">Arrancamos con 3 a 5 pacientes piloto en cada fase y después lo abrimos a todos. Todo es virtual, así estés en Portugal o en Indonesia. <b>Ninguna fase se entrega y se abandona.</b></p>
+<div class="pie">IA CON LALA. · PROPUESTA DR. JUANPE · SEPTIEMBRE 2026</div></section><section class="slide ">
+<div class="eye">LO QUE PONES TÚ</div><h1>Sin esto, el sistema <em>no puede arrancar.</em></h1><p class="lead">Los tres primeros destraban la fase 1: sin ellos no arranca el reloj.</p>
+<div class="list">
+  <div><span>01</span><b>Accesos a tus herramientas</b><p>Drive, Fathom, Google Calendar, Monday, GoHighLevel, Circle y Stripe, con un usuario para el sistema.</p></div>
+  <div><span>02</span><b>Tu prompt de exámenes y tu forma de leerlos</b><p>El prompt que ya usas, tu tabla y una sesión de una hora contándome qué miras primero y qué te prende las alarmas.</p></div>
+  <div><span>03</span><b>La versión actual del onboarding y 3 a 5 pacientes piloto</b><p>El formulario de hoy y quiénes arrancan primero, con su autorización.</p></div>
+  <div><span>04</span><b>Tus respuestas de siempre</b><p>Tus 20 a 30 preguntas más frecuentes con cómo las respondes. Es la base de lo verde del semáforo.</p></div>
+  <div><span>05</span><b>Tus reglas de agenda y cobro</b><p>Horarios, cuánto se puede mover una cita, fechas de cobro y cómo quieres que se le hable a alguien que no ha pagado.</p></div>
+</div>
+<div class="pie">IA CON LALA. · PROPUESTA DR. JUANPE · SEPTIEMBRE 2026</div></section><section class="slide ">
+<div class="eye">INVERSIÓN</div><h1>Por fases, y cada fase se paga <em>cuando funciona.</em></h1>
+<div class="inv">
+  <div class="tabla">
+    <div class="th"><b>Implementación por fase</b><span class="pl on">Dólares</span><span class="pl">Pago único por fase</span></div>
+    <table>
+      <tr><th>FASE</th><th>QUÉ QUEDA FUNCIONANDO</th><th>CUÁNDO</th><th class="r">VALOR</th></tr>
+      <tr><td><b>1 · El expediente vivo</b></td><td>Documento maestro, onboarding, post-sesión, exámenes con tu criterio, reporte pre-sesión</td><td><b>Mes 1</b></td><td class="r"><b>US$ 900</b></td></tr>
+      <tr><td><b>2 · Asistente personal</b></td><td>Agenda y reagendamiento, seguimiento de exámenes, pendientes, retención, renovación, cobros</td><td><b>Mes 2</b></td><td class="r"><b>US$ 900</b></td></tr>
+      <tr><td><b>3 · Entregables</b></td><td>Diagnóstico con puntajes, plan a 4 meses, informe de exámenes, re-diagnóstico</td><td><b>Mes 3</b></td><td class="r"><b>US$ 700</b></td></tr>
+      <tr><td><b>4 · Check-ins y respuestas</b></td><td>Check-ins pre-leídos, preguntas frecuentes, notas de voz, Circle automático</td><td><b>Mes 4</b></td><td class="r"><b>US$ 700</b></td></tr>
+      <tr class="sum"><td><b>Suma por fases</b></td><td>Aprobando una a una</td><td></td><td class="r"><b>US$ 3.200</b></td></tr>
+    </table>
+  </div>
+  <div class="dark">
+    <div class="k">TODO EL SISTEMA · CUATRO FASES</div>
+    <div class="price">US$ 2.900</div>
+    <div class="s">aprobando las cuatro fases juntas · ahorro de US$ 300</div>
+    <div class="hr"></div>
+    <div class="acomp"><b>Acompañamiento mensual</b><b>US$ 200 / mes</b></div>
+    <div class="s2">Ajustes, entrenamiento del asistente, capacitación y soporte</div>
+    <div class="hr"></div>
+    <p>Valores en dólares. No incluyen las herramientas de terceros de la siguiente lámina. Cada fase: 50 % al iniciar y 50 % contra el criterio de “hecho”. El acompañamiento se factura mes vencido mientras haya una fase en curso, y después es opcional.</p>
+  </div>
+</div>
+<div class="pie">IA CON LALA. · PROPUESTA DR. JUANPE · SEPTIEMBRE 2026</div></section><section class="slide ">
+<div class="eye">HERRAMIENTAS DE TERCEROS · COSTOS RECURRENTES</div><h1>Lo que el sistema paga cada mes, <em>sin sorpresas.</em></h1><p class="lead">La mayoría ya las pagas. Ninguna nueva se activa sin mostrarte antes lo que cuesta.</p>
+<div class="tools">
+  <div><span class="tag t">YA LA TIENES</span><b>Drive, Meet, Fathom, Circle, Monday, GoHighLevel, Stripe</b><small>Tus herramientas actuales. El sistema se conecta a ellas.</small><em>Sin costo extra<i>SEGÚN TUS PLANES ACTUALES</i></em></div>
+  <div><span class="tag u">USD</span><b>Inteligencia artificial</b><small>Lee exámenes, resúmenes y check-ins, y redacta borradores. Se cobra por uso.</small><em>30 a 70 / mes<i>SEGÚN EL VOLUMEN</i></em></div>
+  <div><span class="tag u">USD</span><b>Plataforma de automatización</b><small>La que conecta tus herramientas entre sí y mueve la información sola.</small><em>20 a 30 / mes aprox.<i>DESDE LA FASE 1</i></em></div>
+  <div><span class="tag f">FASE 4</span><b>ElevenLabs · opcional</b><small>Tu voz clonada para las notas de voz de lo verde.</small><em>22 / mes aprox.<i>SOLO SI LO ACTIVAS</i></em></div>
+</div>
+<div class="nota">LOS VALORES EN DÓLARES SON APROXIMADOS. LA CUENTA REAL SE PRESENTA CADA MES JUNTO CON EL ACOMPAÑAMIENTO.</div>
+<div class="pie">IA CON LALA. · PROPUESTA DR. JUANPE · SEPTIEMBRE 2026</div></section><section class="slide cov">
+<div class="center">
+  <div class="foto"><img src="data:image/jpeg;base64,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" alt="Laura Calle"></div>
+  <h1 class="m">Empecemos por <em>el expediente vivo.</em></h1>
+  <p class="lead c">Apruebas la fase 1 (o todo el sistema) y me compartes los tres accesos que la destraban.<br>
+  <b>Una reunión de arranque de una hora contigo y con Carly, y arranca el reloj del primer mes.</b></p>
+  <div class="btn">Aprobar y agendar el arranque</div>
+  <div class="contact">
+    <div><small>CONTACTO</small><b>Laura Calle</b></div>
+    <div><small>CORREO</small><b class="t">lala@iaconlala.com</b></div>
+    <div><small>INSTAGRAM</small><b class="t">@ia_con_lala</b></div>
+    <div><small>WEB</small><b class="t">iaconlala.com</b></div>
+  </div>
+  <p class="foot2">ia con lala · Medellín, Colombia · septiembre 2026</p>
+</div><div class="pie">IA CON LALA. · PROPUESTA DR. JUANPE · SEPTIEMBRE 2026</div></section>
+</div></body></html>
