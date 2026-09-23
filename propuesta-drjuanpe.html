@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- PLANTILLA · PROPUESTA / PRESENTACIÓN · ia con lala.
+     Slides de 1280x720 para exportar a PDF (Cmd/Ctrl+P → Guardar como PDF → Horizontal → Márgenes: ninguno).
+     Duplica <section class="slide"> por cada lámina. Cambia solo el contenido, nunca el CSS.
+     Componentes disponibles (ver ejemplos abajo): .panel (caja verde), .numlist, .stats/.stat.g,
+     .two/.card.g, .rows/.row, .grid6/.cat.g, .inv/.price, .stats4. -->
+<title>Propuesta · IA para Dr. Juanpe · ia con lala</title>
+<style>
+  :root{
+    --crema:#f5f1e6; --crema-card:#fbf9f2; --verde:#1e3a2f; --verde-2:#24473a;
+    --terracota:#c0502a; --gris:#6b6b60; --tinta:#324439; --borde:#e3ddc9;
+    --oro:#b9a96b; --sage:#8fa08a;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{background:#2a2a26;}
+  body{font-family:Georgia,"Times New Roman",serif; color:var(--verde);}
+  .mono{font-family:"SF Mono","Roboto Mono","Courier New",monospace;}
+
+  .ayuda{color:#d8d2c0; text-align:center; font:13px/1.5 -apple-system,sans-serif; padding:16px;}
+  .ayuda b{color:#fff;}
+
+  .deck{display:flex; flex-direction:column; align-items:center; gap:22px; padding-bottom:40px;}
+
+  .slide{
+    width:1280px; height:720px; background:var(--crema);
+    padding:44px 60px 56px; position:relative; overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+
+  .top{display:flex; justify-content:space-between; align-items:baseline;}
+  .brand{font-size:21px; letter-spacing:.3px;}
+  .brand b{font-weight:700;} .brand i{font-style:italic; color:var(--verde);}
+  .brand .d{color:var(--terracota); font-weight:700;}
+  .top-eye{font-size:11px; letter-spacing:2.5px; color:var(--gris);}
+  .top-eye .dot{color:var(--terracota);}
+  .rule{height:1px; background:var(--borde); margin:14px 0 0;}
+
+  .sec{display:flex; align-items:center; gap:12px; margin-top:30px;}
+  .chip{background:var(--verde); color:#fff; font-size:11px; letter-spacing:1px; padding:3px 7px;}
+  .sec-lbl{font-size:12px; letter-spacing:3px; color:var(--terracota);}
+
+  h1.tit{font-size:47px; line-height:1.05; font-weight:700; letter-spacing:-.5px; margin-top:14px;}
+  h1.tit i, .tit em{font-style:italic; color:var(--terracota); font-weight:700;}
+  .lead{font-size:16px; line-height:1.6; color:var(--tinta); max-width:1000px; margin-top:16px;}
+  .lead b{color:var(--verde);}
+
+  .foot{position:absolute; left:60px; right:60px; bottom:22px; display:flex; justify-content:space-between;
+        font-size:10.5px; letter-spacing:2px; color:#a79f8c; border-top:1px solid var(--borde); padding-top:10px;}
+
+  .fill{flex:1;}
+
+  .grid2{display:grid; grid-template-columns:1.02fr .98fr; gap:46px; flex:1; margin-top:26px;}
+  .panel{background:var(--verde); color:var(--crema); padding:46px; display:flex; flex-direction:column; justify-content:center;}
+  .panel.center{align-items:flex-start;}
+
+  .cover-eye{font-size:12px; letter-spacing:3px; color:var(--terracota); line-height:1.5;}
+  .cover-tit{font-size:56px; line-height:1.04; font-weight:700; margin-top:14px; letter-spacing:-1px;}
+  .cover-tit i{font-style:italic; color:var(--terracota);}
+  .cover-sub{font-size:16px; line-height:1.6; color:var(--tinta); margin-top:20px; max-width:520px;}
+  .cover-sub b{color:var(--verde);}
+  .cover-meta{display:flex; gap:60px; margin-top:34px;}
+  .cover-meta .k{font-size:11px; letter-spacing:2px; color:var(--gris);}
+  .cover-meta .v{font-size:16px; font-style:italic; margin-top:5px;}
+  .cover-logo{font-size:52px; line-height:1.15; color:var(--crema);}
+  .cover-logo i{font-style:italic; color:#c9c3ac;}
+  .cover-logo .d{color:var(--terracota);}
+
+  .numlist{display:flex; flex-direction:column; justify-content:center; gap:2px;}
+  .numrow{display:grid; grid-template-columns:56px 1fr; gap:16px; padding:18px 0; border-top:1px solid var(--borde); align-items:start;}
+  .numrow:first-child{border-top:none;}
+  .numrow .n{font-size:30px; font-style:italic; color:var(--oro);}
+  .numrow h4{font-size:18px; font-weight:700;}
+  .numrow p{font-size:13.5px; line-height:1.5; color:var(--gris); margin-top:4px;}
+
+  .bignum-eye{font-size:11px; letter-spacing:3px; color:var(--sage);}
+  .bignum{font-size:96px; font-style:italic; color:var(--oro); line-height:1; margin-top:14px; letter-spacing:-2px;}
+  .panel .divi{height:1px; background:rgba(255,255,255,.18); margin:26px 0;}
+  .panel .txt{font-size:15.5px; line-height:1.55; color:#e7e2d2;}
+  .tags{font-size:12px; letter-spacing:2.5px; color:var(--sage); margin-top:26px;}
+
+  .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-top:30px; border:1px solid var(--borde);}
+  .stat{padding:26px 28px; border-left:1px solid var(--borde);}
+  .stat:first-child{border-left:none;}
+  .stat.g{background:var(--verde); color:var(--crema);}
+  .stat .lbl{font-size:11px; letter-spacing:2.5px; color:var(--terracota);}
+  .stat.g .lbl{color:var(--sage);}
+  .stat .big{font-size:52px; font-weight:700; margin:10px 0 6px; letter-spacing:-1px;}
+  .stat .cap{font-size:15px; font-weight:700;}
+  .stat .sub{font-size:12.5px; line-height:1.45; color:var(--gris); margin-top:8px;}
+  .stat.g .sub{color:#cdd4c6;}
+
+  .two{display:grid; grid-template-columns:1fr 1fr; gap:30px; flex:1; margin-top:26px;}
+  .card{border:1px solid var(--borde); padding:34px; display:flex; flex-direction:column;}
+  .card.g{background:var(--verde); color:var(--crema); border-color:var(--verde);}
+  .card .k{font-size:11px; letter-spacing:2.5px; color:var(--terracota);}
+  .card.g .k{color:var(--sage);}
+  .card h3{font-size:30px; font-style:italic; font-weight:700; margin-top:20px;}
+  .card p{font-size:14.5px; line-height:1.55; color:var(--tinta); margin-top:16px;}
+  .card.g p{color:#dfe0d4;}
+  .card .ent{font-size:11px; letter-spacing:2px; color:var(--terracota); margin-top:auto; padding-top:22px; border-top:1px solid var(--borde);}
+  .card.g .ent{color:var(--sage); border-color:rgba(255,255,255,.15);}
+  .card .ent b{display:block; color:var(--verde); font-family:Georgia,serif; letter-spacing:0; font-size:14px; margin-top:6px; font-weight:400;}
+  .card.g .ent b{color:var(--crema);}
+
+  .rows{margin-top:22px;}
+  .row{display:grid; grid-template-columns:22px 1fr auto; gap:14px; padding:15px 0; border-top:1px solid var(--borde); align-items:baseline;}
+  .row .di{color:var(--terracota); font-size:13px;}
+  .row h4{font-size:17px; font-weight:700;}
+  .row p{font-size:13px; line-height:1.45; color:var(--gris); margin-top:3px;}
+  .row .mes{font-size:11px; letter-spacing:2px; color:#a79f8c; white-space:nowrap;}
+
+  .grid6{display:grid; grid-template-columns:repeat(3,1fr); gap:20px; flex:1; margin-top:26px;}
+  .cat{border:1px solid var(--borde); padding:20px 22px;}
+  .cat .k{font-size:11px; letter-spacing:2px; color:var(--terracota);}
+  .cat ul{list-style:none; margin-top:12px; display:flex; flex-direction:column; gap:8px;}
+  .cat li{font-size:13px; line-height:1.35; padding-left:16px; position:relative; color:var(--tinta);}
+  .cat li::before{content:"◆"; position:absolute; left:0; color:var(--terracota); font-size:9px; top:3px;}
+  .cat.g{background:var(--verde); color:var(--crema); border-color:var(--verde); display:flex; flex-direction:column; justify-content:center;}
+  .cat.g h3{font-size:23px; font-style:italic; font-weight:700;}
+  .cat.g p{font-size:13px; line-height:1.5; color:#dfe0d4; margin-top:12px;}
+
+  .inv{display:grid; grid-template-columns:1.05fr .95fr; gap:46px; flex:1; margin-top:26px;}
+  .inv .grp{font-size:14px; font-style:italic; color:var(--terracota); margin:6px 0 10px;}
+  .inv .item{display:flex; gap:12px; padding:8px 0; font-size:14.5px; color:var(--tinta); align-items:baseline;}
+  .inv .item .di{color:var(--terracota); font-size:11px;}
+  .price-eye{font-size:11px; letter-spacing:2.5px; color:var(--sage);}
+  .price{font-size:60px; font-weight:700; color:var(--oro); line-height:1; margin-top:8px; letter-spacing:-1px;}
+  .price-sub{font-size:12.5px; letter-spacing:1px; color:#cdd4c6; margin-top:8px;}
+  .cond{font-size:11px; line-height:1.5; color:var(--gris); margin-top:18px;}
+
+  .stats4{display:grid; grid-template-columns:repeat(4,1fr); border:1px solid var(--borde); margin-top:30px;}
+  .s4{padding:24px 24px; border-left:1px solid var(--borde);}
+  .s4:first-child{border-left:none;}
+  .s4 .big{font-size:40px; font-weight:700; letter-spacing:-1px;}
+  .s4 .lbl{font-size:10.5px; letter-spacing:1.5px; color:var(--gris); margin-top:10px; line-height:1.4;}
+
+  @media print{
+    html,body{background:#fff;}
+    .ayuda{display:none;}
+    .deck{gap:0; padding:0;}
+    .slide{page-break-after:always; box-shadow:none;}
+    @page{size:1280px 720px; margin:0;}
+  }
+  @media screen{ .slide{box-shadow:0 10px 40px rgba(0,0,0,.35);} }
+</style>
+</head>
+<body>
+<div class="ayuda">Vista de la propuesta · <b>Dr. Juanpe</b>. Para exportar a PDF: <b>Cmd/Ctrl + P → Guardar como PDF → Horizontal → Márgenes: ninguno</b>.</div>
+<div class="deck">
+
+<!-- 1 · PORTADA -->
+<section class="slide">
+  <div class="top">
+    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
+    <div class="top-eye"><span class="dot">●</span> PROPUESTA&nbsp;&nbsp;&nbsp;SEPTIEMBRE 2026</div>
+  </div>
+  <div class="rule"></div>
+  <div class="grid2" style="align-items:center;">
+    <div>
+      <div class="cover-eye mono">— PROPUESTA · UN EXPEDIENTE VIVO POR PACIENTE</div>
+      <div class="cover-tit">Tu consulta,<br>con <i>memoria</i><br>propia</div>
+      <div class="cover-sub">Un documento maestro por paciente que se llena solo, un asistente que te prepara cada sesión y te señala lo que se te está pasando, y una operación que deja de depender de <b>juntar información de seis lugares distintos</b>.</div>
+      <div class="cover-meta">
+        <div><div class="k mono">PREPARADO POR</div><div class="v">Laura Calle · ia con lala</div></div>
+        <div><div class="k mono">PARA</div><div class="v">Juan Pedro Montoya · Dr. Juanpe + Vital</div></div>
+      </div>
+    </div>
+    <div class="panel" style="height:520px; justify-content:center;">
+      <div class="cover-logo"><b style="font-weight:700;">ia</b> <i>con lala</i><span class="d">.</span></div>
+      <div class="divi" style="width:100%;"></div>
+      <div class="txt" style="font-style:italic;">"Un expediente clínico vivo por paciente, que me prepare para cada sesión y me señale lo que se me está pasando."</div>
+      <div class="tags mono">— JUANPE, EN NUESTRA REUNIÓN</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 · RESUMEN EJECUTIVO -->
+<section class="slide">
+  <div class="top">
+    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
+    <div class="top-eye mono">01 — RESUMEN EJECUTIVO&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
+  </div>
+  <div class="rule"></div>
+  <div class="sec"><span class="chip mono">01</span><span class="sec-lbl mono">RESUMEN EJECUTIVO</span></div>
+  <div class="grid2">
+    <div>
+      <h1 class="tit">Primero la <i>memoria</i>, después todo lo demás.</h1>
+      <p class="lead">Tu proceso ya está muy bien pensado y documentado en Miro. Lo que falta es que todo viva en un solo lugar y que la IA haga las partes manuales. Por eso arrancamos por lo que tú mismo marcaste como prioridad: <b>la fuente única de verdad de cada paciente</b>, y sobre ella montamos los entregables y la operación.</p>
+    </div>
+    <div class="numlist">
+      <div class="numrow"><div class="n">01</div><div><h4>Fase 1 · El expediente vivo</h4><p>Documento maestro por paciente que se actualiza solo con el onboarding, cada sesión y cada examen, más el reporte pre-sesión con tu criterio médico.</p></div></div>
+      <div class="numrow"><div class="n">02</div><div><h4>Fase 2 · Entregables que enamoran</h4><p>Diagnóstico inicial con puntajes, plan macro a 4 meses, informe visual de exámenes por órganos y check-ins pre-leídos.</p></div></div>
+      <div class="numrow"><div class="n">03</div><div><h4>Fase 3 · Tu agente de operación <span style="font-size:13px; color:#a79f8c; font-weight:400; font-style:italic;">— lo que sigue</span></h4><p>Agenda y reagendamiento por instrucción, CRM al día solo, posteos en Circle y alertas de renovación.</p></div></div>
+    </div>
+  </div>
+  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>02 / 13</span></div>
+</section>
+
+<!-- 3 · DÓNDE ESTÁ HOY -->
+<section class="slide">
+  <div class="top">
+    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
+    <div class="top-eye mono">02 — DÓNDE ESTÁ HOY&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
+  </div>
+  <div class="rule"></div>
+  <div class="sec"><span class="chip mono">02</span><span class="sec-lbl mono">DÓNDE ESTÁ HOY</span></div>
+  <h1 class="tit">Mucho sistema, pero la información está <i>regada.</i></h1>
+  <p class="lead">Tienes Meet, Fathom, Drive, Circle, Monday, GoHighLevel, Stripe, formularios y firma electrónica. Cada uno hace bien su parte, pero cuando llega un caso complejo te toca <b>reunir el rompecabezas a mano</b> antes de poder pensar, y con más pacientes se empiezan a escapar detalles.</p>
+  <div class="stats">
+    <div class="stat"><div class="lbl mono">PACIENTES ACTIVOS</div><div class="big">41</div><div class="cap">Cada uno con su historia</div><div class="sub">Mínimo 4 meses, 2 sesiones al mes, más continuaciones mensuales o semestrales.</div></div>
+    <div class="stat g"><div class="lbl mono">HERRAMIENTAS</div><div class="big">9+</div><div class="cap">Y ninguna tiene la foto completa</div><div class="sub">Onboarding, resúmenes, exámenes, mensajes y avances viven en lugares distintos.</div></div>
+    <div class="stat"><div class="lbl mono">CHECK-INS</div><div class="big">2–3 h</div><div class="cap">Cada ronda de respuestas</div><div class="sub">Leer, entender y grabar el Tella de cada persona, más la extracción manual de exámenes.</div></div>
+  </div>
+  <div class="fill"></div>
+  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>03 / 13</span></div>
+</section>
+
+<!-- 4 · EL CORAZÓN DEL SISTEMA -->
+<section class="slide">
+  <div class="top">
+    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
+    <div class="top-eye mono">03 — EL CORAZÓN DEL SISTEMA&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
+  </div>
+  <div class="rule"></div>
+  <div class="sec"><span class="chip mono">03</span><span class="sec-lbl mono">EL EXPEDIENTE VIVO</span></div>
+  <h1 class="tit">Un documento por paciente que se <i>llena solo.</i></h1>
+  <p class="lead">Es la "single source of truth" que describiste: un documento maestro en Google Drive por cada persona. Tú no lo alimentas, <b>lo alimenta el sistema</b>, y de él sale todo lo demás.</p>
+  <div class="two">
+    <div class="card">
+      <div class="k mono">LO QUE ENTRA · AUTOMÁTICO</div>
+      <h3>Todo lo de la persona, en un lugar.</h3>
+      <p>El formulario de onboarding, el resumen de cada sesión de Fathom, los exámenes que te mandan en PDF, los check-ins, los medicamentos y suplementos con dosis, y los acuerdos de cada sesión.</p>
+      <div class="ent mono">FUENTES<b>Formulario · Fathom · Drive · Circle · Check-ins</b></div>
+    </div>
+    <div class="card g">
+      <div class="k mono">LO QUE SALE · LISTO PARA TI</div>
+      <h3>Contexto sin buscar nada.</h3>
+      <p>Un reporte antes de cada sesión: "hoy tienes tres pacientes, con fulanito acuérdate de esto, con Pepita revisa esto". Y cuando quieras consultar un caso difícil con la IA, ya tiene toda la historia.</p>
+      <div class="ent mono">RESULTADO<b>Llegas a cada sesión preparado en minutos.</b></div>
+    </div>
+  </div>
+  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>04 / 13</span></div>
+</section>
+
+<!-- 5 · FASE 1 -->
+<section class="slide">
+  <div class="top">
+    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
+    <div class="top-eye mono">04 — FASE 1 · EL EXPEDIENTE VIVO&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
+  </div>
+  <div class="rule"></div>
+  <div class="sec"><span class="chip mono">04</span><span class="sec-lbl mono">FASE 1 · EL ARRANQUE</span></div>
+  <h1 class="tit">Con lo que <i>empezamos.</i></h1>
+  <p class="lead">Todo lo que marcaste como prioritario. Arrancamos con un grupo pequeño de pacientes para probar y luego pasamos a los 41.</p>
+  <div class="rows">
+    <div class="row"><div class="di">◆</div><div><h4>Documento maestro por paciente</h4><p>Plantilla única que se crea sola al entrar el paciente y se alimenta del onboarding, las sesiones, los exámenes y los check-ins.</p></div><div class="mes mono">MES 1</div></div>
+    <div class="row"><div class="di">◆</div><div><h4>Actualización automática después de cada sesión</h4><p>El resumen de Fathom se ordena y se agrega al expediente: temas, acuerdos, cambios de plan y próximos pasos.</p></div><div class="mes mono">MES 1</div></div>
+    <div class="row"><div class="di">◆</div><div><h4>Lectura de exámenes con tu criterio</h4><p>Le enseñamos a la IA cómo lees tú los resultados. Extrae los valores del PDF, los pasa a tu tabla y te dice "ten especial cuidado con esto".</p></div><div class="mes mono">MES 1–2</div></div>
+    <div class="row"><div class="di">◆</div><div><h4>Reporte pre-sesión diario</h4><p>Cada mañana, un resumen ejecutivo de tus sesiones del día: contexto, puntos clave de seguimiento, alertas y temas sugeridos.</p></div><div class="mes mono">MES 2</div></div>
+  </div>
+  <div class="fill"></div>
+  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>05 / 13</span></div>
+</section>
+
+<!-- 6 · FASE 2 -->
+<section class="slide">
+  <div class="top">
+    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
+    <div class="top-eye mono">05 — FASE 2 · ENTREGABLES&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
+  </div>
+  <div class="rule"></div>
+  <div class="sec"><span class="chip mono">05</span><span class="sec-lbl mono">FASE 2 · ENTREGABLES QUE ENAMORAN</span></div>
+  <h1 class="tit">Que el paciente <i>vea</i> su avance.</h1>
+  <div class="grid6">
+    <div class="cat"><div class="k mono">DIAGNÓSTICO INICIAL</div><ul><li>Formulario de onboarding estandarizado</li><li>PDF con puntaje en nutrición, sueño, ejercicio, energía y más</li><li>Visual, fácil de entender</li></ul></div>
+    <div class="cat"><div class="k mono">PLAN MACRO A 4 MESES</div><ul><li>La hoja de ruta de lo que van a trabajar</li><li>Responde a lo que te pidieron: más claridad en el día a día</li><li>Tú lo revisas antes de enviarlo</li></ul></div>
+    <div class="cat"><div class="k mono">INFORME DE EXÁMENES</div><ul><li>Histórico con gráficas por área</li><li>Organizado por órganos: corazón, riñones, hígado</li><li>Reemplaza la tabla que hoy haces a mano</li></ul></div>
+    <div class="cat"><div class="k mono">RE-DIAGNÓSTICO</div><ul><li>El mismo reporte cada tercer mes</li><li>Comparado contra el inicial</li><li>Perfecto para renovar y pedir testimonio</li></ul></div>
+    <div class="cat g" style="grid-column:span 2;"><h3>Check-ins pre-leídos</h3><p>El sistema envía el check-in, le recuerda a la persona que lo llene, resume sus respuestas y te deja listo el borrador de qué ajustar. Tú abres, vas al grano y grabas tu Tella. Lo que hoy te toma dos o tres horas, pasa a ser una revisión rápida.</p></div>
+  </div>
+  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>06 / 13</span></div>
+</section>
+
+<!-- 7 · SEMÁFORO MÉDICO -->
+<section class="slide">
+  <div class="top">
+    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
+    <div class="top-eye mono">06 — SEGURIDAD MÉDICA&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
+  </div>
+  <div class="rule"></div>
+  <div class="sec"><span class="chip mono">06</span><span class="sec-lbl mono">EL FILTRO: CUÁNDO SÍ Y CUÁNDO NO</span></div>
+  <h1 class="tit">La IA ayuda, pero <i>tú decides</i> lo médico.</h1>
+  <p class="lead">Tienes pacientes con medicamentos y dosis específicas, así que no todo se puede automatizar. Montamos un semáforo: cada mensaje se clasifica antes de responder, y <b>nada sensible sale sin tu aprobación</b>.</p>
+  <div class="stats">
+    <div class="stat"><div class="lbl mono">VERDE · SE RESPONDE SOLO</div><div class="big" style="font-size:40px;">Lo simple</div><div class="cap">Dudas que ya respondiste mil veces</div><div class="sub">Horarios de un suplemento sencillo, recetas, lista de mercado, logística, agenda. Con tus respuestas y, si quieres, tu voz clonada en ElevenLabs.</div></div>
+    <div class="stat g"><div class="lbl mono">AMARILLO · BORRADOR PARA TI</div><div class="big" style="font-size:40px;">Lo delicado</div><div class="cap">La IA escribe, tú apruebas</div><div class="sub">Ajustes de plan, síntomas nuevos, dudas de suplementación con matices. Te llega el borrador listo, lo apruebas o lo corriges.</div></div>
+    <div class="stat"><div class="lbl mono">ROJO · SOLO JUANPE</div><div class="big" style="font-size:40px;">Lo clínico</div><div class="cap">La IA no responde, te avisa</div><div class="sub">Medicamentos, dosis, interacciones, resultados alterados o cualquier señal de alarma. Te llega una alerta con el contexto.</div></div>
+  </div>
+  <div class="fill"></div>
+  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>07 / 13</span></div>
+</section>
+
+<!-- 8 · FASE 3 -->
+<section class="slide">
+  <div class="top">
+    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
+    <div class="top-eye mono">07 — FASE 3 · OPERACIÓN&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
+  </div>
+  <div class="rule"></div>
+  <div class="sec"><span class="chip mono">07</span><span class="sec-lbl mono">FASE 3 · TU AGENTE DE OPERACIÓN</span></div>
+  <h1 class="tit">Lo del día a día, <i>sin manualidades.</i></h1>
+  <p class="lead">Un agente (un asistente de IA que ejecuta tareas, no solo responde) que trabaja de la mano con Carly y conecta tus herramientas actuales. No cambiamos de plataforma, las ponemos a hablar entre sí.</p>
+  <div class="rows">
+    <div class="row"><div class="di">◆</div><div><h4>Agenda por instrucción</h4><p>"La otra semana viajo el 16, bloquéalo y reacomoda a los que tenían cita". El agente mueve las citas y avisa a cada persona.</p></div><div class="mes mono">MES 3</div></div>
+    <div class="row"><div class="di">◆</div><div><h4>CRM al día y onboarding estandarizado</h4><p>Monday se actualiza solo, se crean y asignan tareas, y un checklist deja claro si ya se enviaron exámenes, suplementos e invitación a Circle.</p></div><div class="mes mono">MES 3</div></div>
+    <div class="row"><div class="di">◆</div><div><h4>Circle automático</h4><p>Al terminar cada sesión se postea el resumen, los próximos pasos y el video en el espacio privado de la persona.</p></div><div class="mes mono">MES 3</div></div>
+    <div class="row"><div class="di">◆</div><div><h4>Alertas de renovación y testimonio</h4><p>"Esta persona entra a su último mes": te avisa a tiempo para planear la continuación o pedir el testimonio.</p></div><div class="mes mono">MES 3</div></div>
+  </div>
+  <div class="fill"></div>
+  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>08 / 13</span></div>
+</section>
+
+<!-- 9 · CÓMO TRABAJAMOS -->
+<section class="slide">
+  <div class="top">
+    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
+    <div class="top-eye mono">08 — CÓMO TRABAJAMOS&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
+  </div>
+  <div class="rule"></div>
+  <div class="sec"><span class="chip mono">08</span><span class="sec-lbl mono">CÓMO TRABAJAMOS</span></div>
+  <h1 class="tit">Lo construyo yo, lo operan <i>tú y Carly.</i></h1>
+  <p class="lead">Trabajamos 100% virtual, así estés en Portugal o en Indonesia. Antes de tocar un solo dato firmamos un <b>acuerdo de confidencialidad (NDA)</b>: la información de tus pacientes y tu conocimiento médico son tuyos y no salen de tu sistema.</p>
+  <div class="two">
+    <div class="card">
+      <div class="k mono">CONSTRUCCIÓN</div>
+      <h3>Yo construyo y conecto.</h3>
+      <p>Diseño el expediente, conecto tus herramientas, entreno a la IA con tu forma de leer exámenes y de responder, y lo probamos con pocos pacientes antes de abrirlo a todos.</p>
+      <div class="ent mono">ENTREGABLE<b>Sistema funcionando sobre tus herramientas actuales.</b></div>
+    </div>
+    <div class="card g">
+      <div class="k mono">CAPACITACIÓN</div>
+      <h3>Ustedes lo operan.</h3>
+      <p>Sesiones cortas contigo y con Carly para que sepan usarlo, corregirlo y pedirle cosas nuevas. Todo queda documentado en videos y guías paso a paso.</p>
+      <div class="ent mono">ENTREGABLE<b>Equipo capacitado + documentación + 30 días de ajustes.</b></div>
+    </div>
+  </div>
+  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>09 / 13</span></div>
+</section>
+
+<!-- 10 · MÉTRICAS -->
+<section class="slide">
+  <div class="top">
+    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
+    <div class="top-eye mono">09 — CÓMO MEDIMOS&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
+  </div>
+  <div class="rule"></div>
+  <div class="sec"><span class="chip mono">09</span><span class="sec-lbl mono">CÓMO SABEMOS QUE FUNCIONA</span></div>
+  <h1 class="tit">Menos tiempo operando, más tiempo <i>con la persona.</i></h1>
+  <div class="grid6">
+    <div class="cat"><div class="k mono">PREPARACIÓN</div><ul><li>Minutos que te toma prepararte para una sesión</li><li>Casos complejos resueltos sin buscar información</li></ul></div>
+    <div class="cat"><div class="k mono">CHECK-INS</div><ul><li>Horas por ronda de check-ins</li><li>Porcentaje de pacientes que lo llenan a tiempo</li></ul></div>
+    <div class="cat"><div class="k mono">EXÁMENES</div><ul><li>Tiempo de extracción e interpretación por PDF</li><li>Alertas que la IA te señaló a tiempo</li></ul></div>
+    <div class="cat"><div class="k mono">EXPERIENCIA</div><ul><li>Satisfacción con el diagnóstico y el plan</li><li>Tasa de renovación al cumplir los 4 meses</li></ul></div>
+    <div class="cat g" style="grid-column:span 2;"><h3>Lo que garantizo vs. lo que perseguimos</h3><p>Garantizo que cada paciente tenga su expediente completo y actualizado, que recibas tu reporte pre-sesión y que nada clínico salga sin tu aprobación. Lo que perseguimos juntos es que el tiempo que hoy se va en operación vuelva a ti, y que la experiencia de tus pacientes suba al nivel de tu contenido.</p></div>
+  </div>
+  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>10 / 13</span></div>
+</section>
+
+<!-- 11 · INVERSIÓN -->
+<section class="slide">
+  <div class="top">
+    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
+    <div class="top-eye mono">10 — INVERSIÓN&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
+  </div>
+  <div class="rule"></div>
+  <div class="sec"><span class="chip mono">10</span><span class="sec-lbl mono">INVERSIÓN</span></div>
+  <h1 class="tit">Tres fases, <i>un solo sistema.</i></h1>
+  <p class="lead">Puedes arrancar solo con la Fase 1 o tomar el sistema completo. Sin mensualidades obligatorias.</p>
+  <div class="inv">
+    <div>
+      <div class="grp">— Fase 1 · El expediente vivo</div>
+      <div class="item"><span class="di">◆</span> Documento maestro, actualización post-sesión, lectura de exámenes y reporte pre-sesión</div>
+      <div class="grp" style="margin-top:13px;">— Fase 2 · Entregables que enamoran</div>
+      <div class="item"><span class="di">◆</span> Diagnóstico con puntajes, plan a 4 meses, informe de exámenes, check-ins pre-leídos y semáforo</div>
+      <div class="grp" style="margin-top:13px;">— Fase 3 · Agente de operación</div>
+      <div class="item"><span class="di">◆</span> Agenda, CRM, onboarding estandarizado, Circle y alertas de renovación</div>
+      <div class="item" style="color:#8a8578; font-size:13px; margin-top:10px;">Incluye diagnóstico, NDA, capacitación, documentación y 30 días de ajustes.</div>
+    </div>
+    <div class="panel" style="justify-content:center;">
+      <div class="price-eye mono">SISTEMA COMPLETO · 3 FASES</div>
+      <div class="price">US$ 7.500</div>
+      <div class="price-sub mono">USD · EL EXPEDIENTE VIVO + ENTREGABLES + OPERACIÓN</div>
+      <div class="divi" style="width:100%;"></div>
+      <div style="font-size:14px; line-height:2; color:#cdd4c6;">
+        Fase 1 · El expediente vivo&nbsp;&nbsp;<b style="color:#b9a96b;">US$ 3.500</b><br>
+        Fase 2 · Entregables&nbsp;&nbsp;<b style="color:#b9a96b;">US$ 2.500</b><br>
+        Fase 3 · Operación&nbsp;&nbsp;<b style="color:#b9a96b;">US$ 2.000</b><br>
+        <span style="font-size:12.5px;">Por separado sumarían US$ 8.000</span>
+      </div>
+      <div class="cond" style="color:#a9b3a4;">No incluye herramientas de terceros (IA, ElevenLabs, automatizaciones). Pago: 50% al iniciar y 50% contra entrega de cada fase.</div>
+    </div>
+  </div>
+  <div class="foot mono"><span>IA CON LALA · PROPUESTA DR. JUANPE</span><span>11 / 13</span></div>
+</section>
+
+<!-- 12 · SOBRE LA CONSULTORA -->
+<section class="slide">
+  <div class="top">
+    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
+    <div class="top-eye mono">11 — SOBRE LA CONSULTORA&nbsp;&nbsp;·&nbsp;&nbsp;DR. JUANPE</div>
+  </div>
+  <div class="rule"></div>
+  <div class="sec"><span class="chip mono">11</span><span class="sec-lbl mono">SOBRE LA CONSULTORA</span></div>
+  <h1 class="tit">Automatizo lo que yo misma uso <i>todos los días.</i></h1>
+  <p class="lead">Abogada y administradora de negocios, con maestría en sistemas de información e innovación digital. Como gerente regional de una multinacional, <b>automaticé procesos que llevaron a la compañía de cero a más de un millón de dólares</b>. Llevo más de un año diseñando agentes, integraciones y sistemas con IA para empresas y creación de contenido.</p>
+  <div class="stats4">
+    <div class="s4"><div class="big">0 → 1M</div><div class="lbl mono">USD GENERADOS CON AUTOMATIZACIÓN</div></div>
+    <div class="s4"><div class="big">+42</div><div class="lbl mono">ALUMNOS EN MASTERCLASSES</div></div>
+    <div class="s4"><div class="big">+145K</div><div class="lbl mono">SEGUIDORES EN @LEE_CON_LALA</div></div>
+    <div class="s4"><div class="big">2</div><div class="lbl mono">PREGRADOS + MAESTRÍA</div></div>
+  </div>
+  <div class="fill"></div>
+  <div class="foot mono"><span>IA CON LALA · @IA_CON_LALA · @LEE_CON_LALA</span><span>12 / 13</span></div>
+</section>
+
+<!-- 13 · PRÓXIMOS PASOS -->
+<section class="slide">
+  <div class="top">
+    <div class="brand"><b>ia</b> <i>con lala</i><span class="d">.</span></div>
+    <div class="top-eye mono"><span class="dot">●</span> PRÓXIMOS PASOS&nbsp;&nbsp;13 / 13</div>
+  </div>
+  <div class="rule"></div>
+  <div class="grid2" style="margin-top:34px;">
+    <div>
+      <div class="sec-lbl mono" style="margin-bottom:6px;">— PRÓXIMOS PASOS</div>
+      <h1 class="tit" style="margin-bottom:20px;">Empecemos <i>por la memoria.</i></h1>
+      <div class="numlist" style="gap:0;">
+        <div class="numrow"><div class="n">01</div><div><p style="font-size:15px; color:var(--tinta); margin:0;">Revisas la propuesta y nos vemos 30 minutos para ajustar alcance y fases.</p></div></div>
+        <div class="numrow"><div class="n">02</div><div><p style="font-size:15px; color:var(--tinta); margin:0;">Firmamos NDA y contrato, y me das acceso a tus herramientas y a tu prompt de exámenes.</p></div></div>
+        <div class="numrow"><div class="n">03</div><div><p style="font-size:15px; color:var(--tinta); margin:0;">Arrancamos la Fase 1 con 3 a 5 pacientes piloto y en semanas lo abrimos a los 41.</p></div></div>
+      </div>
+      <div class="cover-meta" style="margin-top:26px;">
+        <div><div class="k mono" style="font-size:10px; letter-spacing:2px; color:var(--gris);">CONTACTO</div><div class="v" style="font-size:14px;">Laura Calle</div></div>
+        <div><div class="k mono" style="font-size:10px; letter-spacing:2px; color:var(--gris);">CORREO</div><div class="v" style="font-size:14px; font-style:normal; font-weight:700;">lcalle@lauracalle.co</div></div>
+        <div><div class="k mono" style="font-size:10px; letter-spacing:2px; color:var(--gris);">REDES</div><div class="v" style="font-size:14px; font-style:normal; font-weight:700;">@ia_con_lala</div></div>
+      </div>
+    </div>
+    <div class="panel" style="height:540px; justify-content:flex-end;">
+      <div class="bignum-eye mono" style="margin-bottom:16px;">IA CON LALA</div>
+      <div style="font-size:34px; font-style:italic; line-height:1.25; color:var(--crema);">Gracias por abrirnos tu consulta, Juanpe.</div>
+    </div>
+  </div>
+</section>
+
+</div>
+</body>
+</html>
