@@ -147,5 +147,24 @@ window.SEED = {
     { id: 5, paciente_id: 1, concepto: 'Mensualidad noviembre', monto: 500, estado: 'pagado', dia: -5, intentos: 1 },
     { id: 6, paciente_id: 6, concepto: 'Suscripción semestral', monto: 1800, estado: 'pagado', dia: -30, intentos: 1 },
     { id: 7, paciente_id: 5, concepto: 'Mensualidad noviembre', monto: 500, estado: 'pagado', dia: -4, intentos: 1 }
+  ],
+  // Check-in mensual: se envía solo, Letty recuerda y llega pre-leído contra el expediente
+  checkins: [
+    { id: 1, paciente_id: 6, mes: 'Noviembre', estado: 'respondido', resumen: 'Duerme mejor (7 h). Energía 8/10. Pide guía de comidas para viaje en diciembre. Nada en rojo.', color: 'verde' },
+    { id: 2, paciente_id: 1, mes: 'Noviembre', estado: 'respondido', resumen: 'Sigue despertándose a las 3 a.m. aunque menos días. Antojos bajaron. Pregunta si sube el magnesio.', color: 'amarillo' },
+    { id: 3, paciente_id: 8, mes: 'Noviembre', estado: 'respondido', resumen: 'Reporta palpitaciones y cansancio. Cambió la hora de la levotiroxina. Revisar contigo.', color: 'rojo' },
+    { id: 4, paciente_id: 2, mes: 'Noviembre', estado: 'respondido', resumen: 'Muy contento con los resultados. Quiere seguir en semestral. Dispuesto a dar testimonio.', color: 'verde' },
+    { id: 5, paciente_id: 3, mes: 'Octubre', estado: 'sin_respuesta', resumen: 'No ha respondido. Letty le recordó 2 veces.', color: null },
+    { id: 6, paciente_id: 7, mes: 'Noviembre', estado: 'enviado', resumen: 'Enviado hoy. Letty le recuerda en 2 días si no responde.', color: null }
+  ],
+
+  // Lo que va llegando por WhatsApp mientras el demo está abierto (para mostrar a Letty en vivo)
+  envivo: [
+    { paciente_id: 6, texto: '¿Me puedes mandar la guía de comidas para el viaje?' },
+    { paciente_id: 1, texto: '¿Puedo subir el magnesio a dos pastillas?' },
+    { paciente_id: 2, texto: 'Listo, ya quiero pagar la semestral, ¿me mandas el link?' },
+    { paciente_id: 5, texto: 'Hola! ¿mi cita de hoy sigue a las 9?' },
+    { paciente_id: 3, texto: 'Perdón por desaparecer, ¿me ayudas a reagendar?' },
+    { paciente_id: 4, texto: 'Ya me hice los exámenes, se los mando en foto' }
   ]
 };

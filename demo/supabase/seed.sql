@@ -1,5 +1,5 @@
 -- Datos de prueba del demo (generado desde datos.js)
-truncate pacientes, citas, sesiones, examenes, mensajes, whatsapp, recordatorios, leads, pagos, landings restart identity cascade;
+truncate pacientes, citas, sesiones, examenes, mensajes, whatsapp, recordatorios, leads, pagos, landings, checkins restart identity cascade;
 insert into pacientes (id,nombre,edad,telefono,programa,mes,estado,color,motivo,tener_presente,puntajes,plan,pendientes) values
 (1,'Mariana Restrepo',38,'+57 310 555 0101','Inicial 4 meses',2,'activo','#2457a7','Cansancio en las tardes, sueño cortado y antojos de dulce.','Le subió la vitamina D desde la última sesión. Sigue despertándose a las 3 a.m. Pidió ajustar la cena.','{"Energía":58,"Sueño":42,"Nutrición":66,"Estrés":50,"Movimiento":72,"Metabólico":61}'::jsonb,'["Mes 1 · Ordenar horarios de comida y luz de la mañana","Mes 2 · Sueño: rutina de cierre y magnesio","Mes 3 · Fuerza 3 veces por semana","Mes 4 · Re-diagnóstico y plan de mantenimiento"]'::jsonb,'["Mandar foto del diario de sueño","Agendar control de ferritina"]'::jsonb),
 (2,'Andrés Giraldo',45,'+57 311 555 0102','Inicial 4 meses',4,'ultimo_mes','#1e8e3e','Prediabetes y grasa abdominal. Quiere bajar la glucosa sin medicamento.','Último mes del programa. La HbA1c bajó de 6,1 a 5,6. Buen momento para hablar de continuación y pedir testimonio.','{"Energía":78,"Sueño":70,"Nutrición":81,"Estrés":64,"Movimiento":75,"Metabólico":73}'::jsonb,'["Mes 1 · Desayuno con proteína, caminar después de comer","Mes 2 · Ayuno de 12 horas","Mes 3 · Fuerza y control de porciones","Mes 4 · Re-diagnóstico y continuación"]'::jsonb,'["Enviar link de pago de la suscripción semestral"]'::jsonb),
@@ -84,6 +84,13 @@ insert into leads (nombre,fuente,etapa,valor,nota) values
 ('Mateo Sierra','Instagram','llamada',2000,'Pregunta por el plan para deportistas.'),
 ('Natalia Gómez','Referido','propuesta',2000,'Le mandamos el link de pago 50/50.'),
 ('Santiago Mejía','Landing','pagado',2000,'Pagó. Ficha y expediente creados solos.');
+insert into checkins (paciente_id,mes,estado,resumen,color) values
+(6,'Noviembre','respondido','Duerme mejor (7 h). Energía 8/10. Pide guía de comidas para viaje en diciembre. Nada en rojo.','verde'),
+(1,'Noviembre','respondido','Sigue despertándose a las 3 a.m. aunque menos días. Antojos bajaron. Pregunta si sube el magnesio.','amarillo'),
+(8,'Noviembre','respondido','Reporta palpitaciones y cansancio. Cambió la hora de la levotiroxina. Revisar contigo.','rojo'),
+(2,'Noviembre','respondido','Muy contento con los resultados. Quiere seguir en semestral. Dispuesto a dar testimonio.','verde'),
+(3,'Octubre','sin_respuesta','No ha respondido. Letty le recordó 2 veces.',null),
+(7,'Noviembre','enviado','Enviado hoy. Letty le recuerda en 2 días si no responde.',null);
 insert into pagos (paciente_id,concepto,monto,estado,dia,intentos) values
 (7,'Mensualidad noviembre',500,'fallido',-2,2),
 (3,'Suscripción mensual',350,'pendiente',3,0),
