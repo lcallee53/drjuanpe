@@ -133,8 +133,8 @@ svg.ic{width:20px; height:20px; flex:none; fill:none; stroke:currentColor; strok
 .check{display:flex; gap:10px; align-items:flex-start; padding:9px 0; font-size:14.5px;}
 .check input{margin-top:4px; width:17px; height:17px; accent-color:var(--verde);}
 
-/* Letty */
-.letty{display:grid; grid-template-columns:300px minmax(0,1fr) 300px; gap:16px; align-items:start;}
+/* LalaChat */
+.lalachat{display:grid; grid-template-columns:300px minmax(0,1fr) 300px; gap:16px; align-items:start;}
 .convs{overflow:hidden;}
 .conv{display:flex; gap:12px; align-items:center; width:100%; padding:13px 16px; border-bottom:1px solid #f0f1ee; text-align:left;}
 .conv:hover{background:#f7f9fc;}
@@ -237,12 +237,25 @@ td.r,th.r{text-align:right;}
 .integ .tarjeta{padding:18px 20px;}
 .integ b{display:block; font-size:15.5px; margin-bottom:4px;} .integ p{font-size:13.5px; color:var(--gris); margin:6px 0 10px;}
 @media (max-width:860px){ .envivo-btn{top:auto; bottom:84px; right:16px;} }
+.memoria{background:#fbfaf6; border:1px dashed #d8d2bf; border-radius:12px; padding:14px 16px; font-size:14px;}
+.memoria h3{font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:#8a7a4f; margin-bottom:8px; display:flex; gap:8px; align-items:center;}
+.memoria p{margin-bottom:6px;}
+.telefono{max-width:440px; margin:0 auto;}
+body.modo-portal .app, body.modo-portal .flotante, body.modo-portal .envivo-btn, body.modo-portal .chat, body.modo-portal .cajon{display:none !important;}
+#portal{display:none;} body.modo-portal #portal{display:block;}
+.pt-cab{background:var(--navy); color:#fff; padding:18px clamp(16px,4vw,40px); display:flex; align-items:center; gap:12px;}
+.pt-cab .mono{display:grid; place-items:center; width:38px; height:38px; border:1px solid #89d12a6b; border-radius:10px 10px 4px 4px; color:var(--lima); font-weight:700;}
+.pt-cab b{font-size:17px;} .pt-cab span{font-size:12.5px; color:#c9d3e0; display:block;}
+.pt-cab button{margin-left:auto; color:#dfe6ef; font-size:13.5px; font-weight:600;}
+.pt{max-width:980px; margin:0 auto; padding:26px 16px 80px;}
+.pt-login{max-width:400px; margin:60px auto; padding:30px 28px; text-align:center;}
+.pt-login input{width:100%; min-height:54px; border:1px solid #d5d5d5; border-radius:11px; text-align:center; font-size:26px; letter-spacing:.4em; margin:18px 0 12px;}
 .toast{position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px); background:var(--navy); color:#fff; padding:12px 18px; border-radius:10px; font-size:14px; font-weight:600; opacity:0; pointer-events:none; transition:.25s; z-index:60;}
 .toast.ver{opacity:1; transform:translateX(-50%) translateY(0);}
 .volver{display:inline-flex; gap:6px; align-items:center; font-size:14px; font-weight:600; color:var(--azul); margin-bottom:12px;}
 
 @media (max-width:1180px){
-  .letty{grid-template-columns:260px minmax(0,1fr);} .letty .recs{grid-column:1 / -1;}
+  .lalachat{grid-template-columns:260px minmax(0,1fr);} .lalachat .recs{grid-column:1 / -1;}
   .cifras{grid-template-columns:repeat(2,minmax(0,1fr));}
   .dias{grid-template-columns:repeat(3,minmax(0,1fr));}
 }
@@ -253,12 +266,13 @@ td.r,th.r{text-align:right;}
   .menu{display:flex; gap:4px; overflow-x:auto; padding:0 10px 10px;}
   .menu .grupo,.pie{display:none;}
   .enl{width:auto; white-space:nowrap; min-height:40px; padding:8px 12px; margin:0;}
-  .grilla2,.grilla3,.letty,.leyenda,.tablero{grid-template-columns:1fr;}
+  .grilla2,.grilla3,.lalachat,.leyenda,.tablero{grid-template-columns:1fr;}
   .dias{grid-template-columns:1fr 1fr;}
   .pagina{padding:20px 16px 110px;}
   .flotante{right:16px; bottom:16px;}
 }
-@media (max-width:520px){ .cifras{grid-template-columns:1fr 1fr; gap:10px;} .cifra{padding:16px; min-height:120px;} .cifra .v{font-size:32px;} .dias{grid-template-columns:1fr;} }
+.pt-cifras{grid-template-columns:repeat(3,minmax(0,1fr));}
+@media (max-width:520px){ .pt-cifras{grid-template-columns:1fr;}  .cifras{grid-template-columns:1fr 1fr; gap:10px;} .cifra{padding:16px; min-height:120px;} .cifra .v{font-size:32px;} .dias{grid-template-columns:1fr;} }
 </style>
 </head>
 <body>
@@ -278,12 +292,13 @@ td.r,th.r{text-align:right;}
   <div class="sugeridas" id="sugeridas"></div>
   <form id="chatForm"><input id="chatInput" placeholder="Escríbele a tu asistente…" autocomplete="off"><button aria-label="Enviar"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form>
 </section>
-<button class="envivo-btn" id="envivoBtn"><span class="pulso"></span><span id="envivoTxt">Letty en vivo</span></button>
-<aside class="cajon" id="cajon" aria-label="Letty en vivo">
-  <div class="wa-cab"><span class="ini" style="background:#1fa855">L</span><div><b>Letty en vivo · WhatsApp</b><span>Lo que tus pacientes escriben y lo que ella responde</span></div><button class="x" id="cerrarCajon" aria-label="Cerrar"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+<button class="envivo-btn" id="envivoBtn"><span class="pulso"></span><span id="envivoTxt">LalaChat en vivo</span></button>
+<aside class="cajon" id="cajon" aria-label="LalaChat en vivo">
+  <div class="wa-cab"><span class="ini" style="background:#1fa855">L</span><div><b>LalaChat en vivo · WhatsApp</b><span>Lo que tus pacientes escriben y lo que ella responde</span></div><button class="x" id="cerrarCajon" aria-label="Cerrar"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <div class="feed" id="feed"></div>
   <div class="cajon-pie"><span class="punto verde"></span><span id="cajonEstado">Escuchando WhatsApp…</span><button class="boton chico wa" style="margin-left:auto" id="abrirConvs">Abrir conversaciones</button></div>
 </aside>
+<div id="portal"></div>
 <div class="toast" id="toast"></div>
 
 <script src="datos.js"></script>
@@ -352,6 +367,7 @@ const pac = id => D.pacientes.find(p => p.id === id) || {nombre:'Paciente', colo
 const iniciales = n => n.split(' ').slice(0,2).map(x=>x[0]).join('');
 const bolita = (p, t=40) => `<span class="ini" style="background:${p.color}; width:${t}px; height:${t}px">${iniciales(p.nombre)}</span>`;
 const primer = n => n.split(' ')[0];
+const slug = n => n.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 const fechaDia = d => { const f = new Date(); f.setDate(f.getDate()+d); return f; };
 const nomDia = d => d===0 ? 'Hoy' : d===1 ? 'Mañana' : d===-1 ? 'Ayer' : fechaDia(d).toLocaleDateString('es-CO',{weekday:'long', day:'numeric', month:'short'});
 const fechaCorta = d => fechaDia(d).toLocaleDateString('es-CO',{day:'numeric', month:'short'});
@@ -367,23 +383,23 @@ function toast(t){ const el = document.getElementById('toast'); el.innerHTML = t
 /* ============ navegación ============ */
 let actual = 'hoy', pacienteSel = null, convSel = null, filtroSem = 'amarillo', modoWa = 'paciente', landingPrev = null;
 const MENU = [
-  ['Tu día', [['hoy','Reporte de hoy','hoy'], ['agenda','Agenda','age']]],
-  ['Pacientes', [['pacientes','Expedientes','pac'], ['semaforo','Semáforo médico','sem'], ['letty','Letty · WhatsApp','wa'], ['checkins','Check-ins del mes','chk']]],
+  ['Tu día', [['hoy','Reporte de hoy','hoy'], ['tuwa','Tu WhatsApp','wa'], ['agenda','Agenda','age']]],
+  ['Pacientes', [['pacientes','Expedientes','pac'], ['semaforo','Semáforo médico','sem'], ['lalachat','LalaChat · WhatsApp','wa'], ['checkins','Check-ins del mes','chk']]],
   ['Negocio', [['ventas','Ventas','ven'], ['cobros','Cobros · Stripe','cob'], ['landings','Landings','lan'], ['integraciones','Conexiones','int']]]
 ];
 function pintarMenu(){
   const amar = D.mensajes.filter(m=>m.color==='amarillo' && m.estado==='pendiente').length;
   const rojos = D.mensajes.filter(m=>m.color==='rojo' && m.estado==='pendiente').length;
-  const num = { semaforo: (amar+rojos) ? `<span class="num ${rojos?'r':''}">${amar+rojos}</span>` : '', letty: `<span class="num">${D.whatsapp.length}</span>` };
+  const num = { semaforo: (amar+rojos) ? `<span class="num ${rojos?'r':''}">${amar+rojos}</span>` : '', lalachat: `<span class="num">${D.whatsapp.length}</span>` };
   document.getElementById('menu').innerHTML = MENU.map(([g, items]) => `<div class="grupo">${g}</div>` + items.map(([id,t,i]) =>
     `<button class="enl ${actual===id?'act':''}" data-ir="${id}">${ic(i)}${t}${num[id]||''}</button>`).join('')).join('');
 }
-function ir(v, extra){ actual = v; if (v==='pacientes') pacienteSel = extra ?? null; if (v==='letty' && extra) convSel = extra; pintar(); window.scrollTo(0,0); }
+function ir(v, extra){ actual = v; if (v==='pacientes') pacienteSel = extra ?? null; if (v==='lalachat' && extra) convSel = extra; pintar(); window.scrollTo(0,0); }
 function pintar(){
   pintarMenu();
-  const V = { hoy:vHoy, agenda:vAgenda, pacientes:vPacientes, semaforo:vSemaforo, letty:vLetty, ventas:vVentas, cobros:vCobros, landings:vLandings, checkins:vCheckins, integraciones:vIntegraciones };
+  const V = { hoy:vHoy, agenda:vAgenda, pacientes:vPacientes, semaforo:vSemaforo, lalachat:vLalaChat, ventas:vVentas, cobros:vCobros, landings:vLandings, tuwa:vTuWa, checkins:vCheckins, integraciones:vIntegraciones };
   document.getElementById('vista').innerHTML = avisoFuente() + V[actual]();
-  if (actual==='letty'){ const m = document.getElementById('waMsjs'); if (m) m.scrollTop = m.scrollHeight; }
+  if (actual==='lalachat' || actual==='tuwa'){ const m = document.getElementById('waMsjs'); if (m) m.scrollTop = m.scrollHeight; }
   pintarFeed();
 }
 const avisoFuente = () => fuente==='supabase'
@@ -397,22 +413,22 @@ function vHoy(){
   const amar = D.mensajes.filter(m=>m.color==='amarillo' && m.estado==='pendiente');
   const rojos = D.mensajes.filter(m=>m.color==='rojo' && m.estado==='pendiente');
   const fallidos = D.pagos.filter(p=>p.estado==='fallido');
-  const verdes = D.whatsapp.filter(w=>w.de==='letty' && w.color==='verde').length;
+  const verdes = D.whatsapp.filter(w=>w.de==='lalachat' && w.color==='verde').length;
   const alertas = [
     ...rojos.map(m => ({p:pac(m.paciente_id), t:`Mensaje en rojo de ${primer(pac(m.paciente_id).nombre)}`, s:m.texto, tag:pastillaColor('rojo'), ir:`semaforo`})),
     ...D.pacientes.filter(p=>p.estado==='enfriandose').map(p => ({p, t:`${primer(p.nombre)} se está enfriando`, s:p.tener_presente, tag:estadoP(p), ir:`p:${p.id}`})),
     ...D.pacientes.filter(p=>p.estado==='ultimo_mes').map(p => ({p, t:`${primer(p.nombre)} entra a su último mes`, s:'Buen momento para la renovación y el testimonio.', tag:estadoP(p), ir:`p:${p.id}`})),
-    ...fallidos.map(f => ({p:pac(f.paciente_id), t:`Pago fallido · ${pac(f.paciente_id).nombre}`, s:`${f.concepto} · ${usd(f.monto)} · ${f.intentos} intentos. Letty ya le escribió.`, tag:'<span class="pastilla roja">Stripe</span>', ir:'cobros'})),
-    ...D.pacientes.filter(p=>(p.pendientes||[]).some(x=>/exámenes/i.test(x))).map(p => ({p, t:`${primer(p.nombre)} no ha mandado exámenes`, s:'Letty le recuerda hoy a las 12:00.', tag:'<span class="pastilla azul">Exámenes</span>', ir:`p:${p.id}`}))
+    ...fallidos.map(f => ({p:pac(f.paciente_id), t:`Pago fallido · ${pac(f.paciente_id).nombre}`, s:`${f.concepto} · ${usd(f.monto)} · ${f.intentos} intentos. LalaChat ya le escribió.`, tag:'<span class="pastilla roja">Stripe</span>', ir:'cobros'})),
+    ...D.pacientes.filter(p=>(p.pendientes||[]).some(x=>/exámenes/i.test(x))).map(p => ({p, t:`${primer(p.nombre)} no ha mandado exámenes`, s:'LalaChat le recuerda hoy a las 12:00.', tag:'<span class="pastilla azul">Exámenes</span>', ir:`p:${p.id}`}))
   ];
   const saludo = new Date().getHours() < 12 ? 'Buenos días' : new Date().getHours() < 19 ? 'Buenas tardes' : 'Buenas noches';
   return cab(`${saludo}, Juanpe`, `${nomDia(0)} ${fechaDia(0).toLocaleDateString('es-CO',{weekday:'long', day:'numeric', month:'long'})}. Esto es lo que tienes hoy y lo que se te puede estar pasando.`,
-      `<button class="boton wa" data-envivo="1">${ic('wa')}Ver a Letty respondiendo</button><button class="boton sec" data-chat="reporte de hoy">Mándamelo por Telegram</button>`) + `
+      `<button class="boton wa" data-envivo="1">${ic('wa')}Ver a LalaChat respondiendo</button><button class="boton sec" data-chat="reporte de hoy">Mándamelo por Telegram</button>`) + `
     <div class="cifras">
       <button class="cifra oscura" data-ir="agenda"><span class="k">Sesiones hoy</span><span class="v">${hoy.length}</span><span class="d">La primera a las ${hoy[0]?.hora || '—'}</span></button>
       <button class="cifra" data-ir="semaforo" data-sem="amarillo"><span class="k">Borradores para aprobar</span><span class="v ambar">${amar.length}</span><span class="d">Amarillo · tú das el visto bueno</span></button>
       <button class="cifra" data-ir="semaforo" data-sem="rojo"><span class="k">Lo que es tuyo</span><span class="v rojo">${rojos.length}</span><span class="d">Rojo · necesita tu respuesta</span></button>
-      <button class="cifra" data-ir="letty"><span class="k">Respondido solo por Letty</span><span class="v verde">${verdes}</span><span class="d">Verde · WhatsApp y recordatorios</span></button>
+      <button class="cifra" data-ir="lalachat"><span class="k">Respondido solo por LalaChat</span><span class="v verde">${verdes}</span><span class="d">Verde · WhatsApp y recordatorios</span></button>
     </div>
     <div class="grilla3">
       <section class="tarjeta seccion"><div class="seccion-cab"><h2>Tus sesiones de hoy · reporte pre-sesión</h2></div>
@@ -425,7 +441,7 @@ function vHoy(){
         ${alertas.map(a => `<div class="fila clic" data-alerta="${a.ir}">${bolita(a.p,34)}<div class="cuerpo"><div class="t">${esc(a.t)}</div><div class="s">${esc(a.s)}</div><div style="margin-top:6px">${a.tag}</div></div></div>`).join('')}
       </section>
     </div>
-    <section class="tarjeta seccion"><div class="seccion-cab"><h2>Letty hoy por WhatsApp</h2><button data-ir="letty">Abrir conversaciones →</button></div>
+    <section class="tarjeta seccion"><div class="seccion-cab"><h2>LalaChat hoy por WhatsApp</h2><button data-ir="lalachat">Abrir conversaciones →</button></div>
       ${D.recordatorios.filter(r=>r.dia===0).map(r => { const p = pac(r.paciente_id); return `<div class="fila"><span class="hora">${r.hora}</span><div class="cuerpo"><div class="t">${esc(r.tipo)} · ${esc(p.nombre)}</div><div class="s">${esc(r.texto)}</div></div><div class="der"><span class="pastilla ${r.estado==='enviado'?'verde':'azul'}">${r.estado==='enviado'?'Enviado':'Programado'}</span></div></div>`; }).join('')}
     </section>`;
 }
@@ -433,7 +449,7 @@ function vHoy(){
 /* ============ AGENDA ============ */
 function vAgenda(){
   const dias = [0,1,2,3,4];
-  return cab('Agenda', 'Conectada a tu Google Calendar. Le puedes escribir al asistente "mañana viajo, acomódalos" y él mueve las citas y Letty le avisa a cada persona.',
+  return cab('Agenda', 'Conectada a tu Google Calendar. Le puedes escribir al asistente "mañana viajo, acomódalos" y él mueve las citas y LalaChat le avisa a cada persona.',
     `<button class="boton" data-viajo="1">Simular: "mañana viajo, acomódalos"</button>`) + `
     <div class="dias">${dias.map(d => { const cs = D.citas.filter(c=>c.dia===d).sort((a,b)=>a.hora.localeCompare(b.hora)); return `<div class="dia ${d===0?'hoy':''}"><h3>${nomDia(d)} <span style="color:var(--gris); font-weight:500">${fechaCorta(d)}</span></h3>
       ${cs.map(c => { const p = pac(c.paciente_id); return `<div class="cita ${c.movida?'movida':''}"><b>${c.hora} · ${esc(p.nombre)}</b><span>${esc(c.tipo)} · ${c.movida ? 'movida por viaje' : c.estado}</span></div>`; }).join('') || '<p class="vacio" style="font-size:13px">Libre</p>'}</div>`; }).join('')}</div>`;
@@ -445,10 +461,10 @@ async function moverViaje(){
   for (const [i,c] of man.entries()){
     await actualizar('citas', c.id, {dia:2, hora:horas[i%3], estado:'confirmada', movida:true});
     const p = pac(c.paciente_id);
-    await insertar('whatsapp', {paciente_id:p.id, de:'letty', color:'verde', texto:`Hola ${primer(p.nombre)}, el doctor tiene un viaje mañana. Movimos tu sesión para el ${nomDia(2)} a las ${horas[i%3]}. Si no te queda bien, respóndeme y te busco otro espacio 🙏`});
+    await insertar('whatsapp', {paciente_id:p.id, de:'lalachat', color:'verde', texto:`Hola ${primer(p.nombre)}, el doctor tiene un viaje mañana. Movimos tu sesión para el ${nomDia(2)} a las ${horas[i%3]}. Si no te queda bien, respóndeme y te busco otro espacio 🙏`});
   }
   pintar();
-  return `Listo. Moví ${man.length} cita${man.length>1?'s':''} de mañana al ${nomDia(2)} y Letty ya le avisó a cada persona por WhatsApp.`;
+  return `Listo. Moví ${man.length} cita${man.length>1?'s':''} de mañana al ${nomDia(2)} y LalaChat ya le avisó a cada persona por WhatsApp.`;
 }
 
 /* ============ PACIENTES / EXPEDIENTE ============ */
@@ -480,9 +496,10 @@ function vExpediente(p){
   const plan = p.plan || [];
   return `<button class="volver" data-ir="pacientes">← Todos los pacientes</button>` +
     cab(`${esc(p.nombre)}`, `${p.edad} años · ${esc(p.programa)} · mes ${p.mes} · ${esc(p.telefono)} &nbsp; ${estadoP(p)}`,
-      `<button class="boton wa" data-ir="letty" data-conv="${p.id}">${ic('wa')}Conversación con Letty</button><button class="boton sec" data-chat="prepárame la sesión de ${primer(p.nombre)}">Prepárame la sesión</button>`) + `
+      `<button class="boton wa" data-ir="lalachat" data-conv="${p.id}">${ic('wa')}Conversación con LalaChat</button><button class="boton sec" data-portal="${p.id}">Ver lo que ve ${esc(primer(p.nombre))}</button>`) + `
     <div class="tarjeta seccion" style="margin-bottom:20px"><div class="presente" style="margin:0"><b>Ten presente:</b> ${esc(p.tener_presente)}${cita ? ` &nbsp;·&nbsp; <b>Próxima sesión:</b> ${nomDia(cita.dia)} ${cita.hora}` : ''}</div>
-      <p style="margin-top:12px; font-size:14px; color:var(--gris)"><b style="color:var(--tinta)">Motivo de consulta (onboarding):</b> ${esc(p.motivo)}</p></div>
+      <p style="margin-top:12px; font-size:14px; color:var(--gris)"><b style="color:var(--tinta)">Motivo de consulta (onboarding):</b> ${esc(p.motivo)}</p>
+      ${p.quien ? `<div class="memoria" style="margin-top:14px"><h3>🧠 Lo que LalaChat recuerda · memoria-juanpe/pacientes/${slug(p.nombre)}.md</h3><p><b>Quién es:</b> ${esc(p.quien)}</p><p><b>Cómo hablarle:</b> ${esc(p.como_hablarle)}</p><p style="margin:0"><b>Código del portal:</b> ${esc(p.codigo)}</p></div>` : ''}</div>
     <div class="grilla2">
       <section class="tarjeta seccion"><div class="seccion-cab"><h2>Diagnóstico por áreas</h2><span class="pastilla azul">Con tu sistema de puntaje</span></div>
         <div class="areas">${Object.entries(p.puntajes||{}).map(([k,v]) => `<div class="area"><span>${k}</span><div class="barra"><i style="width:${v}%; background:${col(v)}"></i></div><b>${v}</b></div>`).join('')}</div></section>
@@ -490,13 +507,13 @@ function vExpediente(p){
         <div class="pasos">${plan.map((x,i) => `<div class="paso ${i+1<p.mes?'ok':i+1===p.mes?'ahora':''}"><i>${i+1<p.mes?'✓':i+1}</i><span>${esc(x)}</span></div>`).join('')}</div></section>
     </div>
     <section class="tarjeta seccion" style="margin-bottom:20px"><div class="seccion-cab"><h2>Histórico de exámenes</h2><span style="font-size:13px; color:var(--gris)">Leídos con tu criterio · la franja verde es el rango óptimo</span></div>
-      ${marc.length ? `<div class="graficas">${marc.map(m => grafica(ex.filter(e=>e.marcador===m))).join('')}</div>` : '<p class="vacio">Todavía no hay exámenes. Letty le está recordando.</p>'}</section>
+      ${marc.length ? `<div class="graficas">${marc.map(m => grafica(ex.filter(e=>e.marcador===m))).join('')}</div>` : '<p class="vacio">Todavía no hay exámenes. LalaChat le está recordando.</p>'}</section>
     <div class="grilla2">
       <section class="tarjeta seccion hist"><div class="seccion-cab"><h2>Sesiones · resumen de Fathom</h2></div>
         ${ses.map(s => `<div class="fila"><div class="cuerpo"><div class="t">${esc(s.titulo)}</div><div class="s">${esc(s.resumen)}</div><div class="s"><b>Tareas:</b> ${(s.tareas||[]).map(esc).join(' · ')}</div></div><div class="der">${fechaCorta(s.dia)}</div></div>`).join('') || '<p class="vacio">Aún no hay sesiones.</p>'}</section>
       <section class="tarjeta seccion"><div class="seccion-cab"><h2>Pendientes y WhatsApp</h2></div>
         ${(p.pendientes||[]).map((x,i) => `<label class="check"><input type="checkbox" data-pend="${p.id}" data-i="${i}">${esc(x)}</label>`).join('') || '<p class="vacio">Sin pendientes 🎉</p>'}
-        <div style="margin-top:10px">${wa.map(w => `<div class="fila"><div class="cuerpo"><div class="s"><b style="color:var(--tinta)">${w.de==='letty'?'Letty':w.de==='juanpe'?'Tú':primer(p.nombre)}:</b> ${esc(w.texto)}</div></div><div class="der">${hace(w.creado)}</div></div>`).join('')}</div></section>
+        <div style="margin-top:10px">${wa.map(w => `<div class="fila"><div class="cuerpo"><div class="s"><b style="color:var(--tinta)">${w.de==='lalachat'?'LalaChat':w.de==='juanpe'?'Tú':primer(p.nombre)}:</b> ${esc(w.texto)}</div></div><div class="der">${hace(w.creado)}</div></div>`).join('')}</div></section>
     </div>`;
 }
 
@@ -504,32 +521,32 @@ function vExpediente(p){
 function vSemaforo(){
   const lista = D.mensajes.filter(m=>m.color===filtroSem).sort((a,b)=> (a.estado==='pendiente'?-1:1) - (b.estado==='pendiente'?-1:1) || new Date(b.creado)-new Date(a.creado));
   const n = c => D.mensajes.filter(m=>m.color===c && (c==='verde' || m.estado==='pendiente')).length;
-  return cab('Semáforo médico', 'Todo lo que tus pacientes escriben por WhatsApp (Letty) y Circle pasa por aquí. Lo clínico nunca le llega a un paciente sin tu aprobación.') + `
+  return cab('Semáforo médico', 'Todo lo que tus pacientes escriben por WhatsApp (LalaChat) y Circle pasa por aquí. Lo clínico nunca le llega a un paciente sin tu aprobación.') + `
     <div class="leyenda">
       <div class="tarjeta"><span class="punto verde" style="margin-top:5px"></span><div><b>Verde · se responde solo</b><span>Agenda, recordatorios, guías de alimentación, dudas que ya respondiste antes.</span></div></div>
       <div class="tarjeta"><span class="punto amarillo" style="margin-top:5px"></span><div><b>Amarillo · borrador para ti</b><span>Exámenes, suplementos, cambios de plan. La IA escribe, tú apruebas.</span></div></div>
-      <div class="tarjeta"><span class="punto rojo" style="margin-top:5px"></span><div><b>Rojo · lo atiendes tú</b><span>Síntomas de alarma o medicamentos. Letty solo da la indicación de seguridad.</span></div></div>
+      <div class="tarjeta"><span class="punto rojo" style="margin-top:5px"></span><div><b>Rojo · lo atiendes tú</b><span>Síntomas de alarma o medicamentos. LalaChat solo da la indicación de seguridad.</span></div></div>
     </div>
     <div class="pestanas">${['amarillo','rojo','verde'].map(c => `<button class="pestana ${filtroSem===c?'act':''}" data-sem="${c}"><span class="punto ${c}"></span>${COLORES[c][0]} · ${n(c)}</button>`).join('')}</div>
     ${lista.map(m => { const p = pac(m.paciente_id); return `<article class="tarjeta msj ${m.color}">
-      <div class="de">${bolita(p)}<div><b>${esc(p.nombre)}</b><span>${m.canal==='WhatsApp'?'WhatsApp · Letty':'Circle'} · ${hace(m.creado)}</span></div><div style="margin-left:auto">${pastillaColor(m.color)}</div></div>
+      <div class="de">${bolita(p)}<div><b>${esc(p.nombre)}</b><span>${m.canal==='WhatsApp'?'WhatsApp · LalaChat':'Circle'} · ${hace(m.creado)}</span></div><div style="margin-left:auto">${pastillaColor(m.color)}</div></div>
       <p class="texto">“${esc(m.texto)}”</p>
       ${m.color==='amarillo' && m.estado==='pendiente' ? `<textarea class="borrador" id="b${m.id}">${esc(m.respuesta)}</textarea>
         <div class="acciones"><button class="boton verde chico" data-aprobar="${m.id}">Aprobar y enviar</button><button class="boton sec chico" data-ir="pacientes" data-p="${p.id}">Ver expediente</button></div>` : ''}
       ${m.color==='rojo' && m.estado==='pendiente' ? `<textarea class="borrador" id="b${m.id}" placeholder="Escribe tu respuesta o déjala vacía si vas a llamar…">${esc(m.respuesta)}</textarea>
         <div class="acciones"><button class="boton rojo chico" data-aprobar="${m.id}">Enviar mi respuesta</button><button class="boton sec chico" data-llamar="${m.id}">La llamo yo</button><button class="boton sec chico" data-ir="pacientes" data-p="${p.id}">Ver expediente</button></div>` : ''}
-      ${m.estado!=='pendiente' ? `<div class="respondido"><b>${m.color==='verde'?'Letty respondió sola':'Respondido'}:</b> ${esc(m.respuesta || 'Lo atendiste por llamada.')}</div>` : ''}
+      ${m.estado!=='pendiente' ? `<div class="respondido"><b>${m.color==='verde'?'LalaChat respondió sola':'Respondido'}:</b> ${esc(m.respuesta || 'Lo atendiste por llamada.')}</div>` : ''}
     </article>`; }).join('') || '<p class="vacio">Nada por aquí.</p>'}`;
 }
 async function aprobar(id){
   const m = D.mensajes.find(x=>x.id===id); const txt = document.getElementById('b'+id)?.value.trim() || '';
   if (!txt){ toast('Escribe la respuesta primero'); return; }
   await actualizar('mensajes', id, {estado:'aprobado', respuesta:txt});
-  await insertar('whatsapp', {paciente_id:m.paciente_id, de:'letty', color:m.color, texto:txt + '\n— aprobado por el Dr. Juanpe'});
+  await insertar('whatsapp', {paciente_id:m.paciente_id, de:'lalachat', color:m.color, texto:txt + '\n— aprobado por el Dr. Juanpe'});
   toast(`Enviado a ${primer(pac(m.paciente_id).nombre)} por ${m.canal}`); pintar();
 }
 
-/* ============ LETTY (WhatsApp) ============ */
+/* ============ LALACHAT (WhatsApp) ============ */
 function clasificar(t){
   const s = t.toLowerCase();
   if (/pecho|palpitaci|desmay|mareo|sangr|urgen|no puedo respirar|falta de aire|dolor fuerte|fiebre|vómito|vomit/.test(s)) return 'rojo';
@@ -537,7 +554,7 @@ function clasificar(t){
   if (/examen|resultado|medicament|dosis|suplement|pastilla|vitamina|leche|l[aá]cteo|puedo (comer|tomar|volver)|síntoma|sintoma|inflama|cambiar el plan/.test(s)) return 'amarillo';
   return 'verde';
 }
-function respuestaLetty(p, t, color){
+function respuestaLalaChat(p, t, color){
   const n = primer(p.nombre), s = t.toLowerCase();
   if (color==='rojo') return `${n}, gracias por contarme. Esto lo tiene que ver el doctor directamente y ya le avisé como prioridad. Si tienes dolor en el pecho, falta de aire o te desmayas, ve a urgencias de inmediato.`;
   if (color==='amarillo') return `¡Gracias ${n}! Le paso tu pregunta al doctor y te respondo hoy mismo con su indicación.`;
@@ -553,23 +570,23 @@ function convsOrden(){
   const ult = {}; D.whatsapp.forEach(w => { if (!ult[w.paciente_id] || new Date(w.creado) > new Date(ult[w.paciente_id].creado)) ult[w.paciente_id] = w; });
   return Object.values(ult).sort((a,b)=>new Date(b.creado)-new Date(a.creado));
 }
-function vLetty(){
+function vLalaChat(){
   const convs = convsOrden(); if (!convSel) convSel = convs[0]?.paciente_id;
   const p = pac(convSel); const msjs = D.whatsapp.filter(w=>w.paciente_id===convSel).sort((a,b)=>new Date(a.creado)-new Date(b.creado));
   const recs = D.recordatorios.slice().sort((a,b)=>a.dia-b.dia || a.hora.localeCompare(b.hora));
-  return cab('Letty · WhatsApp', 'Letty le responde a tus pacientes por WhatsApp, les manda los recordatorios y lee todo lo que escriben. Cada mensaje pasa por el semáforo antes de responder.',
+  return cab('LalaChat · WhatsApp', 'LalaChat le responde a tus pacientes por WhatsApp, les manda los recordatorios y lee todo lo que escriben. Cada mensaje pasa por el semáforo antes de responder.',
     `<button class="boton sec" data-ir="semaforo">${ic('sem')}Ver semáforo</button>`) + `
-    <div class="letty">
-      <section class="tarjeta convs">${convs.map(w => { const q = pac(w.paciente_id); return `<button class="conv ${q.id===convSel?'act':''}" data-conv="${q.id}">${bolita(q)}<div class="txt" style="min-width:0; flex:1"><b>${esc(q.nombre)}</b><span>${w.de==='letty'?'Letty: ':''}${esc(w.texto)}</span></div><small style="font-size:11px; color:var(--gris)">${hace(w.creado).replace('hace ','')}</small></button>`; }).join('')}</section>
+    <div class="lalachat">
+      <section class="tarjeta convs">${convs.map(w => { const q = pac(w.paciente_id); return `<button class="conv ${q.id===convSel?'act':''}" data-conv="${q.id}">${bolita(q)}<div class="txt" style="min-width:0; flex:1"><b>${esc(q.nombre)}</b><span>${w.de==='lalachat'?'LalaChat: ':''}${esc(w.texto)}</span></div><small style="font-size:11px; color:var(--gris)">${hace(w.creado).replace('hace ','')}</small></button>`; }).join('')}</section>
       <section class="wachat">
-        <div class="wa-cab">${bolita(p)}<div><b>${esc(p.nombre)}</b><span>${esc(p.telefono)} · atendida por Letty</span></div><div class="der"><button class="boton chico sec" data-ir="pacientes" data-p="${p.id}" style="min-height:32px">Expediente</button></div></div>
-        <div class="mensajes" id="waMsjs">${msjs.map(w => `<div class="burbuja ${w.de!=='paciente'?'yo':''}">${w.de==='letty'?'<span class="quien">Letty</span>':w.de==='juanpe'?'<span class="quien" style="color:var(--azul)">Dr. Juanpe</span>':''}${esc(w.texto)}<span class="meta">${w.color && w.de==='letty' ? pastillaColor(w.color) : ''}${horaDe(w.creado)}</span></div>`).join('')}</div>
+        <div class="wa-cab">${bolita(p)}<div><b>${esc(p.nombre)}</b><span>${esc(p.telefono)} · atendida por LalaChat</span></div><div class="der"><button class="boton chico sec" data-ir="pacientes" data-p="${p.id}" style="min-height:32px">Expediente</button></div></div>
+        <div class="mensajes" id="waMsjs">${msjs.map(w => `<div class="burbuja ${w.de!=='paciente'?'yo':''}">${w.de==='lalachat'?'<span class="quien">LalaChat</span>':w.de==='juanpe'?'<span class="quien" style="color:var(--azul)">Dr. Juanpe</span>':''}${esc(w.texto)}<span class="meta">${w.color && w.de==='lalachat' ? pastillaColor(w.color) : ''}${horaDe(w.creado)}</span></div>`).join('')}</div>
         <div class="wa-pie">
           <div class="modo"><button class="${modoWa==='paciente'?'act':''}" data-modo="paciente">Simular mensaje de ${esc(primer(p.nombre))}</button><button class="${modoWa==='juanpe'?'act':''}" data-modo="juanpe">Escribir yo</button></div>
           <form id="waForm"><input id="waInput" autocomplete="off" placeholder="${modoWa==='paciente' ? 'Prueba: “¿a qué hora es mi cita?” o “tengo dolor en el pecho”' : 'Escribe como el doctor…'}"><button class="env" aria-label="Enviar">${ic('env')}</button></form>
         </div>
       </section>
-      <section class="tarjeta seccion recs"><div class="seccion-cab"><h2>Recordatorios de Letty</h2></div>
+      <section class="tarjeta seccion recs"><div class="seccion-cab"><h2>Recordatorios de LalaChat</h2></div>
         ${recs.map(r => { const q = pac(r.paciente_id); return `<div class="fila"><div class="cuerpo"><div class="t" style="font-size:14px">${esc(r.tipo)} · ${esc(primer(q.nombre))}</div><div class="s">${esc(r.texto)}</div><div class="s">${nomDia(r.dia)} · ${r.hora}</div></div><div class="der"><span class="pastilla ${r.estado==='enviado'?'verde':'azul'}">${r.estado==='enviado'?'Enviado':'Programado'}</span></div></div>`; }).join('')}
       </section>
     </div>`;
@@ -580,11 +597,11 @@ async function enviarWa(texto){
   await insertar('whatsapp', {paciente_id:p.id, de:'paciente', texto}); pintar();
   const color = clasificar(texto);
   await new Promise(r=>setTimeout(r, 900));
-  await insertar('whatsapp', {paciente_id:p.id, de:'letty', color, texto:respuestaLetty(p, texto, color)});
+  await insertar('whatsapp', {paciente_id:p.id, de:'lalachat', color, texto:respuestaLalaChat(p, texto, color)});
   const borrador = color==='amarillo' ? `Hola ${primer(p.nombre)}, sobre lo que me preguntas: [la IA arma aquí el borrador con tu criterio y el expediente de ${primer(p.nombre)}]. Lo revisamos en la próxima sesión.` : '';
-  await insertar('mensajes', {paciente_id:p.id, canal:'WhatsApp', color, texto, respuesta: color==='verde' ? respuestaLetty(p, texto, color) : borrador, estado: color==='verde' ? 'enviado' : 'pendiente'});
+  await insertar('mensajes', {paciente_id:p.id, canal:'WhatsApp', color, texto, respuesta: color==='verde' ? respuestaLalaChat(p, texto, color) : borrador, estado: color==='verde' ? 'enviado' : 'pendiente'});
   pintar();
-  toast(color==='verde' ? 'Verde: Letty respondió sola' : color==='amarillo' ? 'Amarillo: quedó un borrador para tu aprobación' : 'Rojo: te llegó una alerta, esto es tuyo');
+  toast(color==='verde' ? 'Verde: LalaChat respondió sola' : color==='amarillo' ? 'Amarillo: quedó un borrador para tu aprobación' : 'Rojo: te llegó una alerta, esto es tuyo');
 }
 
 /* ============ VENTAS ============ */
@@ -598,10 +615,10 @@ function vVentas(){
 async function moverLead(id, etapa){
   const l = D.leads.find(x=>x.id===id);
   if (etapa==='pagado'){
-    const nuevo = await insertar('pacientes', {nombre:l.nombre, edad:35, telefono:'+57 300 555 0199', programa:'Inicial 4 meses', mes:1, estado:'nuevo', color:'#0b7a8a', motivo:'Pendiente: llega con el onboarding de Google Forms.', tener_presente:'Paciente nuevo. Pagó hoy por Stripe. Letty le mandó la bienvenida y el onboarding.', puntajes:{Energía:0,Sueño:0,Nutrición:0,Estrés:0,Movimiento:0,Metabólico:0}, plan:['Borrador · después del onboarding'], pendientes:['Llenar el onboarding','Subir exámenes de sangre','Firmar consentimiento']});
-    await insertar('whatsapp', {paciente_id:nuevo.id, de:'letty', color:'verde', texto:`¡Hola ${primer(l.nombre)}, bienvenida al programa del Dr. Juanpe! 🙌 Ya quedó tu pago. Aquí está tu formulario de inicio: https://forms.gle/onboarding y en un momento te llega la invitación a Circle.`});
+    const nuevo = await insertar('pacientes', {nombre:l.nombre, edad:35, telefono:'+57 300 555 0199', programa:'Inicial 4 meses', mes:1, estado:'nuevo', color:'#0b7a8a', motivo:'Pendiente: llega con el onboarding de Google Forms.', tener_presente:'Paciente nuevo. Pagó hoy por Stripe. LalaChat le mandó la bienvenida y el onboarding.', puntajes:{Energía:0,Sueño:0,Nutrición:0,Estrés:0,Movimiento:0,Metabólico:0}, plan:['Borrador · después del onboarding'], pendientes:['Llenar el onboarding','Subir exámenes de sangre','Firmar consentimiento']});
+    await insertar('whatsapp', {paciente_id:nuevo.id, de:'lalachat', color:'verde', texto:`¡Hola ${primer(l.nombre)}, bienvenida al programa del Dr. Juanpe! 🙌 Ya quedó tu pago. Aquí está tu formulario de inicio: https://forms.gle/onboarding y en un momento te llega la invitación a Circle.`});
     await actualizar('leads', id, {etapa, nota:'Pagó. Ficha, expediente y bienvenida por WhatsApp creados solos.'});
-    toast(`${primer(l.nombre)} ya es paciente: expediente creado y Letty le dio la bienvenida`);
+    toast(`${primer(l.nombre)} ya es paciente: expediente creado y LalaChat le dio la bienvenida`);
   } else await actualizar('leads', id, {etapa});
   pintar();
 }
@@ -610,10 +627,10 @@ async function moverLead(id, etapa){
 function vCobros(){
   const total = D.pagos.filter(p=>p.estado==='pagado').reduce((a,p)=>a+Number(p.monto),0);
   const pend = D.pagos.filter(p=>p.estado!=='pagado');
-  return cab('Cobros · Stripe', 'Pagos fallidos, renovaciones y recordatorios. Letty hace el seguimiento por WhatsApp para que tú no tengas que perseguir a nadie.') + `
+  return cab('Cobros · Stripe', 'Pagos fallidos, renovaciones y recordatorios. LalaChat hace el seguimiento por WhatsApp para que tú no tengas que perseguir a nadie.') + `
     <div class="cifras">
       <div class="cifra oscura"><span class="k">Cobrado este mes</span><span class="v">${usd(total)}</span><span class="d">Por Stripe</span></div>
-      <div class="cifra"><span class="k">Pagos fallidos</span><span class="v rojo">${D.pagos.filter(p=>p.estado==='fallido').length}</span><span class="d">Letty ya está haciendo seguimiento</span></div>
+      <div class="cifra"><span class="k">Pagos fallidos</span><span class="v rojo">${D.pagos.filter(p=>p.estado==='fallido').length}</span><span class="d">LalaChat ya está haciendo seguimiento</span></div>
       <div class="cifra"><span class="k">Por cobrar</span><span class="v ambar">${pend.length}</span><span class="d">${usd(pend.reduce((a,p)=>a+Number(p.monto),0))}</span></div>
       <div class="cifra"><span class="k">Renovaciones cerca</span><span class="v">${D.pacientes.filter(p=>p.estado==='ultimo_mes').length}</span><span class="d">Último mes del programa</span></div>
     </div>
@@ -626,9 +643,9 @@ function vCobros(){
 }
 async function recordarPago(id){
   const f = D.pagos.find(x=>x.id===id); const p = pac(f.paciente_id);
-  await insertar('whatsapp', {paciente_id:p.id, de:'letty', color:'verde', texto:`Hola ${primer(p.nombre)}, te escribo por tu ${f.concepto.toLowerCase()} (${usd(f.monto)}). Puedes pagarlo aquí en un minuto: https://pagos.drjuanpe.com/${primer(p.nombre).toLowerCase()} 🙏`});
+  await insertar('whatsapp', {paciente_id:p.id, de:'lalachat', color:'verde', texto:`Hola ${primer(p.nombre)}, te escribo por tu ${f.concepto.toLowerCase()} (${usd(f.monto)}). Puedes pagarlo aquí en un minuto: https://pagos.drjuanpe.com/${primer(p.nombre).toLowerCase()} 🙏`});
   await insertar('recordatorios', {paciente_id:p.id, tipo:'Pago', texto:`Recordatorio de ${f.concepto.toLowerCase()}`, dia:0, hora:new Date().toTimeString().slice(0,5), estado:'enviado'});
-  toast(`Letty le escribió a ${primer(p.nombre)} por WhatsApp`); pintar();
+  toast(`LalaChat le escribió a ${primer(p.nombre)} por WhatsApp`); pintar();
 }
 
 /* ============ LANDINGS ============ */
@@ -651,7 +668,7 @@ function vLandings(){
 }
 
 /* ============ ASISTENTE (chat flotante) ============ */
-const SUGERIDAS = ['Reporte de hoy', '¿Qué le está contestando Letty?', 'Mañana viajo, acomódalos', 'Cóbrale la semestral a Andrés', '¿Cuánto he cobrado?', '¿Qué tengo por aprobar?'];
+const SUGERIDAS = ['Reporte de hoy', '¿Qué le está contestando LalaChat?', 'Mañana viajo, acomódalos', 'Cóbrale la semestral a Andrés', '¿Cuánto he cobrado?', '¿Qué tengo por aprobar?'];
 function burbujaChat(html, yo){ const m = document.getElementById('chatMsjs'); const b = document.createElement('div'); b.className = 'burbuja' + (yo?' yo':''); b.innerHTML = html + `<span class="meta">${new Date().toLocaleTimeString('es-CO',{hour:'numeric',minute:'2-digit'})}</span>`; m.appendChild(b); m.scrollTop = m.scrollHeight; return b; }
 async function responder(q){
   const s = q.toLowerCase();
@@ -663,11 +680,11 @@ async function responder(q){
     const ex = D.pagos.find(x => x.paciente_id===p.id && x.estado!=='pagado' && (!sem || /semestral/i.test(x.concepto)));
     if (!ex) await insertar('pagos', {paciente_id:p.id, concepto, monto, estado:'pendiente', dia:0, intentos:0});
     const link = `https://buy.stripe.com/drjuanpe-${primer(p.nombre).toLowerCase()}`;
-    await insertar('whatsapp', {paciente_id:p.id, de:'letty', color:'verde', texto:`Hola ${primer(p.nombre)} 👋 te comparto el link para tu ${(ex?ex.concepto:concepto).toLowerCase()} (${usd(ex?ex.monto:monto)}): ${link}\nCualquier duda me escribes por aquí.`});
-    pintar(); return `Listo. Creé el link de pago en Stripe por <b>${usd(ex?ex.monto:monto)}</b> (${esc(ex?ex.concepto:concepto)}) y Letty ya se lo mandó a ${esc(p.nombre)} por WhatsApp. Te aviso cuando pague.<button class="accion" data-chatir="cobros">Ver cobros</button>`; }
+    await insertar('whatsapp', {paciente_id:p.id, de:'lalachat', color:'verde', texto:`Hola ${primer(p.nombre)} 👋 te comparto el link para tu ${(ex?ex.concepto:concepto).toLowerCase()} (${usd(ex?ex.monto:monto)}): ${link}\nCualquier duda me escribes por aquí.`});
+    pintar(); return `Listo. Creé el link de pago en Stripe por <b>${usd(ex?ex.monto:monto)}</b> (${esc(ex?ex.concepto:concepto)}) y LalaChat ya se lo mandó a ${esc(p.nombre)} por WhatsApp. Te aviso cuando pague.<button class="accion" data-chatir="cobros">Ver cobros</button>`; }
   if (/cu[aá]nto|cobrado|factur/.test(s)){ const pag = D.pagos.filter(p=>p.estado==='pagado'); const pend = D.pagos.filter(p=>p.estado!=='pagado'); return `Según Stripe, este mes llevas <b>${usd(pag.reduce((a,p)=>a+Number(p.monto),0))}</b> cobrados en ${pag.length} pagos.\nTienes <b>${usd(pend.reduce((a,p)=>a+Number(p.monto),0))}</b> por cobrar (${pend.length} pagos), de los cuales ${D.pagos.filter(p=>p.estado==='fallido').length} fallaron.<button class="accion" data-chatir="cobros">Ver cobros</button>`; }
-  if (/letty|contestando|respondiendo|whatsapp/.test(s)){ abrirCajon(); const ult = D.whatsapp.filter(w=>w.de==='letty').sort((a,b)=>new Date(b.creado)-new Date(a.creado)).slice(0,3); return `Letty lleva <b>${D.whatsapp.filter(w=>w.de==='letty').length} respuestas</b>. Las últimas:\n\n` + ult.map(w => `• A ${esc(primer(pac(w.paciente_id).nombre))}: “${esc(w.texto.slice(0,110))}${w.texto.length>110?'…':''}”`).join('\n\n') + `\n\nTe abrí el panel en vivo a la derecha.`; }
-  if (/pag|cobr|stripe/.test(s)){ const f = D.pagos.filter(p=>p.estado==='fallido'); return (f.length ? f.map(x => `• <b>${esc(pac(x.paciente_id).nombre)}</b>: ${esc(x.concepto)}, ${usd(x.monto)}, ${x.intentos} intentos. Letty ya le escribió por WhatsApp.`).join('\n') : 'No hay pagos fallidos 🎉') + `<button class="accion" data-chatir="cobros">Ver cobros</button>`; }
+  if (/lalachat|contestando|respondiendo|whatsapp/.test(s)){ abrirCajon(); const ult = D.whatsapp.filter(w=>w.de==='lalachat').sort((a,b)=>new Date(b.creado)-new Date(a.creado)).slice(0,3); return `LalaChat lleva <b>${D.whatsapp.filter(w=>w.de==='lalachat').length} respuestas</b>. Las últimas:\n\n` + ult.map(w => `• A ${esc(primer(pac(w.paciente_id).nombre))}: “${esc(w.texto.slice(0,110))}${w.texto.length>110?'…':''}”`).join('\n\n') + `\n\nTe abrí el panel en vivo a la derecha.`; }
+  if (/pag|cobr|stripe/.test(s)){ const f = D.pagos.filter(p=>p.estado==='fallido'); return (f.length ? f.map(x => `• <b>${esc(pac(x.paciente_id).nombre)}</b>: ${esc(x.concepto)}, ${usd(x.monto)}, ${x.intentos} intentos. LalaChat ya le escribió por WhatsApp.`).join('\n') : 'No hay pagos fallidos 🎉') + `<button class="accion" data-chatir="cobros">Ver cobros</button>`; }
   if (/aprob|amarill|rojo|pendiente/.test(s)){ const a = D.mensajes.filter(m=>m.estado==='pendiente'); return `Tienes <b>${a.filter(m=>m.color==='amarillo').length} borradores en amarillo</b> y <b>${a.filter(m=>m.color==='rojo').length} en rojo</b>:\n\n` + a.map(m => `• ${m.color==='rojo'?'🔴':'🟡'} ${esc(pac(m.paciente_id).nombre)}: “${esc(m.texto)}”`).join('\n') + `<button class="accion" data-chatir="semaforo">Abrir semáforo</button>`; }
   if (/landing|p[aá]gina/.test(s)){ return `Listo, te armé una landing con tu marca. Revísala y si te gusta la publicamos.<button class="accion" data-chatir="landings">Ver landing</button>`; }
   const hoy = D.citas.filter(c=>c.dia===0).sort((a,b)=>a.hora.localeCompare(b.hora));
@@ -691,17 +708,92 @@ async function crearLanding(desdeChat){
   landingPrev = htmlLanding(t, s, c); if (!desdeChat) toast('Landing creada'); if (actual==='landings') pintar();
 }
 
+/* ============ TU WHATSAPP (LalaChat le escribe a Juanpe) ============ */
+let chatJuanpe = [];
+function hm(h, menos){ const [a,b] = h.split(':').map(Number); const t = a*60+b-menos; return `${String(Math.floor(t/60)).padStart(2,'0')}:${String(t%60).padStart(2,'0')}`; }
+function briefCita(c){
+  const p = pac(c.paciente_id); const ult = D.sesiones.filter(s=>s.paciente_id===p.id).sort((a,b)=>b.dia-a.dia)[0];
+  const rojo = D.mensajes.find(m=>m.paciente_id===p.id && m.color==='rojo' && m.estado==='pendiente');
+  const pago = D.pagos.find(f=>f.paciente_id===p.id && f.estado==='fallido');
+  return `⏰ *En 30 min:* ${p.nombre} · ${c.tipo} (${c.hora})\n\n👤 *Quién es:* ${p.quien || p.motivo}\n📍 *Va en:* ${p.programa}, mes ${p.mes}\n🩺 *Ten presente:* ${p.tener_presente}` +
+    (ult ? `\n📝 *Última sesión (${fechaCorta(ult.dia)}):* ${ult.resumen}` : '') +
+    ((p.pendientes||[]).length ? `\n✅ *Pendientes:* ${p.pendientes.join(' · ')}` : '') +
+    (rojo ? `\n🔴 *Ojo:* tiene un mensaje en rojo sin responder: “${rojo.texto}”` : '') +
+    (pago ? `\n💳 *Ojo:* pago fallido de ${usd(pago.monto)}` : '') +
+    (p.como_hablarle ? `\n💬 *Cómo hablarle:* ${p.como_hablarle}` : '');
+}
+function msjsTuWa(){
+  const hoy = D.citas.filter(c=>c.dia===0).sort((a,b)=>a.hora.localeCompare(b.hora));
+  const base = [{yo:false, hora:'06:30', texto:`☀️ *Buenos días Juanpe.* Hoy tienes ${hoy.length} sesiones: ${hoy.map(c=>`${c.hora} ${primer(pac(c.paciente_id).nombre)}`).join(', ')}.\n🔴 ${D.mensajes.filter(m=>m.color==='rojo'&&m.estado==='pendiente').length} en rojo · 🟡 ${D.mensajes.filter(m=>m.color==='amarillo'&&m.estado==='pendiente').length} por aprobar.\nTe escribo 30 minutos antes de cada cita con todo lo que necesitas saber.`},
+    ...hoy.map(c => ({yo:false, hora:hm(c.hora,30), texto:briefCita(c)}))];
+  return [...base, ...chatJuanpe];
+}
+const negrita = t => esc(t).replace(/\*([^*]+)\*/g,'<b>$1</b>');
+function vTuWa(){
+  return cab('Tu WhatsApp', 'Así le llega a Juanpe: LalaChat le escribe al WhatsApp cada mañana y 30 minutos antes de cada cita, con quién es la persona, cómo va y qué tener presente. Él le puede responder o preguntarle lo que quiera.') + `
+    <div class="telefono"><section class="wachat">
+      <div class="wa-cab"><span class="ini" style="background:#1fa855">LC</span><div><b>LalaChat</b><span>tu asistente · en línea</span></div></div>
+      <div class="mensajes" id="waMsjs">${msjsTuWa().map(m => `<div class="burbuja ${m.yo?'yo':''}">${m.yo ? esc(m.texto) : m.html || negrita(m.texto)}<span class="meta">${m.hora}</span></div>`).join('')}</div>
+      <div class="wa-pie"><form id="juanpeForm"><input id="juanpeInput" autocomplete="off" placeholder="Pregúntale: “¿quién es mi próxima cita?” o “cóbrale a Felipe”"><button class="env" aria-label="Enviar">${ic('env')}</button></form></div>
+    </section></div>`;
+}
+async function preguntaJuanpe(q){
+  const ahora = new Date().toTimeString().slice(0,5);
+  chatJuanpe.push({yo:true, hora:ahora, texto:q}); pintar();
+  let r;
+  if (/pr[oó]xima|qui[eé]n (es|sigue|viene)|siguiente/.test(q.toLowerCase())){ const c = D.citas.filter(c=>c.dia===0 && c.hora >= ahora).sort((a,b)=>a.hora.localeCompare(b.hora))[0] || D.citas.filter(c=>c.dia>0).sort((a,b)=>a.dia-b.dia||a.hora.localeCompare(b.hora))[0]; r = {texto: briefCita(c).replace('⏰ *En 30 min:*','⏰ *Tu próxima cita:*')}; }
+  else { const html = (await responder(q)).replace(/<button[^>]*>.*?<\/button>/g,''); r = {html}; }
+  chatJuanpe.push({yo:false, hora:new Date().toTimeString().slice(0,5), ...r}); pintar();
+}
+
+/* ============ PORTAL DEL PACIENTE ============ */
+function pintarPortal(){
+  const id = Number(location.hash.split('/')[1]); const p = id ? D.pacientes.find(x=>x.id===id) : null;
+  const el = document.getElementById('portal');
+  if (!p){ el.innerHTML = `<div class="pt-cab"><span class="mono">J+</span><div><b>Dr. Juanpe + Vital</b><span>Tu espacio de paciente</span></div></div>
+    <div class="tarjeta pt-login"><h1 style="font-size:26px; letter-spacing:-.6px">Hola 👋</h1><p style="color:var(--gris); margin-top:6px">Escribe el código de 4 dígitos que te llegó por WhatsApp para ver tu plan, tus exámenes y tus próximas citas.</p>
+    <form id="ptForm"><input id="ptCod" inputmode="numeric" maxlength="4" autocomplete="one-time-code" placeholder="····"><button class="boton" style="width:100%">Entrar</button></form>
+    <p style="font-size:12.5px; color:var(--gris); margin-top:14px">Demo: prueba con <b>4821</b> (Mariana) o <b>5307</b> (Andrés)</p></div>`; return; }
+  const cita = D.citas.filter(c=>c.paciente_id===p.id && c.dia>=0).sort((a,b)=>a.dia-b.dia||a.hora.localeCompare(b.hora))[0];
+  const ult = D.sesiones.filter(s=>s.paciente_id===p.id).sort((a,b)=>b.dia-a.dia)[0];
+  const ex = D.examenes.filter(e=>e.paciente_id===p.id); const marc = [...new Set(ex.map(e=>e.marcador))];
+  const pago = D.pagos.find(f=>f.paciente_id===p.id && f.estado!=='pagado');
+  const col = v => v>=70 ? 'var(--verde)' : v>=50 ? 'var(--ambar)' : 'var(--rojo)';
+  const tareas = [...(ult?.tareas||[]), ...(p.pendientes||[])];
+  el.innerHTML = `<div class="pt-cab"><span class="mono">J+</span><div><b>Hola, ${esc(primer(p.nombre))}</b><span>Tu espacio · Dr. Juanpe + Vital</span></div><button id="ptSalir">Salir</button></div>
+  <div class="pt">
+    <div class="cifras pt-cifras">
+      <div class="cifra oscura"><span class="k">Tu próxima sesión</span><span class="v" style="font-size:30px">${cita ? `${nomDia(cita.dia)} ${cita.hora}` : 'Por agendar'}</span><span class="d">${cita ? esc(cita.tipo) + ' · Google Meet' : 'Escríbele a LalaChat para agendar'}</span></div>
+      <div class="cifra"><span class="k">Tu programa</span><span class="v" style="font-size:30px">Mes ${p.mes}</span><span class="d">${esc(p.programa)}</span></div>
+      <div class="cifra"><span class="k">${pago ? 'Pago pendiente' : 'Pagos'}</span><span class="v ${pago?'ambar':'verde'}" style="font-size:30px">${pago ? usd(pago.monto) : 'Al día'}</span><span class="d">${pago ? `${esc(pago.concepto)} · <a href="#" onclick="return false">Pagar con Stripe</a>` : 'Gracias 🙌'}</span></div>
+    </div>
+    <div class="grilla2">
+      <section class="tarjeta seccion"><div class="seccion-cab"><h2>Tu diagnóstico por áreas</h2></div><div class="areas">${Object.entries(p.puntajes||{}).map(([k,v]) => `<div class="area"><span>${k}</span><div class="barra"><i style="width:${v}%; background:${col(v)}"></i></div><b>${v}</b></div>`).join('')}</div></section>
+      <section class="tarjeta seccion"><div class="seccion-cab"><h2>Tu plan</h2></div><div class="pasos">${(p.plan||[]).map((x,i) => `<div class="paso ${i+1<p.mes?'ok':i+1===p.mes?'ahora':''}"><i>${i+1<p.mes?'✓':i+1}</i><span>${esc(x)}</span></div>`).join('')}</div></section>
+    </div>
+    <section class="tarjeta seccion" style="margin-bottom:20px"><div class="seccion-cab"><h2>Tus exámenes</h2></div>${marc.length ? `<div class="graficas">${marc.map(m => grafica(ex.filter(e=>e.marcador===m))).join('')}</div>` : '<p class="vacio">Cuando subas tus exámenes los vas a ver aquí con gráficas.</p>'}</section>
+    <div class="grilla2">
+      <section class="tarjeta seccion"><div class="seccion-cab"><h2>Tus tareas</h2></div>${tareas.map(t => `<label class="check"><input type="checkbox">${esc(t)}</label>`).join('') || '<p class="vacio">Sin tareas por ahora.</p>'}</section>
+      <section class="tarjeta seccion"><div class="seccion-cab"><h2>Tu última sesión</h2></div>${ult ? `<div class="fila"><div class="cuerpo"><div class="t">${esc(ult.titulo)}</div><div class="s">${esc(ult.resumen)}</div></div><div class="der">${fechaCorta(ult.dia)}</div></div>` : '<p class="vacio">Aún no tienes sesiones.</p>'}
+        <a class="boton wa" style="margin-top:12px" href="#" onclick="return false">${ic('wa')}Escribirle a LalaChat por WhatsApp</a></section>
+    </div>
+    <p style="text-align:center; font-size:12.5px; color:var(--gris); margin-top:20px">Lo que ves aquí lo revisa y aprueba el Dr. Juanpe. Datos de prueba.</p>
+  </div>`;
+}
+function modoPortal(){ const on = location.hash.startsWith('#portal'); document.body.classList.toggle('modo-portal', on); if (on) pintarPortal(); return on; }
+window.addEventListener('hashchange', () => { if (!modoPortal()) pintar(); });
+
 /* ============ CHECK-INS ============ */
 function vCheckins(){
   const ord = {rojo:0, amarillo:1, verde:2};
   const lista = D.checkins.slice().sort((a,b)=>(ord[a.color] ?? 3)-(ord[b.color] ?? 3));
   const resp = D.checkins.filter(c=>c.estado==='respondido').length;
-  return cab('Check-ins del mes', 'Se envían solos cada mes, Letty le recuerda a quien no responde, y te llegan ya leídos contra el expediente para que grabes tu respuesta directo.') + `
+  return cab('Check-ins del mes', 'Se envían solos cada mes, LalaChat le recuerda a quien no responde, y te llegan ya leídos contra el expediente para que grabes tu respuesta directo.') + `
     <div class="cifras">
       <div class="cifra oscura"><span class="k">Respondidos</span><span class="v">${resp}/${D.checkins.length}</span><span class="d">Este mes</span></div>
       <div class="cifra"><span class="k">En rojo</span><span class="v rojo">${D.checkins.filter(c=>c.color==='rojo').length}</span><span class="d">Revisa tú primero</span></div>
       <div class="cifra"><span class="k">En amarillo</span><span class="v ambar">${D.checkins.filter(c=>c.color==='amarillo').length}</span><span class="d">Tienen una pregunta para ti</span></div>
-      <div class="cifra"><span class="k">Sin responder</span><span class="v">${D.checkins.filter(c=>c.estado!=='respondido').length}</span><span class="d">Letty les está recordando</span></div>
+      <div class="cifra"><span class="k">Sin responder</span><span class="v">${D.checkins.filter(c=>c.estado!=='respondido').length}</span><span class="d">LalaChat les está recordando</span></div>
     </div>
     <section class="tarjeta seccion">${lista.map(c => { const p = pac(c.paciente_id); return `<div class="fila">${bolita(p)}<div class="cuerpo"><div class="t">${esc(p.nombre)} · ${esc(c.mes)} ${c.color ? pastillaColor(c.color) : `<span class="pastilla">${c.estado==='enviado'?'Enviado':'Sin respuesta'}</span>`}</div>
       <div class="presente"><b>${c.estado==='respondido'?'Pre-leído:':'Estado:'}</b> ${esc(c.resumen)}</div></div>
@@ -710,7 +802,7 @@ function vCheckins(){
 
 /* ============ CONEXIONES ============ */
 const CONEX = [
-  ['WhatsApp Business · Letty', 'Letty responde a los pacientes, manda recordatorios y lee lo que escriben, con el semáforo.', 'Fase 2 · semana 8', 'wa'],
+  ['WhatsApp Business · LalaChat', 'LalaChat responde a los pacientes, manda recordatorios y lee lo que escriben, con el semáforo.', 'Fase 2 · semana 8', 'wa'],
   ['Stripe', 'Cobros, links de pago, reintentos de pagos fallidos y renovaciones. El asistente lo maneja por instrucción.', 'Fase 2 · semana 7', 'azul'],
   ['Google Calendar y Meet', 'Agenda, bloqueos por viaje y enlaces de Meet para cada sesión.', 'Fase 2 · semana 6', 'azul'],
   ['Notas de sesión · Fathom (o Granola)', 'El resumen y las tareas de cada sesión caen solos en el expediente. Las dos tienen API; Juanpe hoy usa Fathom.', 'Fase 1 · semana 3', 'azul'],
@@ -718,6 +810,8 @@ const CONEX = [
   ['Google Drive', 'Los exámenes en PDF o foto que guarda Carly se leen con el criterio de Juanpe.', 'Fase 1 · semana 3', 'azul'],
   ['Circle', 'El asistente lee y responde en el espacio privado de cada paciente y publica el resumen de la sesión.', 'Fase 2 · semana 8', 'azul'],
   ['Telegram', 'El reporte de cada mañana y las alertas en rojo le llegan a Juanpe al celular.', 'Fase 1 · semana 4', 'azul'],
+  ['Memoria · GitHub memoria-juanpe', 'Un archivo por paciente con quién es, lo importante, los pendientes y el resumen de cada reunión. LalaChat lo lee antes de escribirle a Juanpe y lo actualiza después de cada sesión.', 'Fase 1 · semana 2', 'lima'],
+  ['Portal del paciente', 'Cada paciente entra con su código y ve su plan, su diagnóstico, sus exámenes, sus tareas y sus pagos.', 'Fase 3 · semanas 9 y 10', 'azul'],
   ['Voz de Juanpe (opcional)', 'Notas de voz con la voz de Juanpe para lo verde, si él quiere.', 'Fase 3 · semana 12', 'lima']
 ];
 function vIntegraciones(){
@@ -729,36 +823,36 @@ function vIntegraciones(){
     </section>`;
 }
 
-/* ============ LETTY EN VIVO ============ */
+/* ============ LALACHAT EN VIVO ============ */
 let colaVivo = (window.SEED.envivo || []).slice(), timerVivo = null;
 function pintarFeed(){
-  const n = D.whatsapp.filter(w=>w.de==='letty').length;
-  document.getElementById('envivoTxt').textContent = `Letty en vivo · ${n} respuestas`;
+  const n = D.whatsapp.filter(w=>w.de==='lalachat').length;
+  document.getElementById('envivoTxt').textContent = `LalaChat en vivo · ${n} respuestas`;
   const f = document.getElementById('feed'); if (!f) return;
   const orden = D.whatsapp.slice().sort((a,b)=>new Date(b.creado)-new Date(a.creado));
   const vistos = new Set(); const items = [];
-  for (const w of orden){ if (w.de!=='letty' || vistos.has(w.id)) continue;
+  for (const w of orden){ if (w.de!=='lalachat' || vistos.has(w.id)) continue;
     const prev = orden.find(x => x.paciente_id===w.paciente_id && x.de==='paciente' && new Date(x.creado) <= new Date(w.creado));
     items.push({w, prev}); vistos.add(w.id); if (items.length>=14) break; }
   f.innerHTML = items.map(({w,prev}) => { const p = pac(w.paciente_id); return `<div class="item-feed" data-feedp="${p.id}"><div class="quien">${bolita(p,26)}${esc(p.nombre)} ${pastillaColor(w.color)}<small>${hace(w.creado)}</small></div>
-    ${prev ? `<p>“${esc(prev.texto)}”</p>` : ''}<p class="resp"><b>Letty:</b> ${esc(w.texto)}</p></div>`; }).join('');
+    ${prev ? `<p>“${esc(prev.texto)}”</p>` : ''}<p class="resp"><b>LalaChat:</b> ${esc(w.texto)}</p></div>`; }).join('');
 }
 async function llegaMensaje(){
   const m = colaVivo.shift(); if (!m){ document.getElementById('cajonEstado').textContent = 'Al día · no hay mensajes nuevos'; return; }
   const p = pac(m.paciente_id); document.getElementById('cajonEstado').textContent = `${primer(p.nombre)} está escribiendo…`;
   await insertar('whatsapp', {paciente_id:p.id, de:'paciente', texto:m.texto}); pintarFeed();
   await new Promise(r=>setTimeout(r, 1500));
-  const color = clasificar(m.texto); const txt = respuestaLetty(p, m.texto, color);
-  await insertar('whatsapp', {paciente_id:p.id, de:'letty', color, texto:txt});
+  const color = clasificar(m.texto); const txt = respuestaLalaChat(p, m.texto, color);
+  await insertar('whatsapp', {paciente_id:p.id, de:'lalachat', color, texto:txt});
   if (color!=='verde') await insertar('mensajes', {paciente_id:p.id, canal:'WhatsApp', color, texto:m.texto, respuesta: color==='amarillo' ? `Hola ${primer(p.nombre)}, [borrador con tu criterio y el expediente de ${primer(p.nombre)}].` : '', estado:'pendiente'});
-  document.getElementById('cajonEstado').textContent = color==='verde' ? `Letty le respondió a ${primer(p.nombre)}` : `Letty le respondió a ${primer(p.nombre)} y te dejó un ${COLORES[color][0].toLowerCase()} en el semáforo`;
+  document.getElementById('cajonEstado').textContent = color==='verde' ? `LalaChat le respondió a ${primer(p.nombre)}` : `LalaChat le respondió a ${primer(p.nombre)} y te dejó un ${COLORES[color][0].toLowerCase()} en el semáforo`;
   pintar();
 }
 function abrirCajon(){ document.getElementById('cajon').classList.add('abierto'); pintarFeed(); if (!timerVivo){ setTimeout(llegaMensaje, 2500); timerVivo = setInterval(llegaMensaje, 11000); } }
 function cerrarCajon(){ document.getElementById('cajon').classList.remove('abierto'); clearInterval(timerVivo); timerVivo = null; }
 document.getElementById('envivoBtn').onclick = abrirCajon;
 document.getElementById('cerrarCajon').onclick = cerrarCajon;
-document.getElementById('abrirConvs').onclick = () => { cerrarCajon(); ir('letty'); };
+document.getElementById('abrirConvs').onclick = () => { cerrarCajon(); ir('lalachat'); };
 
 /* ============ eventos ============ */
 document.addEventListener('click', async e => {
@@ -774,10 +868,11 @@ document.addEventListener('click', async e => {
   if (d.llamar){ await actualizar('mensajes', Number(d.llamar), {estado:'atendido', respuesta:'Lo atendiste por llamada.'}); toast('Marcado como atendido por llamada'); pintar(); return; }
   if (d.lead){ moverLead(Number(d.lead), d.a); return; }
   if (d.cobrar){ recordarPago(Number(d.cobrar)); return; }
-  if (d.reintentar){ const f = D.pagos.find(x=>x.id===Number(d.reintentar)); await actualizar('pagos', f.id, {estado:'pagado', intentos:f.intentos+1}); await insertar('whatsapp', {paciente_id:f.paciente_id, de:'letty', color:'verde', texto:`¡Gracias ${primer(pac(f.paciente_id).nombre)}! Ya quedó tu pago de ${f.concepto.toLowerCase()} 🙌`}); toast('Stripe: el cobro pasó en el reintento'); pintar(); return; }
+  if (d.reintentar){ const f = D.pagos.find(x=>x.id===Number(d.reintentar)); await actualizar('pagos', f.id, {estado:'pagado', intentos:f.intentos+1}); await insertar('whatsapp', {paciente_id:f.paciente_id, de:'lalachat', color:'verde', texto:`¡Gracias ${primer(pac(f.paciente_id).nombre)}! Ya quedó tu pago de ${f.concepto.toLowerCase()} 🙌`}); toast('Stripe: el cobro pasó en el reintento'); pintar(); return; }
   if (d.envivo){ abrirCajon(); return; }
-  if (d.feedp){ cerrarCajon(); ir('letty', Number(d.feedp)); return; }
-  if (d.recordarck){ const c = D.checkins.find(x=>x.id===Number(d.recordarck)); const p = pac(c.paciente_id); await insertar('whatsapp', {paciente_id:p.id, de:'letty', color:'verde', texto:`Hola ${primer(p.nombre)} 👋 te recuerdo tu check-in del mes, son 5 minutos: https://forms.gle/checkin`}); await actualizar('checkins', c.id, {resumen:'Letty le recordó otra vez hoy por WhatsApp.'}); toast(`Letty le recordó a ${primer(p.nombre)}`); pintar(); return; }
+  if (d.portal){ window.open(location.pathname + '#portal/' + d.portal, '_blank'); return; }
+  if (d.feedp){ cerrarCajon(); ir('lalachat', Number(d.feedp)); return; }
+  if (d.recordarck){ const c = D.checkins.find(x=>x.id===Number(d.recordarck)); const p = pac(c.paciente_id); await insertar('whatsapp', {paciente_id:p.id, de:'lalachat', color:'verde', texto:`Hola ${primer(p.nombre)} 👋 te recuerdo tu check-in del mes, son 5 minutos: https://forms.gle/checkin`}); await actualizar('checkins', c.id, {resumen:'LalaChat le recordó otra vez hoy por WhatsApp.'}); toast(`LalaChat le recordó a ${primer(p.nombre)}`); pintar(); return; }
   if (d.viajo){ const r = await moverViaje(); toast(r.split('.')[0]); return; }
   if (d.aprobarplan){ const p = pac(Number(d.aprobarplan)); await actualizar('pacientes', p.id, {estado:'activo', plan:['Mes 1 · Sueño: 7 horas y rutina de cierre','Mes 2 · Presión: sal, potasio y caminar a diario','Mes 3 · Fuerza 3 veces por semana','Mes 4 · Re-diagnóstico y continuación']}); toast(`Plan de ${primer(p.nombre)} aprobado y enviado a su Circle`); pintar(); return; }
   if (d.crearlanding){ crearLanding(false); return; }
@@ -792,6 +887,8 @@ document.addEventListener('input', e => { if (e.target.id==='busca'){ busca = e.
 document.addEventListener('submit', e => {
   e.preventDefault();
   if (e.target.id==='waForm'){ const i = document.getElementById('waInput'); const t = i.value.trim(); if (t) enviarWa(t); i.value=''; }
+  if (e.target.id==='juanpeForm'){ const i = document.getElementById('juanpeInput'); const t = i.value.trim(); if (t) preguntaJuanpe(t); i.value=''; }
+  if (e.target.id==='ptForm'){ const c = document.getElementById('ptCod').value.trim(); const p = D.pacientes.find(x=>x.codigo===c); if (p) location.hash = '#portal/' + p.id; else toast('Ese código no existe'); }
   if (e.target.id==='chatForm'){ const i = document.getElementById('chatInput'); preguntar(i.value); i.value=''; }
 });
 document.getElementById('abrirChat').onclick = () => abrirChat();
@@ -801,8 +898,9 @@ document.getElementById('sugeridas').addEventListener('click', e => { const s = 
 
 cargarDatos().then(() => {
   burbujaChat('Hola Juanpe 👋 Soy tu asistente. Pregúntame por tu día, tus pacientes, los cobros, o pídeme que te mueva la agenda.');
-  pintar();
+  if (!modoPortal()) pintar();
 });
+document.addEventListener('click', e => { if (e.target.id==='ptSalir') location.hash = '#portal'; });
 </script>
 </body>
 </html>
