@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dr. Juanpe · Asistente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --fondo:#f5f6f8; --tinta:#333333; --gris:#595959; --linea:#e2e2e2; --linea2:#ececec;
+  --azul:#2457a7; --azul2:#194582; --navy:#142d4e; --navy2:#23446b; --navy3:#365777; --lima:#89d12a;
+  --verde:#1e8e3e; --rojo:#c0392b; --ambar:#d98a1c; --azulclaro:#edf3fc;
+  --wa:#efeae2; --wame:#d9fdd3; --wacab:#0b5d4b;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{background:var(--fondo); color:var(--tinta); font-family:Inter,system-ui,sans-serif; font-size:15.5px; line-height:1.5; -webkit-font-smoothing:antialiased;}
+button{font:inherit; cursor:pointer; border:0; background:none; color:inherit;}
+input,textarea,select{font:inherit; color:inherit;}
+a{color:var(--azul); text-decoration:none;}
+svg.ic{width:20px; height:20px; flex:none; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round;}
+
+.app{display:flex; min-height:100vh;}
+.lateral{width:262px; flex:none; background:var(--navy); color:#f5f6f8; position:sticky; top:0; height:100vh; display:flex; flex-direction:column;}
+.marca{display:flex; align-items:center; gap:11px; padding:28px 24px 26px; font-size:20px; font-weight:700; letter-spacing:-.5px; color:#fff; line-height:1.15;}
+.marca .mono{display:grid; place-items:center; width:40px; height:40px; border:1px solid #89d12a6b; border-radius:10px 10px 4px 4px; color:var(--lima); font-size:17px; font-weight:700;}
+.marca small{display:block; font-size:12px; font-weight:500; color:#bbbbbb; letter-spacing:0; margin-top:2px;}
+.menu{flex:1; overflow-y:auto; padding:0 14px 20px;}
+.menu .grupo{font-size:13px; font-weight:650; color:#fff; padding:18px 13px 6px;}
+.enl{display:flex; align-items:center; gap:12px; width:100%; min-height:46px; padding:10px 13px; margin:3px 0; border:1px solid transparent; border-radius:9px; font-size:14.5px; font-weight:500; color:#dddddd; text-align:left; transition:background .15s, color .15s;}
+.enl:hover{background:var(--navy2); color:#fff;}
+.enl .ic{color:#bbbbbb;}
+.enl.act{background:var(--navy2); border-color:var(--navy3); box-shadow:inset 3px 0 var(--lima); color:#fff; font-weight:650;}
+.enl.act .ic{color:var(--lima);}
+.enl .num{margin-left:auto; background:var(--lima); color:var(--navy); font-size:11.5px; font-weight:800; border-radius:99px; padding:1px 8px;}
+.enl .num.r{background:#f0816f; color:#fff;}
+.pie{border-top:1px solid #ffffff1f; padding:18px 22px; display:flex; align-items:center; gap:12px;}
+.avatar{display:grid; place-items:center; width:40px; height:40px; border-radius:50%; background:var(--navy2); color:#d8edbe; border:1px solid var(--navy3); font-weight:700; font-size:14px; flex:none;}
+.pie b{display:block; font-size:14px; color:#fff;} .pie div > span{font-size:12px; color:#bbbbbb;}
+
+.pagina{flex:1; min-width:0; padding:30px clamp(16px,3vw,48px) 110px;}
+.pagina > .cont{max-width:1280px;}
+.aviso{display:flex; gap:10px; align-items:center; background:#fff8e6; border:1px solid #f1d9a6; color:#7a5410; border-radius:10px; padding:9px 14px; font-size:13px; font-weight:500; margin-bottom:22px;}
+.aviso.ok{background:#eef8df; border-color:#cfe8ad; color:#3f6a0c;}
+.cabecera{display:flex; flex-wrap:wrap; gap:16px 24px; align-items:flex-end; justify-content:space-between; margin-bottom:24px;}
+.titulo{font-size:clamp(28px,2.6vw,38px); font-weight:650; letter-spacing:-1.2px; line-height:1.15;}
+.cabecera p{color:var(--gris); margin-top:8px; font-size:15px; max-width:70ch;}
+.acciones{display:flex; gap:8px; flex-wrap:wrap;}
+.boton{display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:44px; padding:10px 18px; border-radius:9px; font-size:14px; font-weight:650; background:var(--azul); color:#fff; transition:background .15s, transform .15s, box-shadow .15s;}
+.boton:hover{background:var(--azul2); transform:translateY(-1px); box-shadow:0 4px 12px #142d4e26;}
+.boton.sec{background:#fff; color:var(--tinta); border:1px solid #d5d5d5;}
+.boton.sec:hover{background:var(--azulclaro); color:var(--azul2); border-color:var(--azul);}
+.boton.verde{background:var(--verde);} .boton.verde:hover{background:#17702f;}
+.boton.rojo{background:var(--rojo);}
+.boton.wa{background:#1fa855;} .boton.wa:hover{background:#178a45;}
+.boton.chico{min-height:36px; padding:7px 13px; font-size:13px;}
+
+.tarjeta{background:#fff; border:1px solid var(--linea); border-radius:13px; box-shadow:0 2px 3px #33333303;}
+.cifras{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin-bottom:20px;}
+.cifra{background:#fff; border:1px solid var(--linea); border-radius:13px; padding:22px; min-height:150px; text-align:left; transition:transform .15s, box-shadow .15s, border-color .15s; display:flex; flex-direction:column;}
+.cifra:hover{transform:translateY(-3px); border-color:var(--azul); box-shadow:0 8px 22px #142d4e18;}
+.cifra .k{font-size:13.5px; font-weight:550; color:var(--gris); min-height:38px;}
+.cifra .v{font-size:40px; font-weight:650; letter-spacing:-1.4px; margin:6px 0; line-height:1.1; font-variant-numeric:tabular-nums;}
+.cifra .d{font-size:13px; color:var(--gris);}
+.cifra.oscura{background:var(--navy); border-color:var(--navy); color:#fff;}
+.cifra.oscura .k,.cifra.oscura .d{color:#dddddd;}
+.v.rojo{color:var(--rojo);} .v.ambar{color:var(--ambar);} .v.verde{color:var(--verde);}
+
+.grilla2{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:20px; margin-bottom:20px;}
+.grilla3{display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:20px; margin-bottom:20px;}
+.seccion{padding:22px 24px 14px;}
+.seccion-cab{display:flex; justify-content:space-between; align-items:baseline; gap:16px; padding-bottom:14px; border-bottom:1px solid var(--linea2);}
+.seccion-cab h2{font-size:16.5px; font-weight:650;}
+.seccion-cab button{font-size:13.5px; font-weight:600; color:var(--azul); flex:none;}
+.fila{display:flex; gap:14px; align-items:flex-start; padding:14px 0; border-bottom:1px solid #f0f1ee;}
+.fila:last-child{border-bottom:0;}
+.fila .cuerpo{flex:1; min-width:0;}
+.fila .t{font-size:15px; font-weight:600; line-height:1.4;}
+.fila .s{font-size:13.5px; color:var(--gris); margin-top:3px; line-height:1.5;}
+.fila .der{flex:none; text-align:right; font-size:13px; color:var(--gris);}
+.fila.clic{cursor:pointer;} .fila.clic:hover .t{color:var(--azul);}
+.hora{font-weight:700; font-size:15px; color:var(--navy); min-width:52px; font-variant-numeric:tabular-nums;}
+.pastilla{display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:700; padding:2px 9px; border-radius:99px; background:#f0f1f5; color:#555; white-space:nowrap;}
+.pastilla.roja{background:#fbe9e7; color:var(--rojo);} .pastilla.ambar{background:#fdf1df; color:#9a5f0c;}
+.pastilla.verde{background:#e5f4ea; color:var(--verde);} .pastilla.azul{background:var(--azulclaro); color:var(--azul);}
+.pastilla.lima{background:#eef8df; color:#4c7a10;} .pastilla.wa{background:#dcf5e3; color:#147a3c;}
+.punto{width:10px; height:10px; border-radius:50%; display:inline-block; flex:none;}
+.punto.verde{background:var(--verde);} .punto.amarillo{background:var(--ambar);} .punto.rojo{background:var(--rojo);}
+.ini{display:grid; place-items:center; width:40px; height:40px; border-radius:50%; font-weight:700; font-size:14px; color:#fff; flex:none;}
+.vacio{color:var(--gris); padding:18px 0; font-size:14.5px;}
+.presente{background:var(--azulclaro); border-radius:10px; padding:10px 12px; font-size:13.5px; margin-top:8px; color:#24364f;}
+.presente b{color:var(--azul2);}
+
+.pestanas{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;}
+.pestana{display:inline-flex; align-items:center; gap:8px; min-height:42px; padding:8px 16px; border-radius:99px; border:1px solid #d5d5d5; background:#fff; font-size:14px; font-weight:600; color:var(--gris);}
+.pestana.act{background:var(--navy); color:#fff; border-color:var(--navy);}
+
+/* semáforo */
+.msj{padding:20px 22px; margin-bottom:12px; border-left:5px solid var(--linea);}
+.msj.verde{border-left-color:var(--verde);} .msj.amarillo{border-left-color:var(--ambar);} .msj.rojo{border-left-color:var(--rojo);}
+.msj .de{display:flex; gap:12px; align-items:center;}
+.msj .de b{font-size:15.5px;} .msj .de > div > span{display:block; font-size:13px; color:var(--gris);}
+.msj .texto{font-size:15.5px; margin:12px 0 6px;}
+.borrador{border:1px dashed #b9c8e0; border-radius:10px; padding:12px 14px; font-size:14.5px; margin-top:10px; background:#fff; width:100%; min-height:90px; resize:vertical;}
+.respondido{background:#f1faf3; border-radius:10px; padding:12px 14px; font-size:14.5px; margin-top:10px;}
+.msj .acciones{margin-top:14px;}
+.leyenda{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-bottom:20px;}
+.leyenda .tarjeta{padding:16px 18px; display:flex; gap:12px; align-items:flex-start;}
+.leyenda b{display:block; font-size:14.5px;} .leyenda span{font-size:13px; color:var(--gris);}
+
+/* expediente */
+.pacientes{display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:14px;}
+.pac{padding:18px; display:flex; gap:14px; align-items:center; text-align:left; transition:border-color .15s, transform .15s;}
+.pac:hover{border-color:var(--azul); transform:translateY(-2px);}
+.pac .ini{width:50px; height:50px; font-size:16px;}
+.pac b{display:block; font-size:15.5px;} .pac div > span{display:block; font-size:13px; color:var(--gris); line-height:1.45;}
+.buscador{flex:1; min-width:220px; min-height:46px; border:1px solid #d9d9d9; border-radius:9px; padding:0 14px; font-size:15px; background:#fff;}
+.areas{display:flex; flex-direction:column; gap:12px; padding-top:16px;}
+.area{display:grid; grid-template-columns:110px 1fr 40px; gap:12px; align-items:center; font-size:14px;}
+.barra{height:10px; background:#eef0f4; border-radius:99px; overflow:hidden;}
+.barra i{display:block; height:100%; border-radius:99px;}
+.area b{text-align:right; font-variant-numeric:tabular-nums;}
+.pasos{display:flex; flex-direction:column; gap:10px; padding-top:16px;}
+.paso{display:flex; gap:12px; align-items:flex-start; font-size:14.5px;}
+.paso i{display:grid; place-items:center; width:26px; height:26px; border-radius:50%; background:var(--fondo); font-style:normal; font-weight:700; font-size:12.5px; color:var(--gris); flex:none;}
+.paso.ok i{background:#e5f4ea; color:var(--verde);} .paso.ahora i{background:var(--azul); color:#fff;}
+.graficas{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; padding-top:16px;}
+.grafica{background:var(--fondo); border-radius:12px; padding:14px;}
+.grafica b{font-size:14px;} .grafica span{font-size:12.5px; color:var(--gris);}
+.grafica svg{width:100%; height:auto; display:block; margin-top:6px;}
+.hist .fila .cuerpo{padding-left:18px; position:relative;}
+.hist .fila .cuerpo::before{content:""; position:absolute; left:0; top:7px; width:7px; height:7px; border:1.5px solid #799456; border-radius:50%;}
+.check{display:flex; gap:10px; align-items:flex-start; padding:9px 0; font-size:14.5px;}
+.check input{margin-top:4px; width:17px; height:17px; accent-color:var(--verde);}
+
+/* Letty */
+.letty{display:grid; grid-template-columns:300px minmax(0,1fr) 300px; gap:16px; align-items:start;}
+.convs{overflow:hidden;}
+.conv{display:flex; gap:12px; align-items:center; width:100%; padding:13px 16px; border-bottom:1px solid #f0f1ee; text-align:left;}
+.conv:hover{background:#f7f9fc;}
+.conv.act{background:var(--azulclaro); box-shadow:inset 3px 0 var(--azul);}
+.conv b{display:block; font-size:14.5px;} .conv .txt span{display:block; font-size:12.5px; color:var(--gris); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:170px;}
+.conv .ini{width:40px; height:40px;}
+.wachat{display:flex; flex-direction:column; height:min(680px, calc(100vh - 180px)); min-height:480px; border-radius:13px; overflow:hidden; border:1px solid var(--linea); background:var(--wa);}
+.wa-cab{display:flex; align-items:center; gap:12px; background:var(--wacab); color:#fff; padding:13px 16px;}
+.wa-cab b{display:block; font-size:15px;} .wa-cab div > span{font-size:12px; opacity:.85;}
+.wa-cab .der{margin-left:auto;}
+.mensajes{flex:1; overflow-y:auto; padding:16px 14px; display:flex; flex-direction:column; gap:8px;}
+.burbuja{max-width:82%; background:#fff; border-radius:12px; padding:9px 12px; font-size:14.5px; line-height:1.45; box-shadow:0 1px 1px #0000001a; white-space:pre-line; animation:entra .25s ease;}
+.burbuja.yo{background:var(--wame); align-self:flex-end;}
+.burbuja .meta{display:flex; gap:6px; justify-content:flex-end; align-items:center; font-size:10.5px; color:#8a8f98; margin-top:3px;}
+.burbuja .quien{display:block; font-size:11.5px; font-weight:700; color:#0b7a5a; margin-bottom:2px;}
+.burbuja .accion{display:block; margin-top:8px; text-align:center; background:#f3f6fb; color:var(--azul); font-weight:700; font-size:13.5px; border-radius:8px; padding:8px; width:100%;}
+@keyframes entra{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+.wa-pie{display:flex; flex-direction:column; gap:8px; padding:10px 12px; background:#f0f2f5;}
+.wa-pie .modo{display:flex; gap:6px;}
+.wa-pie .modo button{font-size:12.5px; font-weight:650; padding:5px 11px; border-radius:99px; background:#fff; color:var(--gris);}
+.wa-pie .modo button.act{background:var(--wacab); color:#fff;}
+.wa-pie form{display:flex; gap:8px;}
+.wa-pie input{flex:1; min-height:44px; border:0; border-radius:22px; padding:0 16px; background:#fff;}
+.wa-pie .env{width:44px; height:44px; border-radius:50%; background:#1fa855; color:#fff; display:grid; place-items:center;}
+.recs .fila{padding:11px 0;}
+
+/* tablero ventas */
+.tablero{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; align-items:start;}
+.columna{background:#eceef2; border-radius:13px; padding:12px; min-height:200px;}
+.columna h3{display:flex; align-items:center; gap:8px; font-size:13px; font-weight:700; padding:4px 4px 10px; text-transform:uppercase; letter-spacing:.06em; color:#555;}
+.columna h3 .c{margin-left:auto; background:#fff; border-radius:99px; padding:0 9px; font-size:12px;}
+.tarea{background:#fff; border-radius:11px; padding:13px 14px; margin-bottom:10px; border-left:4px solid var(--azul); box-shadow:0 1px 3px #0000000d;}
+.tarea.pagado{border-left-color:var(--verde);}
+.tarea .t{font-size:14.5px; font-weight:650; line-height:1.35;}
+.tarea .s{font-size:12.5px; color:var(--gris); margin-top:5px;}
+.tarea .mover{display:flex; gap:6px; margin-top:10px;}
+.tarea .mover button{flex:1; min-height:34px; border-radius:8px; background:var(--fondo); font-size:12.5px; font-weight:650; color:var(--gris);}
+.tarea .mover button:hover{background:var(--azulclaro); color:var(--azul);}
+
+table{width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums;}
+th{text-align:left; font-size:12.5px; font-weight:600; color:var(--gris); background:var(--fondo); padding:12px 14px; white-space:nowrap;}
+td{padding:14px; border-bottom:1px solid #f0f1ee; font-size:14.5px;}
+tbody tr:hover{background:#f0f5fc;}
+td.r,th.r{text-align:right;}
+.tabla{overflow-x:auto;}
+
+/* agenda */
+.dias{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px;}
+.dia{background:#fff; border:1px solid var(--linea); border-radius:13px; padding:14px; min-height:180px;}
+.dia h3{font-size:14px; font-weight:700; margin-bottom:10px; text-transform:capitalize;}
+.dia.hoy{border-color:var(--azul); box-shadow:inset 0 3px var(--azul);}
+.cita{background:var(--fondo); border-radius:10px; padding:9px 11px; margin-bottom:8px; font-size:13.5px;}
+.cita b{display:block;} .cita span{color:var(--gris); font-size:12.5px;}
+.cita.movida{background:#fff8e6; animation:entra .3s;}
+
+/* landings */
+.landing-prev{border:1px solid var(--linea); border-radius:12px; overflow:hidden; background:#fff;}
+.landing-prev iframe{width:100%; height:520px; border:0; display:block;}
+.campo{display:flex; flex-direction:column; gap:6px; margin-bottom:14px; font-size:13.5px; font-weight:600;}
+.campo input,.campo textarea{min-height:44px; border:1px solid #d9d9d9; border-radius:9px; padding:10px 12px; font-weight:400; font-size:15px;}
+
+/* asistente flotante */
+.flotante{position:fixed; right:26px; bottom:26px; z-index:30; display:flex; align-items:center; gap:10px; background:var(--azul); color:#fff; border-radius:99px; padding:14px 22px 14px 16px; font-weight:700; font-size:15px; box-shadow:0 10px 30px #142d4e40; border:2px solid transparent; transition:transform .15s, background .15s;}
+.flotante:hover{transform:translateY(-2px); background:var(--azul2); border-color:var(--lima);}
+.flotante .pulso{width:10px; height:10px; border-radius:50%; background:var(--lima); box-shadow:0 0 0 0 #89d12a99; animation:pulso 1.8s infinite;}
+@keyframes pulso{70%{box-shadow:0 0 0 10px #89d12a00;} 100%{box-shadow:0 0 0 0 #89d12a00;}}
+.chat{position:fixed; right:22px; bottom:22px; width:400px; max-width:calc(100vw - 24px); height:min(680px, calc(100vh - 44px)); z-index:40; display:none; flex-direction:column; border-radius:20px; overflow:hidden; background:#eef2f7; box-shadow:0 30px 80px #142d4e55;}
+.chat.abierto{display:flex;}
+.chat-cab{display:flex; align-items:center; gap:12px; background:var(--navy); color:#fff; padding:14px 16px;}
+.chat-cab .ini{background:linear-gradient(135deg,var(--azul),#16b8de);}
+.chat-cab b{display:block; font-size:15px;} .chat-cab div > span{font-size:12px; opacity:.85;}
+.chat-cab button{margin-left:auto; width:38px; height:38px; border-radius:50%; display:grid; place-items:center; color:#fff;}
+.chat-cab button:hover{background:#ffffff22;}
+.chat .burbuja.yo{background:#dce8fb;}
+.sugeridas{display:flex; gap:6px; flex-wrap:wrap; padding:8px 12px 0;}
+.sugeridas button{font-size:12.5px; font-weight:600; background:#fff; border:1px solid #d5dbe5; border-radius:99px; padding:5px 11px; color:var(--azul2);}
+.chat form{display:flex; gap:8px; padding:10px 12px 12px;}
+.chat form input{flex:1; min-height:44px; border:1px solid #d5dbe5; border-radius:22px; padding:0 16px; background:#fff;}
+.chat form button{width:44px; height:44px; border-radius:50%; background:var(--azul); color:#fff; display:grid; place-items:center;}
+.escribiendo{align-self:flex-start; background:#fff; border-radius:12px; padding:10px 14px; display:flex; gap:4px;}
+.escribiendo i{width:7px; height:7px; border-radius:50%; background:#9aa0a6; animation:salta 1s infinite;}
+.escribiendo i:nth-child(2){animation-delay:.15s;} .escribiendo i:nth-child(3){animation-delay:.3s;}
+@keyframes salta{0%,60%,100%{transform:none; opacity:.5;} 30%{transform:translateY(-4px); opacity:1;}}
+.toast{position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px); background:var(--navy); color:#fff; padding:12px 18px; border-radius:10px; font-size:14px; font-weight:600; opacity:0; pointer-events:none; transition:.25s; z-index:60;}
+.toast.ver{opacity:1; transform:translateX(-50%) translateY(0);}
+.volver{display:inline-flex; gap:6px; align-items:center; font-size:14px; font-weight:600; color:var(--azul); margin-bottom:12px;}
+
+@media (max-width:1180px){
+  .letty{grid-template-columns:260px minmax(0,1fr);} .letty .recs{grid-column:1 / -1;}
+  .cifras{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .dias{grid-template-columns:repeat(3,minmax(0,1fr));}
+}
+@media (max-width:860px){
+  .app{flex-direction:column;}
+  .lateral{width:100%; height:auto; position:sticky; z-index:20;}
+  .marca{padding:14px 16px; font-size:17px;} .marca small{display:none;}
+  .menu{display:flex; gap:4px; overflow-x:auto; padding:0 10px 10px;}
+  .menu .grupo,.pie{display:none;}
+  .enl{width:auto; white-space:nowrap; min-height:40px; padding:8px 12px; margin:0;}
+  .grilla2,.grilla3,.letty,.leyenda,.tablero{grid-template-columns:1fr;}
+  .dias{grid-template-columns:1fr 1fr;}
+  .pagina{padding:20px 16px 110px;}
+  .flotante{right:16px; bottom:16px;}
+}
+@media (max-width:520px){ .cifras{grid-template-columns:1fr 1fr; gap:10px;} .cifra{padding:16px; min-height:120px;} .cifra .v{font-size:32px;} .dias{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="lateral">
+    <div class="marca"><span class="mono">J+</span><div>Dr. Juanpe<small>+ Vital · tu asistente</small></div></div>
+    <nav class="menu" id="menu"></nav>
+    <div class="pie"><span class="avatar">JP</span><div><b>Juan Pedro Montoya</b><span>Demo · ia con lala</span></div></div>
+  </aside>
+  <main class="pagina"><div class="cont" id="vista"></div></main>
+</div>
+
+<button class="flotante" id="abrirChat"><span class="pulso"></span>Pregúntale a tu asistente</button>
+<section class="chat" id="chat" aria-label="Asistente">
+  <div class="chat-cab"><span class="ini">IA</span><div><b>Tu asistente</b><span>Te responde aquí o por Telegram</span></div><button id="cerrarChat" aria-label="Cerrar"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="mensajes" id="chatMsjs"></div>
+  <div class="sugeridas" id="sugeridas"></div>
+  <form id="chatForm"><input id="chatInput" placeholder="Escríbele a tu asistente…" autocomplete="off"><button aria-label="Enviar"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form>
+</section>
+<div class="toast" id="toast"></div>
+
+<script src="datos.js"></script>
+<script>
+/* ============ íconos ============ */
+const IC = {
+  hoy:'<path d="M4 6h16v14H4zM4 10h16M9 3v4M15 3v4"/>',
+  pac:'<circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 4.5a3.5 3.5 0 010 7M21 20c0-2.6-1.6-4.8-4-5.6"/>',
+  sem:'<rect x="8" y="2.5" width="8" height="19" rx="3"/><circle cx="12" cy="7" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="17" r="1.6"/>',
+  wa:'<path d="M4 20l1.3-3.9A8 8 0 1112 20a8 8 0 01-4-1.1z"/><path d="M9 9.5c.3 1.9 1.6 3.7 3.5 4.6l1.2-1 1.8.8"/>',
+  age:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+  ven:'<path d="M4 19V9M10 19V5M16 19v-7M21 19H3"/>',
+  cob:'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/>',
+  lan:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 13h8M8 16h5"/>',
+  env:'<path d="M5 12h14M13 6l6 6-6 6"/>'
+};
+const ic = k => `<svg class="ic" viewBox="0 0 24 24">${IC[k]}</svg>`;
+
+/* ============ datos (Supabase si está configurado, si no, datos locales) ============ */
+let DB = null, D = {}, fuente = 'local';
+const TABLAS = ['pacientes','citas','sesiones','examenes','mensajes','whatsapp','recordatorios','leads','pagos','landings'];
+const minAgo = m => new Date(Date.now() - m*60000).toISOString();
+
+function datosLocales(){
+  const S = JSON.parse(JSON.stringify(window.SEED));
+  let eid = 1;
+  S.examenes = S.examenes.flatMap(e => e.valores.map(([dia,valor]) => ({id:eid++, paciente_id:e.paciente_id, marcador:e.marcador, unidad:e.unidad, min:e.min, max:e.max, dia, valor})));
+  S.mensajes.forEach(m => { m.creado = minAgo(m.min); delete m.min; });
+  S.whatsapp = S.whatsapp.map((w,i) => ({id:i+1, paciente_id:w.paciente_id, de:w.de, texto:w.texto, color:w.color||null, creado:minAgo(w.min)}));
+  S.landings = [];
+  return S;
+}
+async function cargarDatos(){
+  let cfg = {};
+  try { cfg = await (await fetch('/api/config', {cache:'no-store'})).json(); } catch {}
+  if (cfg.url && cfg.key){
+    try {
+      await new Promise((ok, mal) => { const s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js'; s.onload=ok; s.onerror=mal; document.head.appendChild(s); });
+      DB = window.supabase.createClient(cfg.url, cfg.key);
+      const res = await Promise.all(TABLAS.map(t => DB.from(t).select('*').order('id')));
+      res.forEach((r,i) => { if (r.error) throw r.error; D[TABLAS[i]] = r.data; });
+      fuente = 'supabase'; return;
+    } catch(e){ console.warn('Supabase no respondió, uso datos locales', e); DB = null; }
+  }
+  D = datosLocales(); fuente = 'local';
+}
+async function actualizar(tabla, id, cambios){
+  const f = D[tabla].find(x => x.id === id); Object.assign(f, cambios);
+  if (DB){ const {error} = await DB.from(tabla).update(cambios).eq('id', id); if (error) toast('No se pudo guardar: '+error.message); }
+}
+async function insertar(tabla, fila){
+  if (DB){
+    const {data, error} = await DB.from(tabla).insert(fila).select().single();
+    if (!error){ D[tabla].push(data); return data; }
+    toast('No se pudo guardar: '+error.message);
+  }
+  const nueva = {id: Math.max(0, ...D[tabla].map(x=>x.id)) + 1, creado: new Date().toISOString(), ...fila};
+  D[tabla].push(nueva); return nueva;
+}
+
+/* ============ utilidades ============ */
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pac = id => D.pacientes.find(p => p.id === id) || {nombre:'Paciente', color:'#999'};
+const iniciales = n => n.split(' ').slice(0,2).map(x=>x[0]).join('');
+const bolita = (p, t=40) => `<span class="ini" style="background:${p.color}; width:${t}px; height:${t}px">${iniciales(p.nombre)}</span>`;
+const primer = n => n.split(' ')[0];
+const fechaDia = d => { const f = new Date(); f.setDate(f.getDate()+d); return f; };
+const nomDia = d => d===0 ? 'Hoy' : d===1 ? 'Mañana' : d===-1 ? 'Ayer' : fechaDia(d).toLocaleDateString('es-CO',{weekday:'long', day:'numeric', month:'short'});
+const fechaCorta = d => fechaDia(d).toLocaleDateString('es-CO',{day:'numeric', month:'short'});
+const hace = iso => { const m = Math.round((Date.now() - new Date(iso))/60000); if (m < 1) return 'ahora'; if (m < 60) return `hace ${m} min`; const h = Math.round(m/60); if (h < 24) return `hace ${h} h`; return `hace ${Math.round(h/24)} d`; };
+const horaDe = iso => new Date(iso).toLocaleTimeString('es-CO',{hour:'numeric', minute:'2-digit'});
+const usd = n => 'US$' + Number(n).toLocaleString('es-CO');
+const ESTADOS = { activo:['Activo','verde'], nuevo:['Nuevo','azul'], enfriandose:['Se está enfriando','ambar'], ultimo_mes:['Último mes','lima'] };
+const estadoP = p => { const [t,c] = ESTADOS[p.estado] || ['—','']; return `<span class="pastilla ${c}">${t}</span>`; };
+const COLORES = { verde:['Verde','verde','Se responde solo'], amarillo:['Amarillo','ambar','Borrador para tu aprobación'], rojo:['Rojo','roja','Lo atiendes tú'] };
+const pastillaColor = c => c ? `<span class="pastilla ${COLORES[c][1]}"><span class="punto ${c}"></span>${COLORES[c][0]}</span>` : '';
+function toast(t){ const el = document.getElementById('toast'); el.innerHTML = t; el.classList.add('ver'); clearTimeout(toast.t); toast.t = setTimeout(()=>el.classList.remove('ver'), 2800); }
+
+/* ============ navegación ============ */
+let actual = 'hoy', pacienteSel = null, convSel = null, filtroSem = 'amarillo', modoWa = 'paciente', landingPrev = null;
+const MENU = [
+  ['Tu día', [['hoy','Reporte de hoy','hoy'], ['agenda','Agenda','age']]],
+  ['Pacientes', [['pacientes','Expedientes','pac'], ['semaforo','Semáforo médico','sem'], ['letty','Letty · WhatsApp','wa']]],
+  ['Negocio', [['ventas','Ventas','ven'], ['cobros','Cobros · Stripe','cob'], ['landings','Landings','lan']]]
+];
+function pintarMenu(){
+  const amar = D.mensajes.filter(m=>m.color==='amarillo' && m.estado==='pendiente').length;
+  const rojos = D.mensajes.filter(m=>m.color==='rojo' && m.estado==='pendiente').length;
+  const num = { semaforo: (amar+rojos) ? `<span class="num ${rojos?'r':''}">${amar+rojos}</span>` : '', letty: `<span class="num">${D.whatsapp.length}</span>` };
+  document.getElementById('menu').innerHTML = MENU.map(([g, items]) => `<div class="grupo">${g}</div>` + items.map(([id,t,i]) =>
+    `<button class="enl ${actual===id?'act':''}" data-ir="${id}">${ic(i)}${t}${num[id]||''}</button>`).join('')).join('');
+}
+function ir(v, extra){ actual = v; if (v==='pacientes') pacienteSel = extra ?? null; if (v==='letty' && extra) convSel = extra; pintar(); window.scrollTo(0,0); }
+function pintar(){
+  pintarMenu();
+  const V = { hoy:vHoy, agenda:vAgenda, pacientes:vPacientes, semaforo:vSemaforo, letty:vLetty, ventas:vVentas, cobros:vCobros, landings:vLandings };
+  document.getElementById('vista').innerHTML = avisoFuente() + V[actual]();
+  if (actual==='letty'){ const m = document.getElementById('waMsjs'); if (m) m.scrollTop = m.scrollHeight; }
+}
+const avisoFuente = () => fuente==='supabase'
+  ? `<div class="aviso ok">● Conectado a Supabase · datos de prueba, ningún paciente es real</div>`
+  : `<div class="aviso">Demo con datos de prueba · ningún paciente es real</div>`;
+const cab = (t, p, acc='') => `<div class="cabecera"><div><h1 class="titulo">${t}</h1><p>${p}</p></div><div class="acciones">${acc}</div></div>`;
+
+/* ============ HOY ============ */
+function vHoy(){
+  const hoy = D.citas.filter(c=>c.dia===0).sort((a,b)=>a.hora.localeCompare(b.hora));
+  const amar = D.mensajes.filter(m=>m.color==='amarillo' && m.estado==='pendiente');
+  const rojos = D.mensajes.filter(m=>m.color==='rojo' && m.estado==='pendiente');
+  const fallidos = D.pagos.filter(p=>p.estado==='fallido');
+  const verdes = D.whatsapp.filter(w=>w.de==='letty' && w.color==='verde').length;
+  const alertas = [
+    ...rojos.map(m => ({p:pac(m.paciente_id), t:`Mensaje en rojo de ${primer(pac(m.paciente_id).nombre)}`, s:m.texto, tag:pastillaColor('rojo'), ir:`semaforo`})),
+    ...D.pacientes.filter(p=>p.estado==='enfriandose').map(p => ({p, t:`${primer(p.nombre)} se está enfriando`, s:p.tener_presente, tag:estadoP(p), ir:`p:${p.id}`})),
+    ...D.pacientes.filter(p=>p.estado==='ultimo_mes').map(p => ({p, t:`${primer(p.nombre)} entra a su último mes`, s:'Buen momento para la renovación y el testimonio.', tag:estadoP(p), ir:`p:${p.id}`})),
+    ...fallidos.map(f => ({p:pac(f.paciente_id), t:`Pago fallido · ${pac(f.paciente_id).nombre}`, s:`${f.concepto} · ${usd(f.monto)} · ${f.intentos} intentos. Letty ya le escribió.`, tag:'<span class="pastilla roja">Stripe</span>', ir:'cobros'})),
+    ...D.pacientes.filter(p=>(p.pendientes||[]).some(x=>/exámenes/i.test(x))).map(p => ({p, t:`${primer(p.nombre)} no ha mandado exámenes`, s:'Letty le recuerda hoy a las 12:00.', tag:'<span class="pastilla azul">Exámenes</span>', ir:`p:${p.id}`}))
+  ];
+  const saludo = new Date().getHours() < 12 ? 'Buenos días' : new Date().getHours() < 19 ? 'Buenas tardes' : 'Buenas noches';
+  return cab(`${saludo}, Juanpe`, `${nomDia(0)} ${fechaDia(0).toLocaleDateString('es-CO',{weekday:'long', day:'numeric', month:'long'})}. Esto es lo que tienes hoy y lo que se te puede estar pasando.`,
+      `<button class="boton sec" data-ir="agenda">${ic('age')}Ver agenda</button><button class="boton" data-chat="reporte de hoy">Mándamelo por Telegram</button>`) + `
+    <div class="cifras">
+      <button class="cifra oscura" data-ir="agenda"><span class="k">Sesiones hoy</span><span class="v">${hoy.length}</span><span class="d">La primera a las ${hoy[0]?.hora || '—'}</span></button>
+      <button class="cifra" data-ir="semaforo" data-sem="amarillo"><span class="k">Borradores para aprobar</span><span class="v ambar">${amar.length}</span><span class="d">Amarillo · tú das el visto bueno</span></button>
+      <button class="cifra" data-ir="semaforo" data-sem="rojo"><span class="k">Lo que es tuyo</span><span class="v rojo">${rojos.length}</span><span class="d">Rojo · necesita tu respuesta</span></button>
+      <button class="cifra" data-ir="letty"><span class="k">Respondido solo por Letty</span><span class="v verde">${verdes}</span><span class="d">Verde · WhatsApp y recordatorios</span></button>
+    </div>
+    <div class="grilla3">
+      <section class="tarjeta seccion"><div class="seccion-cab"><h2>Tus sesiones de hoy · reporte pre-sesión</h2></div>
+        ${hoy.map(c => { const p = pac(c.paciente_id); return `<div class="fila clic" data-ir="pacientes" data-p="${p.id}">
+          <span class="hora">${c.hora}</span>${bolita(p)}<div class="cuerpo"><div class="t">${esc(p.nombre)} · ${esc(c.tipo)}</div>
+          <div class="s">${esc(p.programa)} · mes ${p.mes} ${estadoP(p)}</div>
+          <div class="presente"><b>Ten presente:</b> ${esc(p.tener_presente)}</div></div></div>`; }).join('') || '<p class="vacio">Hoy no tienes sesiones.</p>'}
+      </section>
+      <section class="tarjeta seccion"><div class="seccion-cab"><h2>Lo que se te puede estar pasando</h2></div>
+        ${alertas.map(a => `<div class="fila clic" data-alerta="${a.ir}">${bolita(a.p,34)}<div class="cuerpo"><div class="t">${esc(a.t)}</div><div class="s">${esc(a.s)}</div><div style="margin-top:6px">${a.tag}</div></div></div>`).join('')}
+      </section>
+    </div>
+    <section class="tarjeta seccion"><div class="seccion-cab"><h2>Letty hoy por WhatsApp</h2><button data-ir="letty">Abrir conversaciones →</button></div>
+      ${D.recordatorios.filter(r=>r.dia===0).map(r => { const p = pac(r.paciente_id); return `<div class="fila"><span class="hora">${r.hora}</span><div class="cuerpo"><div class="t">${esc(r.tipo)} · ${esc(p.nombre)}</div><div class="s">${esc(r.texto)}</div></div><div class="der"><span class="pastilla ${r.estado==='enviado'?'verde':'azul'}">${r.estado==='enviado'?'Enviado':'Programado'}</span></div></div>`; }).join('')}
+    </section>`;
+}
+
+/* ============ AGENDA ============ */
+function vAgenda(){
+  const dias = [0,1,2,3,4];
+  return cab('Agenda', 'Conectada a tu Google Calendar. Le puedes escribir al asistente "mañana viajo, acomódalos" y él mueve las citas y Letty le avisa a cada persona.',
+    `<button class="boton" data-viajo="1">Simular: "mañana viajo, acomódalos"</button>`) + `
+    <div class="dias">${dias.map(d => { const cs = D.citas.filter(c=>c.dia===d).sort((a,b)=>a.hora.localeCompare(b.hora)); return `<div class="dia ${d===0?'hoy':''}"><h3>${nomDia(d)} <span style="color:var(--gris); font-weight:500">${fechaCorta(d)}</span></h3>
+      ${cs.map(c => { const p = pac(c.paciente_id); return `<div class="cita ${c.movida?'movida':''}"><b>${c.hora} · ${esc(p.nombre)}</b><span>${esc(c.tipo)} · ${c.movida ? 'movida por viaje' : c.estado}</span></div>`; }).join('') || '<p class="vacio" style="font-size:13px">Libre</p>'}</div>`; }).join('')}</div>`;
+}
+async function moverViaje(){
+  const man = D.citas.filter(c=>c.dia===1);
+  if (!man.length){ toast('Mañana ya está libre'); return 'Mañana ya no tienes citas, quedó libre.'; }
+  const horas = ['12:00','14:00','17:00'];
+  for (const [i,c] of man.entries()){
+    await actualizar('citas', c.id, {dia:2, hora:horas[i%3], estado:'confirmada', movida:true});
+    const p = pac(c.paciente_id);
+    await insertar('whatsapp', {paciente_id:p.id, de:'letty', color:'verde', texto:`Hola ${primer(p.nombre)}, el doctor tiene un viaje mañana. Movimos tu sesión para el ${nomDia(2)} a las ${horas[i%3]}. Si no te queda bien, respóndeme y te busco otro espacio 🙏`});
+  }
+  pintar();
+  return `Listo. Moví ${man.length} cita${man.length>1?'s':''} de mañana al ${nomDia(2)} y Letty ya le avisó a cada persona por WhatsApp.`;
+}
+
+/* ============ PACIENTES / EXPEDIENTE ============ */
+let busca = '';
+function vPacientes(){
+  if (pacienteSel) return vExpediente(pac(pacienteSel));
+  const lista = D.pacientes.filter(p => p.nombre.toLowerCase().includes(busca.toLowerCase()));
+  return cab('Expedientes', 'Cada paciente con su expediente vivo: onboarding, sesiones de Fathom, exámenes y conversaciones en un solo lugar.') + `
+    <div style="display:flex; gap:10px; margin-bottom:16px"><input class="buscador" id="busca" placeholder="Busca a un paciente…" value="${esc(busca)}"></div>
+    <div class="pacientes">${lista.map(p => `<button class="tarjeta pac" data-ir="pacientes" data-p="${p.id}">${bolita(p,50)}<div><b>${esc(p.nombre)}</b><span>${esc(p.programa)} · mes ${p.mes}</span><span style="margin-top:6px">${estadoP(p)}</span></div></button>`).join('')}</div>`;
+}
+function grafica(ex){
+  const pts = ex.slice().sort((a,b)=>a.dia-b.dia);
+  const vals = pts.map(e=>Number(e.valor)); const lo = Math.min(...vals, Number(ex[0].min)), hi = Math.max(...vals, Number(ex[0].max));
+  const pad = (hi-lo)*.15 || 1, y0 = lo-pad, y1 = hi+pad, W=260, H=100;
+  const X = i => 8 + i*(W-16)/Math.max(1,pts.length-1), Y = v => H - 8 - (v-y0)/(y1-y0)*(H-16);
+  const ult = vals[vals.length-1], ok = ult >= ex[0].min && ult <= ex[0].max;
+  return `<div class="grafica"><b>${esc(ex[0].marcador)}</b> <span>· ${ult} ${esc(ex[0].unidad)} · rango ${ex[0].min}–${ex[0].max}</span>
+    <svg viewBox="0 0 ${W} ${H}"><rect x="0" y="${Y(ex[0].max)}" width="${W}" height="${Math.max(2,Y(ex[0].min)-Y(ex[0].max))}" fill="#1e8e3e14"/>
+    <polyline fill="none" stroke="${ok?'#1e8e3e':'#d98a1c'}" stroke-width="2.4" points="${pts.map((e,i)=>`${X(i)},${Y(e.valor)}`).join(' ')}"/>
+    ${pts.map((e,i)=>`<circle cx="${X(i)}" cy="${Y(e.valor)}" r="4" fill="#fff" stroke="${ok?'#1e8e3e':'#d98a1c'}" stroke-width="2"/><text x="${X(i)}" y="${H-1}" font-size="9" text-anchor="${i===0?'start':i===pts.length-1?'end':'middle'}" fill="#6b6b6b">${fechaCorta(e.dia)}</text>`).join('')}</svg></div>`;
+}
+function vExpediente(p){
+  const ses = D.sesiones.filter(s=>s.paciente_id===p.id).sort((a,b)=>b.dia-a.dia);
+  const ex = D.examenes.filter(e=>e.paciente_id===p.id); const marc = [...new Set(ex.map(e=>e.marcador))];
+  const wa = D.whatsapp.filter(w=>w.paciente_id===p.id).slice(-3);
+  const cita = D.citas.filter(c=>c.paciente_id===p.id && c.dia>=0).sort((a,b)=>a.dia-b.dia)[0];
+  const col = v => v>=70 ? 'var(--verde)' : v>=50 ? 'var(--ambar)' : 'var(--rojo)';
+  const plan = p.plan || [];
+  return `<button class="volver" data-ir="pacientes">← Todos los pacientes</button>` +
+    cab(`${esc(p.nombre)}`, `${p.edad} años · ${esc(p.programa)} · mes ${p.mes} · ${esc(p.telefono)} &nbsp; ${estadoP(p)}`,
+      `<button class="boton wa" data-ir="letty" data-conv="${p.id}">${ic('wa')}Conversación con Letty</button><button class="boton sec" data-chat="prepárame la sesión de ${primer(p.nombre)}">Prepárame la sesión</button>`) + `
+    <div class="tarjeta seccion" style="margin-bottom:20px"><div class="presente" style="margin:0"><b>Ten presente:</b> ${esc(p.tener_presente)}${cita ? ` &nbsp;·&nbsp; <b>Próxima sesión:</b> ${nomDia(cita.dia)} ${cita.hora}` : ''}</div>
+      <p style="margin-top:12px; font-size:14px; color:var(--gris)"><b style="color:var(--tinta)">Motivo de consulta (onboarding):</b> ${esc(p.motivo)}</p></div>
+    <div class="grilla2">
+      <section class="tarjeta seccion"><div class="seccion-cab"><h2>Diagnóstico por áreas</h2><span class="pastilla azul">Con tu sistema de puntaje</span></div>
+        <div class="areas">${Object.entries(p.puntajes||{}).map(([k,v]) => `<div class="area"><span>${k}</span><div class="barra"><i style="width:${v}%; background:${col(v)}"></i></div><b>${v}</b></div>`).join('')}</div></section>
+      <section class="tarjeta seccion"><div class="seccion-cab"><h2>Plan macro a 4 meses</h2>${p.estado==='nuevo' ? '<button data-aprobarplan="'+p.id+'">Aprobar borrador →</button>' : '<span class="pastilla verde">Aprobado por ti</span>'}</div>
+        <div class="pasos">${plan.map((x,i) => `<div class="paso ${i+1<p.mes?'ok':i+1===p.mes?'ahora':''}"><i>${i+1<p.mes?'✓':i+1}</i><span>${esc(x)}</span></div>`).join('')}</div></section>
+    </div>
+    <section class="tarjeta seccion" style="margin-bottom:20px"><div class="seccion-cab"><h2>Histórico de exámenes</h2><span style="font-size:13px; color:var(--gris)">Leídos con tu criterio · la franja verde es el rango óptimo</span></div>
+      ${marc.length ? `<div class="graficas">${marc.map(m => grafica(ex.filter(e=>e.marcador===m))).join('')}</div>` : '<p class="vacio">Todavía no hay exámenes. Letty le está recordando.</p>'}</section>
+    <div class="grilla2">
+      <section class="tarjeta seccion hist"><div class="seccion-cab"><h2>Sesiones · resumen de Fathom</h2></div>
+        ${ses.map(s => `<div class="fila"><div class="cuerpo"><div class="t">${esc(s.titulo)}</div><div class="s">${esc(s.resumen)}</div><div class="s"><b>Tareas:</b> ${(s.tareas||[]).map(esc).join(' · ')}</div></div><div class="der">${fechaCorta(s.dia)}</div></div>`).join('') || '<p class="vacio">Aún no hay sesiones.</p>'}</section>
+      <section class="tarjeta seccion"><div class="seccion-cab"><h2>Pendientes y WhatsApp</h2></div>
+        ${(p.pendientes||[]).map((x,i) => `<label class="check"><input type="checkbox" data-pend="${p.id}" data-i="${i}">${esc(x)}</label>`).join('') || '<p class="vacio">Sin pendientes 🎉</p>'}
+        <div style="margin-top:10px">${wa.map(w => `<div class="fila"><div class="cuerpo"><div class="s"><b style="color:var(--tinta)">${w.de==='letty'?'Letty':w.de==='juanpe'?'Tú':primer(p.nombre)}:</b> ${esc(w.texto)}</div></div><div class="der">${hace(w.creado)}</div></div>`).join('')}</div></section>
+    </div>`;
+}
+
+/* ============ SEMÁFORO ============ */
+function vSemaforo(){
+  const lista = D.mensajes.filter(m=>m.color===filtroSem).sort((a,b)=> (a.estado==='pendiente'?-1:1) - (b.estado==='pendiente'?-1:1) || new Date(b.creado)-new Date(a.creado));
+  const n = c => D.mensajes.filter(m=>m.color===c && (c==='verde' || m.estado==='pendiente')).length;
+  return cab('Semáforo médico', 'Todo lo que tus pacientes escriben por WhatsApp (Letty) y Circle pasa por aquí. Lo clínico nunca le llega a un paciente sin tu aprobación.') + `
+    <div class="leyenda">
+      <div class="tarjeta"><span class="punto verde" style="margin-top:5px"></span><div><b>Verde · se responde solo</b><span>Agenda, recordatorios, guías de alimentación, dudas que ya respondiste antes.</span></div></div>
+      <div class="tarjeta"><span class="punto amarillo" style="margin-top:5px"></span><div><b>Amarillo · borrador para ti</b><span>Exámenes, suplementos, cambios de plan. La IA escribe, tú apruebas.</span></div></div>
+      <div class="tarjeta"><span class="punto rojo" style="margin-top:5px"></span><div><b>Rojo · lo atiendes tú</b><span>Síntomas de alarma o medicamentos. Letty solo da la indicación de seguridad.</span></div></div>
+    </div>
+    <div class="pestanas">${['amarillo','rojo','verde'].map(c => `<button class="pestana ${filtroSem===c?'act':''}" data-sem="${c}"><span class="punto ${c}"></span>${COLORES[c][0]} · ${n(c)}</button>`).join('')}</div>
+    ${lista.map(m => { const p = pac(m.paciente_id); return `<article class="tarjeta msj ${m.color}">
+      <div class="de">${bolita(p)}<div><b>${esc(p.nombre)}</b><span>${m.canal==='WhatsApp'?'WhatsApp · Letty':'Circle'} · ${hace(m.creado)}</span></div><div style="margin-left:auto">${pastillaColor(m.color)}</div></div>
+      <p class="texto">“${esc(m.texto)}”</p>
+      ${m.color==='amarillo' && m.estado==='pendiente' ? `<textarea class="borrador" id="b${m.id}">${esc(m.respuesta)}</textarea>
+        <div class="acciones"><button class="boton verde chico" data-aprobar="${m.id}">Aprobar y enviar</button><button class="boton sec chico" data-ir="pacientes" data-p="${p.id}">Ver expediente</button></div>` : ''}
+      ${m.color==='rojo' && m.estado==='pendiente' ? `<textarea class="borrador" id="b${m.id}" placeholder="Escribe tu respuesta o déjala vacía si vas a llamar…">${esc(m.respuesta)}</textarea>
+        <div class="acciones"><button class="boton rojo chico" data-aprobar="${m.id}">Enviar mi respuesta</button><button class="boton sec chico" data-llamar="${m.id}">La llamo yo</button><button class="boton sec chico" data-ir="pacientes" data-p="${p.id}">Ver expediente</button></div>` : ''}
+      ${m.estado!=='pendiente' ? `<div class="respondido"><b>${m.color==='verde'?'Letty respondió sola':'Respondido'}:</b> ${esc(m.respuesta || 'Lo atendiste por llamada.')}</div>` : ''}
+    </article>`; }).join('') || '<p class="vacio">Nada por aquí.</p>'}`;
+}
+async function aprobar(id){
+  const m = D.mensajes.find(x=>x.id===id); const txt = document.getElementById('b'+id)?.value.trim() || '';
+  if (!txt){ toast('Escribe la respuesta primero'); return; }
+  await actualizar('mensajes', id, {estado:'aprobado', respuesta:txt});
+  await insertar('whatsapp', {paciente_id:m.paciente_id, de:'letty', color:m.color, texto:txt + '\n— aprobado por el Dr. Juanpe'});
+  toast(`Enviado a ${primer(pac(m.paciente_id).nombre)} por ${m.canal}`); pintar();
+}
+
+/* ============ LETTY (WhatsApp) ============ */
+function clasificar(t){
+  const s = t.toLowerCase();
+  if (/pecho|palpitaci|desmay|mareo|sangr|urgen|no puedo respirar|falta de aire|dolor fuerte|fiebre|vómito|vomit/.test(s)) return 'rojo';
+  if (/examen|resultado|medicament|dosis|suplement|pastilla|vitamina|leche|l[aá]cteo|puedo (comer|tomar|volver)|síntoma|sintoma|inflama|cambiar el plan/.test(s)) return 'amarillo';
+  return 'verde';
+}
+function respuestaLetty(p, t, color){
+  const n = primer(p.nombre), s = t.toLowerCase();
+  if (color==='rojo') return `${n}, gracias por contarme. Esto lo tiene que ver el doctor directamente y ya le avisé como prioridad. Si tienes dolor en el pecho, falta de aire o te desmayas, ve a urgencias de inmediato.`;
+  if (color==='amarillo') return `¡Gracias ${n}! Le paso tu pregunta al doctor y te respondo hoy mismo con su indicación.`;
+  const cita = D.citas.filter(c=>c.paciente_id===p.id && c.dia>=0).sort((a,b)=>a.dia-b.dia)[0];
+  if (/cita|sesi[oó]n|hora|cu[aá]ndo|agenda|reagend|cambiar/.test(s)) return cita ? `¡Hola ${n}! Tu próxima sesión es ${nomDia(cita.dia).toLowerCase()} a las ${cita.hora}. Si necesitas moverla, dime qué día te queda mejor y te busco espacio.` : `¡Hola ${n}! Ya te busco espacio con el doctor. ¿Prefieres mañana o tarde?`;
+  if (/pag|tarjeta|factura|cobro/.test(s)) return `Claro ${n}, aquí puedes pagar o actualizar tu tarjeta en un minuto: https://pagos.drjuanpe.com/${n.toLowerCase()}`;
+  if (/comer|receta|cena|desayuno|almuerzo|snack|men[uú]/.test(s)) return `${n}, te dejo la guía de comidas del doctor para tu etapa del plan. Recuerda: proteína en cada comida y cenar 3 horas antes de dormir 🥗`;
+  if (/gracias|listo|ok|perfecto/.test(s)) return `¡Con mucho gusto ${n}! Aquí estoy para lo que necesites 🙌`;
+  return `¡Hola ${n}! Recibido. Si es algo de tu plan te respondo enseguida, y si necesita al doctor se lo paso hoy mismo.`;
+}
+function convsOrden(){
+  const ult = {}; D.whatsapp.forEach(w => { if (!ult[w.paciente_id] || new Date(w.creado) > new Date(ult[w.paciente_id].creado)) ult[w.paciente_id] = w; });
+  return Object.values(ult).sort((a,b)=>new Date(b.creado)-new Date(a.creado));
+}
+function vLetty(){
+  const convs = convsOrden(); if (!convSel) convSel = convs[0]?.paciente_id;
+  const p = pac(convSel); const msjs = D.whatsapp.filter(w=>w.paciente_id===convSel).sort((a,b)=>new Date(a.creado)-new Date(b.creado));
+  const recs = D.recordatorios.slice().sort((a,b)=>a.dia-b.dia || a.hora.localeCompare(b.hora));
+  return cab('Letty · WhatsApp', 'Letty le responde a tus pacientes por WhatsApp, les manda los recordatorios y lee todo lo que escriben. Cada mensaje pasa por el semáforo antes de responder.',
+    `<button class="boton sec" data-ir="semaforo">${ic('sem')}Ver semáforo</button>`) + `
+    <div class="letty">
+      <section class="tarjeta convs">${convs.map(w => { const q = pac(w.paciente_id); return `<button class="conv ${q.id===convSel?'act':''}" data-conv="${q.id}">${bolita(q)}<div class="txt" style="min-width:0; flex:1"><b>${esc(q.nombre)}</b><span>${w.de==='letty'?'Letty: ':''}${esc(w.texto)}</span></div><small style="font-size:11px; color:var(--gris)">${hace(w.creado).replace('hace ','')}</small></button>`; }).join('')}</section>
+      <section class="wachat">
+        <div class="wa-cab">${bolita(p)}<div><b>${esc(p.nombre)}</b><span>${esc(p.telefono)} · atendida por Letty</span></div><div class="der"><button class="boton chico sec" data-ir="pacientes" data-p="${p.id}" style="min-height:32px">Expediente</button></div></div>
+        <div class="mensajes" id="waMsjs">${msjs.map(w => `<div class="burbuja ${w.de!=='paciente'?'yo':''}">${w.de==='letty'?'<span class="quien">Letty</span>':w.de==='juanpe'?'<span class="quien" style="color:var(--azul)">Dr. Juanpe</span>':''}${esc(w.texto)}<span class="meta">${w.color && w.de==='letty' ? pastillaColor(w.color) : ''}${horaDe(w.creado)}</span></div>`).join('')}</div>
+        <div class="wa-pie">
+          <div class="modo"><button class="${modoWa==='paciente'?'act':''}" data-modo="paciente">Simular mensaje de ${esc(primer(p.nombre))}</button><button class="${modoWa==='juanpe'?'act':''}" data-modo="juanpe">Escribir yo</button></div>
+          <form id="waForm"><input id="waInput" autocomplete="off" placeholder="${modoWa==='paciente' ? 'Prueba: “¿a qué hora es mi cita?” o “tengo dolor en el pecho”' : 'Escribe como el doctor…'}"><button class="env" aria-label="Enviar">${ic('env')}</button></form>
+        </div>
+      </section>
+      <section class="tarjeta seccion recs"><div class="seccion-cab"><h2>Recordatorios de Letty</h2></div>
+        ${recs.map(r => { const q = pac(r.paciente_id); return `<div class="fila"><div class="cuerpo"><div class="t" style="font-size:14px">${esc(r.tipo)} · ${esc(primer(q.nombre))}</div><div class="s">${esc(r.texto)}</div><div class="s">${nomDia(r.dia)} · ${r.hora}</div></div><div class="der"><span class="pastilla ${r.estado==='enviado'?'verde':'azul'}">${r.estado==='enviado'?'Enviado':'Programado'}</span></div></div>`; }).join('')}
+      </section>
+    </div>`;
+}
+async function enviarWa(texto){
+  const p = pac(convSel);
+  if (modoWa==='juanpe'){ await insertar('whatsapp', {paciente_id:p.id, de:'juanpe', texto}); pintar(); return; }
+  await insertar('whatsapp', {paciente_id:p.id, de:'paciente', texto}); pintar();
+  const color = clasificar(texto);
+  await new Promise(r=>setTimeout(r, 900));
+  await insertar('whatsapp', {paciente_id:p.id, de:'letty', color, texto:respuestaLetty(p, texto, color)});
+  const borrador = color==='amarillo' ? `Hola ${primer(p.nombre)}, sobre lo que me preguntas: [la IA arma aquí el borrador con tu criterio y el expediente de ${primer(p.nombre)}]. Lo revisamos en la próxima sesión.` : '';
+  await insertar('mensajes', {paciente_id:p.id, canal:'WhatsApp', color, texto, respuesta: color==='verde' ? respuestaLetty(p, texto, color) : borrador, estado: color==='verde' ? 'enviado' : 'pendiente'});
+  pintar();
+  toast(color==='verde' ? 'Verde: Letty respondió sola' : color==='amarillo' ? 'Amarillo: quedó un borrador para tu aprobación' : 'Rojo: te llegó una alerta, esto es tuyo');
+}
+
+/* ============ VENTAS ============ */
+const ETAPAS = [['nuevo','Llegó por la landing'], ['llamada','Llamada de valoración'], ['propuesta','Link de pago enviado'], ['pagado','Pagó · ya es paciente']];
+function vVentas(){
+  return cab('Ventas', 'Tu pipeline desde que alguien llena la landing hasta que paga por Stripe. Cuando paga, la ficha, el expediente y la invitación a Circle se crean solos.') + `
+    <div class="tablero">${ETAPAS.map(([e,t],i) => { const ls = D.leads.filter(l=>l.etapa===e); return `<div class="columna"><h3>${t}<span class="c">${ls.length}</span></h3>
+      ${ls.map(l => `<div class="tarea ${e}"><div class="t">${esc(l.nombre)}</div><div class="s">${esc(l.fuente)} · ${usd(l.valor)}</div><div class="s">${esc(l.nota)}</div>
+        ${e!=='pagado' ? `<div class="mover">${i>0?`<button data-lead="${l.id}" data-a="${ETAPAS[i-1][0]}">← Atrás</button>`:''}<button data-lead="${l.id}" data-a="${ETAPAS[i+1][0]}">${i===2?'Marcar pagado ✓':'Avanzar →'}</button></div>` : ''}</div>`).join('')}</div>`; }).join('')}</div>`;
+}
+async function moverLead(id, etapa){
+  const l = D.leads.find(x=>x.id===id);
+  if (etapa==='pagado'){
+    const nuevo = await insertar('pacientes', {nombre:l.nombre, edad:35, telefono:'+57 300 555 0199', programa:'Inicial 4 meses', mes:1, estado:'nuevo', color:'#0b7a8a', motivo:'Pendiente: llega con el onboarding de Google Forms.', tener_presente:'Paciente nuevo. Pagó hoy por Stripe. Letty le mandó la bienvenida y el onboarding.', puntajes:{Energía:0,Sueño:0,Nutrición:0,Estrés:0,Movimiento:0,Metabólico:0}, plan:['Borrador · después del onboarding'], pendientes:['Llenar el onboarding','Subir exámenes de sangre','Firmar consentimiento']});
+    await insertar('whatsapp', {paciente_id:nuevo.id, de:'letty', color:'verde', texto:`¡Hola ${primer(l.nombre)}, bienvenida al programa del Dr. Juanpe! 🙌 Ya quedó tu pago. Aquí está tu formulario de inicio: https://forms.gle/onboarding y en un momento te llega la invitación a Circle.`});
+    await actualizar('leads', id, {etapa, nota:'Pagó. Ficha, expediente y bienvenida por WhatsApp creados solos.'});
+    toast(`${primer(l.nombre)} ya es paciente: expediente creado y Letty le dio la bienvenida`);
+  } else await actualizar('leads', id, {etapa});
+  pintar();
+}
+
+/* ============ COBROS ============ */
+function vCobros(){
+  const total = D.pagos.filter(p=>p.estado==='pagado').reduce((a,p)=>a+Number(p.monto),0);
+  const pend = D.pagos.filter(p=>p.estado!=='pagado');
+  return cab('Cobros · Stripe', 'Pagos fallidos, renovaciones y recordatorios. Letty hace el seguimiento por WhatsApp para que tú no tengas que perseguir a nadie.') + `
+    <div class="cifras">
+      <div class="cifra oscura"><span class="k">Cobrado este mes</span><span class="v">${usd(total)}</span><span class="d">Por Stripe</span></div>
+      <div class="cifra"><span class="k">Pagos fallidos</span><span class="v rojo">${D.pagos.filter(p=>p.estado==='fallido').length}</span><span class="d">Letty ya está haciendo seguimiento</span></div>
+      <div class="cifra"><span class="k">Por cobrar</span><span class="v ambar">${pend.length}</span><span class="d">${usd(pend.reduce((a,p)=>a+Number(p.monto),0))}</span></div>
+      <div class="cifra"><span class="k">Renovaciones cerca</span><span class="v">${D.pacientes.filter(p=>p.estado==='ultimo_mes').length}</span><span class="d">Último mes del programa</span></div>
+    </div>
+    <section class="tarjeta"><div class="tabla"><table><thead><tr><th>Paciente</th><th>Concepto</th><th class="r">Monto</th><th>Fecha</th><th>Estado</th><th></th></tr></thead><tbody>
+      ${D.pagos.slice().sort((a,b)=>({fallido:0,pendiente:1,pagado:2}[a.estado]-{fallido:0,pendiente:1,pagado:2}[b.estado])).map(f => { const p = pac(f.paciente_id); return `<tr><td><b>${esc(p.nombre)}</b></td><td>${esc(f.concepto)}</td><td class="r">${usd(f.monto)}</td><td>${f.dia>=0?'Vence ':''}${fechaCorta(f.dia)}</td>
+        <td><span class="pastilla ${f.estado==='pagado'?'verde':f.estado==='fallido'?'roja':'ambar'}">${f.estado==='pagado'?'Pagado':f.estado==='fallido'?`Fallido · ${f.intentos} intentos`:'Pendiente'}</span></td>
+        <td class="r">${f.estado!=='pagado'?`<button class="boton wa chico" data-cobrar="${f.id}">Recordar por WhatsApp</button>`:''}</td></tr>`; }).join('')}
+    </tbody></table></div></section>`;
+}
+async function recordarPago(id){
+  const f = D.pagos.find(x=>x.id===id); const p = pac(f.paciente_id);
+  await insertar('whatsapp', {paciente_id:p.id, de:'letty', color:'verde', texto:`Hola ${primer(p.nombre)}, te escribo por tu ${f.concepto.toLowerCase()} (${usd(f.monto)}). Puedes pagarlo aquí en un minuto: https://pagos.drjuanpe.com/${primer(p.nombre).toLowerCase()} 🙏`});
+  await insertar('recordatorios', {paciente_id:p.id, tipo:'Pago', texto:`Recordatorio de ${f.concepto.toLowerCase()}`, dia:0, hora:new Date().toTimeString().slice(0,5), estado:'enviado'});
+  toast(`Letty le escribió a ${primer(p.nombre)} por WhatsApp`); pintar();
+}
+
+/* ============ LANDINGS ============ */
+function htmlLanding(t, s, cta){
+  return `<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet"><style>body{margin:0;font-family:Inter,sans-serif;color:#142d4e;background:#f5f6f8}header{padding:20px 32px;font-weight:800;display:flex;gap:10px;align-items:center}header span{border:1px solid #89d12a;color:#4c7a10;border-radius:8px;padding:2px 8px}.hero{background:#142d4e;color:#fff;padding:56px 32px}.hero small{color:#89d12a;font-weight:600;letter-spacing:.1em}h1{font-size:40px;line-height:1.1;margin:10px 0 14px;letter-spacing:-1px;max-width:16ch}p{font-size:17px;max-width:52ch;color:#dfe6ef}a{display:inline-block;margin-top:18px;background:#89d12a;color:#142d4e;font-weight:800;padding:14px 22px;border-radius:10px;text-decoration:none}.tres{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:28px 32px}.tres div{background:#fff;border-radius:12px;padding:18px;border:1px solid #e2e2e2;font-size:14px}.tres b{display:block;font-size:15px;margin-bottom:4px}</style></head><body><header><span>J+</span>Dr. Juanpe + Vital</header><section class="hero"><small>MEDICINA DE CABECERA PRIVADA</small><h1>${esc(t)}</h1><p>${esc(s)}</p><a href="#">${esc(cta)}</a></section><section class="tres"><div><b>Diagnóstico por áreas</b>Sabes exactamente dónde estás en energía, sueño, nutrición y estrés.</div><div><b>Plan a 4 meses</b>Dos sesiones al mes y seguimiento entre sesiones.</div><div><b>Acompañamiento real</b>Tu médico y su equipo pendientes de ti todo el proceso.</div></section></body></html>`;
+}
+function vLandings(){
+  const ls = D.landings || [];
+  return cab('Landings', 'Le pides al asistente "hazme una landing para el programa de enero" y te la arma con tu marca. La gente que se registra cae sola en Ventas.') + `
+    <div class="grilla3" style="grid-template-columns:minmax(0,1fr) minmax(0,1.6fr)">
+      <section class="tarjeta seccion"><div class="seccion-cab"><h2>Pídele una landing</h2></div><div style="padding-top:16px">
+        <label class="campo">Título<input id="lT" value="Empieza enero con energía de verdad"></label>
+        <label class="campo">De qué se trata<textarea id="lS" rows="3">Programa de 4 meses con tu médico de cabecera: diagnóstico completo, plan personalizado y acompañamiento entre sesiones. Cupos limitados para enero.</textarea></label>
+        <label class="campo">Botón<input id="lC" value="Quiero mi llamada de valoración"></label>
+        <button class="boton" data-crearlanding="1">Crear landing</button>
+        ${ls.length ? `<div style="margin-top:18px">${ls.map(l => `<div class="fila"><div class="cuerpo"><div class="t">${esc(l.titulo)}</div><div class="s">drjuanpe.com/${esc(l.slug)}</div></div><div class="der"><button class="boton sec chico" data-verlanding="${l.id}">Ver</button></div></div>`).join('')}</div>` : ''}
+      </div></section>
+      <section class="landing-prev">${landingPrev ? `<iframe title="Vista previa" srcdoc="${esc(landingPrev)}"></iframe>` : `<div style="padding:60px 30px; text-align:center; color:var(--gris)">Aquí aparece la vista previa de tu landing.</div>`}</section>
+    </div>`;
+}
+
+/* ============ ASISTENTE (chat flotante) ============ */
+const SUGERIDAS = ['Reporte de hoy', '¿Quién se está enfriando?', 'Mañana viajo, acomódalos', 'Pagos fallidos', '¿Qué tengo por aprobar?'];
+function burbujaChat(html, yo){ const m = document.getElementById('chatMsjs'); const b = document.createElement('div'); b.className = 'burbuja' + (yo?' yo':''); b.innerHTML = html + `<span class="meta">${new Date().toLocaleTimeString('es-CO',{hour:'numeric',minute:'2-digit'})}</span>`; m.appendChild(b); m.scrollTop = m.scrollHeight; return b; }
+async function responder(q){
+  const s = q.toLowerCase();
+  if (/viaj|acom[oó]d|mover|bloque/.test(s)) return await moverViaje();
+  if (/prep[aá]r|sesi[oó]n de/.test(s)){ const p = D.pacientes.find(x => s.includes(primer(x.nombre).toLowerCase())); if (p) return `<b>Sesión con ${esc(p.nombre)}</b>\nMes ${p.mes} de ${esc(p.programa)}.\n\n<b>Ten presente:</b> ${esc(p.tener_presente)}\n\n<b>Pendientes:</b> ${(p.pendientes||[]).map(esc).join(', ') || 'ninguno'}<button class="accion" data-chatir="p:${p.id}">Abrir expediente</button>`; }
+  if (/enfri|renov|[uú]ltimo mes/.test(s)){ const ps = D.pacientes.filter(p=>['enfriandose','ultimo_mes'].includes(p.estado)); return ps.map(p => `• <b>${esc(p.nombre)}</b>: ${p.estado==='enfriandose'?'se está enfriando':'entra a su último mes'}. ${esc(p.tener_presente)}`).join('\n\n') + `<button class="accion" data-chatir="hoy">Ver en el reporte</button>`; }
+  if (/pag|cobr|stripe/.test(s)){ const f = D.pagos.filter(p=>p.estado==='fallido'); return (f.length ? f.map(x => `• <b>${esc(pac(x.paciente_id).nombre)}</b>: ${esc(x.concepto)}, ${usd(x.monto)}, ${x.intentos} intentos. Letty ya le escribió por WhatsApp.`).join('\n') : 'No hay pagos fallidos 🎉') + `<button class="accion" data-chatir="cobros">Ver cobros</button>`; }
+  if (/aprob|amarill|rojo|pendiente/.test(s)){ const a = D.mensajes.filter(m=>m.estado==='pendiente'); return `Tienes <b>${a.filter(m=>m.color==='amarillo').length} borradores en amarillo</b> y <b>${a.filter(m=>m.color==='rojo').length} en rojo</b>:\n\n` + a.map(m => `• ${m.color==='rojo'?'🔴':'🟡'} ${esc(pac(m.paciente_id).nombre)}: “${esc(m.texto)}”`).join('\n') + `<button class="accion" data-chatir="semaforo">Abrir semáforo</button>`; }
+  if (/landing|p[aá]gina/.test(s)){ return `Listo, te armé una landing con tu marca. Revísala y si te gusta la publicamos.<button class="accion" data-chatir="landings">Ver landing</button>`; }
+  const hoy = D.citas.filter(c=>c.dia===0).sort((a,b)=>a.hora.localeCompare(b.hora));
+  return `<b>Tu día, ${fechaDia(0).toLocaleDateString('es-CO',{weekday:'long', day:'numeric', month:'long'})}</b>\n\n` + hoy.map(c => { const p = pac(c.paciente_id); return `• <b>${c.hora} ${esc(p.nombre)}</b> (${esc(c.tipo)}): ${esc(p.tener_presente)}`; }).join('\n\n') +
+    `\n\n🔴 ${D.mensajes.filter(m=>m.color==='rojo'&&m.estado==='pendiente').length} en rojo · 🟡 ${D.mensajes.filter(m=>m.color==='amarillo'&&m.estado==='pendiente').length} por aprobar · 💳 ${D.pagos.filter(p=>p.estado==='fallido').length} pago fallido<button class="accion" data-chatir="hoy">Abrir el reporte</button>`;
+}
+async function preguntar(q){
+  if (!q.trim()) return; burbujaChat(esc(q), true);
+  const m = document.getElementById('chatMsjs'); const e = document.createElement('div'); e.className = 'escribiendo'; e.innerHTML = '<i></i><i></i><i></i>'; m.appendChild(e); m.scrollTop = m.scrollHeight;
+  await new Promise(r=>setTimeout(r, 700)); const r = await responder(q); e.remove(); burbujaChat(r);
+  if (/landing/.test(q.toLowerCase())) crearLanding(true);
+}
+function abrirChat(q){ document.getElementById('chat').classList.add('abierto'); document.getElementById('abrirChat').style.display='none'; if (q) preguntar(q); }
+
+async function crearLanding(desdeChat){
+  const t = desdeChat ? 'Empieza enero con energía de verdad' : document.getElementById('lT').value;
+  const s = desdeChat ? 'Programa de 4 meses con tu médico de cabecera: diagnóstico completo, plan personalizado y acompañamiento entre sesiones. Cupos limitados para enero.' : document.getElementById('lS').value;
+  const c = desdeChat ? 'Quiero mi llamada de valoración' : document.getElementById('lC').value;
+  const slug = t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40);
+  await insertar('landings', {titulo:t, subtitulo:s, cta:c, slug});
+  landingPrev = htmlLanding(t, s, c); if (!desdeChat) toast('Landing creada'); if (actual==='landings') pintar();
+}
+
+/* ============ eventos ============ */
+document.addEventListener('click', async e => {
+  const b = e.target.closest('button, [data-alerta], .fila.clic'); if (!b) return;
+  const d = b.dataset;
+  if (d.sem && actual!=='semaforo' && !d.ir){ filtroSem = d.sem; pintar(); return; }
+  if (d.sem && !d.ir){ filtroSem = d.sem; pintar(); return; }
+  if (d.ir){ if (d.sem) filtroSem = d.sem; ir(d.ir, d.p ? Number(d.p) : d.conv ? Number(d.conv) : undefined); return; }
+  if (d.alerta){ const [v,id] = d.alerta.split(':'); if (v==='p') ir('pacientes', Number(id)); else ir(v); return; }
+  if (d.conv){ convSel = Number(d.conv); pintar(); return; }
+  if (d.modo){ modoWa = d.modo; pintar(); document.getElementById('waInput')?.focus(); return; }
+  if (d.aprobar){ aprobar(Number(d.aprobar)); return; }
+  if (d.llamar){ await actualizar('mensajes', Number(d.llamar), {estado:'atendido', respuesta:'Lo atendiste por llamada.'}); toast('Marcado como atendido por llamada'); pintar(); return; }
+  if (d.lead){ moverLead(Number(d.lead), d.a); return; }
+  if (d.cobrar){ recordarPago(Number(d.cobrar)); return; }
+  if (d.viajo){ const r = await moverViaje(); toast(r.split('.')[0]); return; }
+  if (d.aprobarplan){ const p = pac(Number(d.aprobarplan)); await actualizar('pacientes', p.id, {estado:'activo', plan:['Mes 1 · Sueño: 7 horas y rutina de cierre','Mes 2 · Presión: sal, potasio y caminar a diario','Mes 3 · Fuerza 3 veces por semana','Mes 4 · Re-diagnóstico y continuación']}); toast(`Plan de ${primer(p.nombre)} aprobado y enviado a su Circle`); pintar(); return; }
+  if (d.crearlanding){ crearLanding(false); return; }
+  if (d.verlanding){ const l = D.landings.find(x=>x.id===Number(d.verlanding)); landingPrev = htmlLanding(l.titulo, l.subtitulo, l.cta); pintar(); return; }
+  if (d.chat){ abrirChat(d.chat); return; }
+  if (d.chatir){ const [v,id] = d.chatir.split(':'); if (v==='p') ir('pacientes', Number(id)); else ir(v); return; }
+});
+document.addEventListener('change', async e => {
+  const t = e.target; if (t.dataset.pend){ const p = pac(Number(t.dataset.pend)); const pend = (p.pendientes||[]).filter((_,i)=>i!==Number(t.dataset.i)); await actualizar('pacientes', p.id, {pendientes:pend}); toast('Pendiente cerrado'); pintar(); }
+});
+document.addEventListener('input', e => { if (e.target.id==='busca'){ busca = e.target.value; const pos = e.target.selectionStart; pintar(); const i = document.getElementById('busca'); i.focus(); i.setSelectionRange(pos,pos); } });
+document.addEventListener('submit', e => {
+  e.preventDefault();
+  if (e.target.id==='waForm'){ const i = document.getElementById('waInput'); const t = i.value.trim(); if (t) enviarWa(t); i.value=''; }
+  if (e.target.id==='chatForm'){ const i = document.getElementById('chatInput'); preguntar(i.value); i.value=''; }
+});
+document.getElementById('abrirChat').onclick = () => abrirChat();
+document.getElementById('cerrarChat').onclick = () => { document.getElementById('chat').classList.remove('abierto'); document.getElementById('abrirChat').style.display=''; };
+document.getElementById('sugeridas').innerHTML = SUGERIDAS.map(s => `<button type="button" data-sug="${s}">${s}</button>`).join('');
+document.getElementById('sugeridas').addEventListener('click', e => { const s = e.target.dataset.sug; if (s) preguntar(s); });
+
+cargarDatos().then(() => {
+  burbujaChat('Hola Juanpe 👋 Soy tu asistente. Pregúntame por tu día, tus pacientes, los cobros, o pídeme que te mueva la agenda.');
+  pintar();
+});
+</script>
+</body>
+</html>
