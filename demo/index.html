@@ -190,9 +190,6 @@ td.r,th.r{text-align:right;}
 .cita b{display:block;} .cita span{color:var(--gris); font-size:12.5px;}
 .cita.movida{background:#fff8e6; animation:entra .3s;}
 
-/* landings */
-.landing-prev{border:1px solid var(--linea); border-radius:12px; overflow:hidden; background:#fff;}
-.landing-prev iframe{width:100%; height:520px; border:0; display:block;}
 .campo{display:flex; flex-direction:column; gap:6px; margin-bottom:14px; font-size:13.5px; font-weight:600;}
 .campo input,.campo textarea{min-height:44px; border:1px solid #d9d9d9; border-radius:9px; padding:10px 12px; font-weight:400; font-size:15px;}
 
@@ -381,11 +378,11 @@ const pastillaColor = c => c ? `<span class="pastilla ${COLORES[c][1]}"><span cl
 function toast(t){ const el = document.getElementById('toast'); el.innerHTML = t; el.classList.add('ver'); clearTimeout(toast.t); toast.t = setTimeout(()=>el.classList.remove('ver'), 2800); }
 
 /* ============ navegación ============ */
-let actual = 'hoy', pacienteSel = null, convSel = null, filtroSem = 'amarillo', modoWa = 'paciente', landingPrev = null;
+let actual = 'hoy', pacienteSel = null, convSel = null, filtroSem = 'amarillo', modoWa = 'paciente';
 const MENU = [
-  ['Tu día', [['hoy','Reporte de hoy','hoy'], ['tuwa','Tu WhatsApp','wa'], ['agenda','Agenda','age']]],
+  ['Tu día', [['hoy','Reporte de hoy','hoy'], ['agenda','Agenda','age']]],
   ['Pacientes', [['pacientes','Expedientes','pac'], ['semaforo','Semáforo médico','sem'], ['lalachat','LalaChat · WhatsApp','wa'], ['checkins','Check-ins del mes','chk']]],
-  ['Negocio', [['ventas','Ventas','ven'], ['cobros','Cobros · Stripe','cob'], ['landings','Landings','lan'], ['integraciones','Conexiones','int']]]
+  ['Negocio', [['ventas','Ventas','ven'], ['cobros','Cobros · Stripe','cob'], ['integraciones','Conexiones','int']]]
 ];
 function pintarMenu(){
   const amar = D.mensajes.filter(m=>m.color==='amarillo' && m.estado==='pendiente').length;
@@ -397,9 +394,9 @@ function pintarMenu(){
 function ir(v, extra){ actual = v; if (v==='pacientes') pacienteSel = extra ?? null; if (v==='lalachat' && extra) convSel = extra; pintar(); window.scrollTo(0,0); }
 function pintar(){
   pintarMenu();
-  const V = { hoy:vHoy, agenda:vAgenda, pacientes:vPacientes, semaforo:vSemaforo, lalachat:vLalaChat, ventas:vVentas, cobros:vCobros, landings:vLandings, tuwa:vTuWa, checkins:vCheckins, integraciones:vIntegraciones };
+  const V = { hoy:vHoy, agenda:vAgenda, pacientes:vPacientes, semaforo:vSemaforo, lalachat:vLalaChat, ventas:vVentas, cobros:vCobros, checkins:vCheckins, integraciones:vIntegraciones };
   document.getElementById('vista').innerHTML = avisoFuente() + V[actual]();
-  if (actual==='lalachat' || actual==='tuwa'){ const m = document.getElementById('waMsjs'); if (m) m.scrollTop = m.scrollHeight; }
+  if (actual==='lalachat'){ const m = document.getElementById('waMsjs'); if (m) m.scrollTop = m.scrollHeight; }
   pintarFeed();
 }
 const avisoFuente = () => fuente==='supabase'
@@ -570,14 +567,32 @@ function convsOrden(){
   const ult = {}; D.whatsapp.forEach(w => { if (!ult[w.paciente_id] || new Date(w.creado) > new Date(ult[w.paciente_id].creado)) ult[w.paciente_id] = w; });
   return Object.values(ult).sort((a,b)=>new Date(b.creado)-new Date(a.creado));
 }
+function listaConvs(convs){
+  return `<button class="conv ${convSel==='juanpe'?'act':''}" data-conv="juanpe"><span class="ini" style="background:var(--navy)">JP</span><div class="txt" style="min-width:0; flex:1"><b>Dr. Juanpe (tú)</b><span>Avisos antes de cada cita</span></div></button>` +
+    convs.map(w => { const q = pac(w.paciente_id); return `<button class="conv ${q.id===convSel?'act':''}" data-conv="${q.id}">${bolita(q)}<div class="txt" style="min-width:0; flex:1"><b>${esc(q.nombre)}</b><span>${w.de==='lalachat'?'LalaChat: ':''}${esc(w.texto)}</span></div><small style="font-size:11px; color:var(--gris)">${hace(w.creado).replace('hace ','')}</small></button>`; }).join('');
+}
+function chatJuanpeHTML(){
+  return `<section class="wachat">
+      <div class="wa-cab"><span class="ini" style="background:var(--navy)">JP</span><div><b>Dr. Juanpe (tú)</b><span>LalaChat te escribe cada mañana y 30 min antes de cada cita</span></div></div>
+      <div class="mensajes" id="waMsjs">${msjsTuWa().map(m => `<div class="burbuja ${m.yo?'yo':''}">${m.yo ? esc(m.texto) : '<span class="quien">LalaChat</span>' + (m.html || negrita(m.texto))}<span class="meta">${m.hora}</span></div>`).join('')}</div>
+      <div class="wa-pie"><form id="juanpeForm"><input id="juanpeInput" autocomplete="off" placeholder="Pregúntale: “¿quién es mi próxima cita?” o “cóbrale a Felipe”"><button class="env" aria-label="Enviar">${ic('env')}</button></form></div>
+    </section>`;
+}
 function vLalaChat(){
-  const convs = convsOrden(); if (!convSel) convSel = convs[0]?.paciente_id;
+  const convs = convsOrden(); if (!convSel) convSel = 'juanpe';
+  if (convSel === 'juanpe'){
+    const recs = D.recordatorios.slice().sort((a,b)=>a.dia-b.dia || a.hora.localeCompare(b.hora));
+    return cab('LalaChat · WhatsApp', 'LalaChat le responde a tus pacientes por WhatsApp, les manda los recordatorios y lee todo lo que escriben. A ti te escribe cada mañana y 30 minutos antes de cada cita con quién es la persona y qué tener presente.',
+      `<button class="boton sec" data-ir="semaforo">${ic('sem')}Ver semáforo</button>`) + `
+      <div class="lalachat"><section class="tarjeta convs">${listaConvs(convs)}</section>${chatJuanpeHTML()}
+      <section class="tarjeta seccion recs"><div class="seccion-cab"><h2>Recordatorios de LalaChat</h2></div>${recs.map(r => { const q = pac(r.paciente_id); return `<div class="fila"><div class="cuerpo"><div class="t" style="font-size:14px">${esc(r.tipo)} · ${esc(primer(q.nombre))}</div><div class="s">${esc(r.texto)}</div><div class="s">${nomDia(r.dia)} · ${r.hora}</div></div><div class="der"><span class="pastilla ${r.estado==='enviado'?'verde':'azul'}">${r.estado==='enviado'?'Enviado':'Programado'}</span></div></div>`; }).join('')}</section></div>`;
+  }
   const p = pac(convSel); const msjs = D.whatsapp.filter(w=>w.paciente_id===convSel).sort((a,b)=>new Date(a.creado)-new Date(b.creado));
   const recs = D.recordatorios.slice().sort((a,b)=>a.dia-b.dia || a.hora.localeCompare(b.hora));
   return cab('LalaChat · WhatsApp', 'LalaChat le responde a tus pacientes por WhatsApp, les manda los recordatorios y lee todo lo que escriben. Cada mensaje pasa por el semáforo antes de responder.',
     `<button class="boton sec" data-ir="semaforo">${ic('sem')}Ver semáforo</button>`) + `
     <div class="lalachat">
-      <section class="tarjeta convs">${convs.map(w => { const q = pac(w.paciente_id); return `<button class="conv ${q.id===convSel?'act':''}" data-conv="${q.id}">${bolita(q)}<div class="txt" style="min-width:0; flex:1"><b>${esc(q.nombre)}</b><span>${w.de==='lalachat'?'LalaChat: ':''}${esc(w.texto)}</span></div><small style="font-size:11px; color:var(--gris)">${hace(w.creado).replace('hace ','')}</small></button>`; }).join('')}</section>
+      <section class="tarjeta convs">${listaConvs(convs)}</section>
       <section class="wachat">
         <div class="wa-cab">${bolita(p)}<div><b>${esc(p.nombre)}</b><span>${esc(p.telefono)} · atendida por LalaChat</span></div><div class="der"><button class="boton chico sec" data-ir="pacientes" data-p="${p.id}" style="min-height:32px">Expediente</button></div></div>
         <div class="mensajes" id="waMsjs">${msjs.map(w => `<div class="burbuja ${w.de!=='paciente'?'yo':''}">${w.de==='lalachat'?'<span class="quien">LalaChat</span>':w.de==='juanpe'?'<span class="quien" style="color:var(--azul)">Dr. Juanpe</span>':''}${esc(w.texto)}<span class="meta">${w.color && w.de==='lalachat' ? pastillaColor(w.color) : ''}${horaDe(w.creado)}</span></div>`).join('')}</div>
@@ -605,9 +620,9 @@ async function enviarWa(texto){
 }
 
 /* ============ VENTAS ============ */
-const ETAPAS = [['nuevo','Llegó por la landing'], ['llamada','Llamada de valoración'], ['propuesta','Link de pago enviado'], ['pagado','Pagó · ya es paciente']];
+const ETAPAS = [['nuevo','Llegó por la landing (GoDaddy)'], ['llamada','Llamada de valoración'], ['propuesta','Link de pago enviado'], ['pagado','Pagó · ya es paciente']];
 function vVentas(){
-  return cab('Ventas', 'Tu pipeline desde que alguien llena la landing hasta que paga por Stripe. Cuando paga, la ficha, el expediente y la invitación a Circle se crean solos.') + `
+  return cab('Ventas', 'Tu pipeline desde que alguien llena tu landing de GoDaddy hasta que paga por Stripe. Cuando paga, la ficha, el expediente y la invitación a Circle se crean solos.') + `
     <div class="tablero">${ETAPAS.map(([e,t],i) => { const ls = D.leads.filter(l=>l.etapa===e); return `<div class="columna"><h3>${t}<span class="c">${ls.length}</span></h3>
       ${ls.map(l => `<div class="tarea ${e}"><div class="t">${esc(l.nombre)}</div><div class="s">${esc(l.fuente)} · ${usd(l.valor)}</div><div class="s">${esc(l.nota)}</div>
         ${e!=='pagado' ? `<div class="mover">${i>0?`<button data-lead="${l.id}" data-a="${ETAPAS[i-1][0]}">← Atrás</button>`:''}<button data-lead="${l.id}" data-a="${ETAPAS[i+1][0]}">${i===2?'Marcar pagado ✓':'Avanzar →'}</button></div>` : ''}</div>`).join('')}</div>`; }).join('')}</div>`;
@@ -648,25 +663,6 @@ async function recordarPago(id){
   toast(`LalaChat le escribió a ${primer(p.nombre)} por WhatsApp`); pintar();
 }
 
-/* ============ LANDINGS ============ */
-function htmlLanding(t, s, cta){
-  return `<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet"><style>body{margin:0;font-family:Inter,sans-serif;color:#142d4e;background:#f5f6f8}header{padding:20px 32px;font-weight:800;display:flex;gap:10px;align-items:center}header span{border:1px solid #89d12a;color:#4c7a10;border-radius:8px;padding:2px 8px}.hero{background:#142d4e;color:#fff;padding:56px 32px}.hero small{color:#89d12a;font-weight:600;letter-spacing:.1em}h1{font-size:40px;line-height:1.1;margin:10px 0 14px;letter-spacing:-1px;max-width:16ch}p{font-size:17px;max-width:52ch;color:#dfe6ef}a{display:inline-block;margin-top:18px;background:#89d12a;color:#142d4e;font-weight:800;padding:14px 22px;border-radius:10px;text-decoration:none}.tres{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:28px 32px}.tres div{background:#fff;border-radius:12px;padding:18px;border:1px solid #e2e2e2;font-size:14px}.tres b{display:block;font-size:15px;margin-bottom:4px}</style></head><body><header><span>J+</span>Dr. Juanpe + Vital</header><section class="hero"><small>MEDICINA DE CABECERA PRIVADA</small><h1>${esc(t)}</h1><p>${esc(s)}</p><a href="#">${esc(cta)}</a></section><section class="tres"><div><b>Diagnóstico por áreas</b>Sabes exactamente dónde estás en energía, sueño, nutrición y estrés.</div><div><b>Plan a 4 meses</b>Dos sesiones al mes y seguimiento entre sesiones.</div><div><b>Acompañamiento real</b>Tu médico y su equipo pendientes de ti todo el proceso.</div></section></body></html>`;
-}
-function vLandings(){
-  const ls = D.landings || [];
-  return cab('Landings', 'Le pides al asistente "hazme una landing para el programa de enero" y te la arma con tu marca. La gente que se registra cae sola en Ventas.') + `
-    <div class="grilla3" style="grid-template-columns:minmax(0,1fr) minmax(0,1.6fr)">
-      <section class="tarjeta seccion"><div class="seccion-cab"><h2>Pídele una landing</h2></div><div style="padding-top:16px">
-        <label class="campo">Título<input id="lT" value="Empieza enero con energía de verdad"></label>
-        <label class="campo">De qué se trata<textarea id="lS" rows="3">Programa de 4 meses con tu médico de cabecera: diagnóstico completo, plan personalizado y acompañamiento entre sesiones. Cupos limitados para enero.</textarea></label>
-        <label class="campo">Botón<input id="lC" value="Quiero mi llamada de valoración"></label>
-        <button class="boton" data-crearlanding="1">Crear landing</button>
-        ${ls.length ? `<div style="margin-top:18px">${ls.map(l => `<div class="fila"><div class="cuerpo"><div class="t">${esc(l.titulo)}</div><div class="s">drjuanpe.com/${esc(l.slug)}</div></div><div class="der"><button class="boton sec chico" data-verlanding="${l.id}">Ver</button></div></div>`).join('')}</div>` : ''}
-      </div></section>
-      <section class="landing-prev">${landingPrev ? `<iframe title="Vista previa" srcdoc="${esc(landingPrev)}"></iframe>` : `<div style="padding:60px 30px; text-align:center; color:var(--gris)">Aquí aparece la vista previa de tu landing.</div>`}</section>
-    </div>`;
-}
-
 /* ============ ASISTENTE (chat flotante) ============ */
 const SUGERIDAS = ['Reporte de hoy', '¿Qué le está contestando LalaChat?', 'Mañana viajo, acomódalos', 'Cóbrale la semestral a Andrés', '¿Cuánto he cobrado?', '¿Qué tengo por aprobar?'];
 function burbujaChat(html, yo){ const m = document.getElementById('chatMsjs'); const b = document.createElement('div'); b.className = 'burbuja' + (yo?' yo':''); b.innerHTML = html + `<span class="meta">${new Date().toLocaleTimeString('es-CO',{hour:'numeric',minute:'2-digit'})}</span>`; m.appendChild(b); m.scrollTop = m.scrollHeight; return b; }
@@ -686,7 +682,7 @@ async function responder(q){
   if (/lalachat|contestando|respondiendo|whatsapp/.test(s)){ abrirCajon(); const ult = D.whatsapp.filter(w=>w.de==='lalachat').sort((a,b)=>new Date(b.creado)-new Date(a.creado)).slice(0,3); return `LalaChat lleva <b>${D.whatsapp.filter(w=>w.de==='lalachat').length} respuestas</b>. Las últimas:\n\n` + ult.map(w => `• A ${esc(primer(pac(w.paciente_id).nombre))}: “${esc(w.texto.slice(0,110))}${w.texto.length>110?'…':''}”`).join('\n\n') + `\n\nTe abrí el panel en vivo a la derecha.`; }
   if (/pag|cobr|stripe/.test(s)){ const f = D.pagos.filter(p=>p.estado==='fallido'); return (f.length ? f.map(x => `• <b>${esc(pac(x.paciente_id).nombre)}</b>: ${esc(x.concepto)}, ${usd(x.monto)}, ${x.intentos} intentos. LalaChat ya le escribió por WhatsApp.`).join('\n') : 'No hay pagos fallidos 🎉') + `<button class="accion" data-chatir="cobros">Ver cobros</button>`; }
   if (/aprob|amarill|rojo|pendiente/.test(s)){ const a = D.mensajes.filter(m=>m.estado==='pendiente'); return `Tienes <b>${a.filter(m=>m.color==='amarillo').length} borradores en amarillo</b> y <b>${a.filter(m=>m.color==='rojo').length} en rojo</b>:\n\n` + a.map(m => `• ${m.color==='rojo'?'🔴':'🟡'} ${esc(pac(m.paciente_id).nombre)}: “${esc(m.texto)}”`).join('\n') + `<button class="accion" data-chatir="semaforo">Abrir semáforo</button>`; }
-  if (/landing|p[aá]gina/.test(s)){ return `Listo, te armé una landing con tu marca. Revísala y si te gusta la publicamos.<button class="accion" data-chatir="landings">Ver landing</button>`; }
+  if (/landing|p[aá]gina/.test(s)){ return `Tus landings se quedan en GoDaddy. Lo que la gente llene ahí cae solo en Ventas, y LalaChat le escribe por WhatsApp a cada persona nueva.<button class="accion" data-chatir="ventas">Ver ventas</button>`; }
   const hoy = D.citas.filter(c=>c.dia===0).sort((a,b)=>a.hora.localeCompare(b.hora));
   return `<b>Tu día, ${fechaDia(0).toLocaleDateString('es-CO',{weekday:'long', day:'numeric', month:'long'})}</b>\n\n` + hoy.map(c => { const p = pac(c.paciente_id); return `• <b>${c.hora} ${esc(p.nombre)}</b> (${esc(c.tipo)}): ${esc(p.tener_presente)}`; }).join('\n\n') +
     `\n\n🔴 ${D.mensajes.filter(m=>m.color==='rojo'&&m.estado==='pendiente').length} en rojo · 🟡 ${D.mensajes.filter(m=>m.color==='amarillo'&&m.estado==='pendiente').length} por aprobar · 💳 ${D.pagos.filter(p=>p.estado==='fallido').length} pago fallido<button class="accion" data-chatir="hoy">Abrir el reporte</button>`;
@@ -695,18 +691,8 @@ async function preguntar(q){
   if (!q.trim()) return; burbujaChat(esc(q), true);
   const m = document.getElementById('chatMsjs'); const e = document.createElement('div'); e.className = 'escribiendo'; e.innerHTML = '<i></i><i></i><i></i>'; m.appendChild(e); m.scrollTop = m.scrollHeight;
   await new Promise(r=>setTimeout(r, 700)); const r = await responder(q); e.remove(); burbujaChat(r);
-  if (/landing/.test(q.toLowerCase())) crearLanding(true);
 }
 function abrirChat(q){ document.getElementById('chat').classList.add('abierto'); document.getElementById('abrirChat').style.display='none'; if (q) preguntar(q); }
-
-async function crearLanding(desdeChat){
-  const t = desdeChat ? 'Empieza enero con energía de verdad' : document.getElementById('lT').value;
-  const s = desdeChat ? 'Programa de 4 meses con tu médico de cabecera: diagnóstico completo, plan personalizado y acompañamiento entre sesiones. Cupos limitados para enero.' : document.getElementById('lS').value;
-  const c = desdeChat ? 'Quiero mi llamada de valoración' : document.getElementById('lC').value;
-  const slug = t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40);
-  await insertar('landings', {titulo:t, subtitulo:s, cta:c, slug});
-  landingPrev = htmlLanding(t, s, c); if (!desdeChat) toast('Landing creada'); if (actual==='landings') pintar();
-}
 
 /* ============ TU WHATSAPP (LalaChat le escribe a Juanpe) ============ */
 let chatJuanpe = [];
@@ -729,14 +715,6 @@ function msjsTuWa(){
   return [...base, ...chatJuanpe];
 }
 const negrita = t => esc(t).replace(/\*([^*]+)\*/g,'<b>$1</b>');
-function vTuWa(){
-  return cab('Tu WhatsApp', 'Así le llega a Juanpe: LalaChat le escribe al WhatsApp cada mañana y 30 minutos antes de cada cita, con quién es la persona, cómo va y qué tener presente. Él le puede responder o preguntarle lo que quiera.') + `
-    <div class="telefono"><section class="wachat">
-      <div class="wa-cab"><span class="ini" style="background:#1fa855">LC</span><div><b>LalaChat</b><span>tu asistente · en línea</span></div></div>
-      <div class="mensajes" id="waMsjs">${msjsTuWa().map(m => `<div class="burbuja ${m.yo?'yo':''}">${m.yo ? esc(m.texto) : m.html || negrita(m.texto)}<span class="meta">${m.hora}</span></div>`).join('')}</div>
-      <div class="wa-pie"><form id="juanpeForm"><input id="juanpeInput" autocomplete="off" placeholder="Pregúntale: “¿quién es mi próxima cita?” o “cóbrale a Felipe”"><button class="env" aria-label="Enviar">${ic('env')}</button></form></div>
-    </section></div>`;
-}
 async function preguntaJuanpe(q){
   const ahora = new Date().toTimeString().slice(0,5);
   chatJuanpe.push({yo:true, hora:ahora, texto:q}); pintar();
@@ -810,6 +788,7 @@ const CONEX = [
   ['Google Drive', 'Los exámenes en PDF o foto que guarda Carly se leen con el criterio de Juanpe.', 'Fase 1 · semana 3', 'azul'],
   ['Circle', 'El asistente lee y responde en el espacio privado de cada paciente y publica el resumen de la sesión.', 'Fase 2 · semana 8', 'azul'],
   ['Telegram', 'El reporte de cada mañana y las alertas en rojo le llegan a Juanpe al celular.', 'Fase 1 · semana 4', 'azul'],
+  ['Landings · GoDaddy', 'Las landings siguen en GoDaddy como hoy. Cada persona que llena el formulario cae sola en Ventas y LalaChat le escribe por WhatsApp.', 'Fase 2 · semana 5', 'azul'],
   ['Memoria · GitHub memoria-juanpe', 'Un archivo por paciente con quién es, lo importante, los pendientes y el resumen de cada reunión. LalaChat lo lee antes de escribirle a Juanpe y lo actualiza después de cada sesión.', 'Fase 1 · semana 2', 'lima'],
   ['Portal del paciente', 'Cada paciente entra con su código y ve su plan, su diagnóstico, sus exámenes, sus tareas y sus pagos.', 'Fase 3 · semanas 9 y 10', 'azul'],
   ['Voz de Juanpe (opcional)', 'Notas de voz con la voz de Juanpe para lo verde, si él quiere.', 'Fase 3 · semana 12', 'lima']
@@ -862,7 +841,7 @@ document.addEventListener('click', async e => {
   if (d.sem && !d.ir){ filtroSem = d.sem; pintar(); return; }
   if (d.ir){ if (d.sem) filtroSem = d.sem; ir(d.ir, d.p ? Number(d.p) : d.conv ? Number(d.conv) : undefined); return; }
   if (d.alerta){ const [v,id] = d.alerta.split(':'); if (v==='p') ir('pacientes', Number(id)); else ir(v); return; }
-  if (d.conv){ convSel = Number(d.conv); pintar(); return; }
+  if (d.conv){ convSel = d.conv==='juanpe' ? 'juanpe' : Number(d.conv); pintar(); return; }
   if (d.modo){ modoWa = d.modo; pintar(); document.getElementById('waInput')?.focus(); return; }
   if (d.aprobar){ aprobar(Number(d.aprobar)); return; }
   if (d.llamar){ await actualizar('mensajes', Number(d.llamar), {estado:'atendido', respuesta:'Lo atendiste por llamada.'}); toast('Marcado como atendido por llamada'); pintar(); return; }
@@ -875,8 +854,6 @@ document.addEventListener('click', async e => {
   if (d.recordarck){ const c = D.checkins.find(x=>x.id===Number(d.recordarck)); const p = pac(c.paciente_id); await insertar('whatsapp', {paciente_id:p.id, de:'lalachat', color:'verde', texto:`Hola ${primer(p.nombre)} 👋 te recuerdo tu check-in del mes, son 5 minutos: https://forms.gle/checkin`}); await actualizar('checkins', c.id, {resumen:'LalaChat le recordó otra vez hoy por WhatsApp.'}); toast(`LalaChat le recordó a ${primer(p.nombre)}`); pintar(); return; }
   if (d.viajo){ const r = await moverViaje(); toast(r.split('.')[0]); return; }
   if (d.aprobarplan){ const p = pac(Number(d.aprobarplan)); await actualizar('pacientes', p.id, {estado:'activo', plan:['Mes 1 · Sueño: 7 horas y rutina de cierre','Mes 2 · Presión: sal, potasio y caminar a diario','Mes 3 · Fuerza 3 veces por semana','Mes 4 · Re-diagnóstico y continuación']}); toast(`Plan de ${primer(p.nombre)} aprobado y enviado a su Circle`); pintar(); return; }
-  if (d.crearlanding){ crearLanding(false); return; }
-  if (d.verlanding){ const l = D.landings.find(x=>x.id===Number(d.verlanding)); landingPrev = htmlLanding(l.titulo, l.subtitulo, l.cta); pintar(); return; }
   if (d.chat){ abrirChat(d.chat); return; }
   if (d.chatir){ const [v,id] = d.chatir.split(':'); if (v==='p') ir('pacientes', Number(id)); else ir(v); return; }
 });
