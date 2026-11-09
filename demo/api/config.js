@@ -4,6 +4,7 @@ module.exports = (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   res.status(200).json({
     url: process.env.SUPABASE_URL || null,
-    key: process.env.SUPABASE_PUBLISHABLE_KEY || null
+    key: process.env.SUPABASE_PUBLISHABLE_KEY || null,
+    lalachat: process.env.LALACHAT_URL || null
   });
 };

@@ -317,7 +317,7 @@ const IC = {
 const ic = k => `<svg class="ic" viewBox="0 0 24 24">${IC[k]}</svg>`;
 
 /* ============ datos (Supabase si está configurado, si no, datos locales) ============ */
-let DB = null, D = {}, fuente = 'local';
+let DB = null, D = {}, fuente = 'local', urlLalaChat = null;
 const TABLAS = ['pacientes','citas','sesiones','examenes','mensajes','whatsapp','recordatorios','leads','pagos','landings','checkins'];
 const minAgo = m => new Date(Date.now() - m*60000).toISOString();
 
@@ -333,6 +333,7 @@ function datosLocales(){
 async function cargarDatos(){
   let cfg = {};
   try { cfg = await (await fetch('/api/config', {cache:'no-store'})).json(); } catch {}
+  urlLalaChat = cfg.lalachat || null;
   if (cfg.url && cfg.key){
     try {
       await new Promise((ok, mal) => { const s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js'; s.onload=ok; s.onerror=mal; document.head.appendChild(s); });
@@ -583,18 +584,18 @@ function vLalaChat(){
   if (convSel === 'juanpe'){
     const recs = D.recordatorios.slice().sort((a,b)=>a.dia-b.dia || a.hora.localeCompare(b.hora));
     return cab('LalaChat · WhatsApp', 'LalaChat le responde a tus pacientes por WhatsApp, les manda los recordatorios y lee todo lo que escriben. A ti te escribe cada mañana y 30 minutos antes de cada cita con quién es la persona y qué tener presente.',
-      `<button class="boton sec" data-ir="semaforo">${ic('sem')}Ver semáforo</button>`) + `
+      `<button class="boton wa" data-abrirlc="1">${ic('wa')}Abrir LalaChat</button><button class="boton sec" data-ir="semaforo">${ic('sem')}Ver semáforo</button>`) + `
       <div class="lalachat"><section class="tarjeta convs">${listaConvs(convs)}</section>${chatJuanpeHTML()}
       <section class="tarjeta seccion recs"><div class="seccion-cab"><h2>Recordatorios de LalaChat</h2></div>${recs.map(r => { const q = pac(r.paciente_id); return `<div class="fila"><div class="cuerpo"><div class="t" style="font-size:14px">${esc(r.tipo)} · ${esc(primer(q.nombre))}</div><div class="s">${esc(r.texto)}</div><div class="s">${nomDia(r.dia)} · ${r.hora}</div></div><div class="der"><span class="pastilla ${r.estado==='enviado'?'verde':'azul'}">${r.estado==='enviado'?'Enviado':'Programado'}</span></div></div>`; }).join('')}</section></div>`;
   }
   const p = pac(convSel); const msjs = D.whatsapp.filter(w=>w.paciente_id===convSel).sort((a,b)=>new Date(a.creado)-new Date(b.creado));
   const recs = D.recordatorios.slice().sort((a,b)=>a.dia-b.dia || a.hora.localeCompare(b.hora));
   return cab('LalaChat · WhatsApp', 'LalaChat le responde a tus pacientes por WhatsApp, les manda los recordatorios y lee todo lo que escriben. Cada mensaje pasa por el semáforo antes de responder.',
-    `<button class="boton sec" data-ir="semaforo">${ic('sem')}Ver semáforo</button>`) + `
+    `<button class="boton wa" data-abrirlc="1">${ic('wa')}Abrir LalaChat</button><button class="boton sec" data-ir="semaforo">${ic('sem')}Ver semáforo</button>`) + `
     <div class="lalachat">
       <section class="tarjeta convs">${listaConvs(convs)}</section>
       <section class="wachat">
-        <div class="wa-cab">${bolita(p)}<div><b>${esc(p.nombre)}</b><span>${esc(p.telefono)} · atendida por LalaChat</span></div><div class="der"><button class="boton chico sec" data-ir="pacientes" data-p="${p.id}" style="min-height:32px">Expediente</button></div></div>
+        <div class="wa-cab">${bolita(p)}<div><b>${esc(p.nombre)}</b><span>${esc(p.telefono)} · atendida por LalaChat</span></div><div class="der" style="display:flex; gap:6px"><button class="boton chico sec" data-abrirlc="1" style="min-height:32px">Responder en LalaChat</button><button class="boton chico sec" data-ir="pacientes" data-p="${p.id}" style="min-height:32px">Expediente</button></div></div>
         <div class="mensajes" id="waMsjs">${msjs.map(w => `<div class="burbuja ${w.de!=='paciente'?'yo':''}">${w.de==='lalachat'?'<span class="quien">LalaChat</span>':w.de==='juanpe'?'<span class="quien" style="color:var(--azul)">Dr. Juanpe</span>':''}${esc(w.texto)}<span class="meta">${w.color && w.de==='lalachat' ? pastillaColor(w.color) : ''}${horaDe(w.creado)}</span></div>`).join('')}</div>
         <div class="wa-pie">
           <div class="modo"><button class="${modoWa==='paciente'?'act':''}" data-modo="paciente">Simular mensaje de ${esc(primer(p.nombre))}</button><button class="${modoWa==='juanpe'?'act':''}" data-modo="juanpe">Escribir yo</button></div>
@@ -848,6 +849,7 @@ document.addEventListener('click', async e => {
   if (d.lead){ moverLead(Number(d.lead), d.a); return; }
   if (d.cobrar){ recordarPago(Number(d.cobrar)); return; }
   if (d.reintentar){ const f = D.pagos.find(x=>x.id===Number(d.reintentar)); await actualizar('pagos', f.id, {estado:'pagado', intentos:f.intentos+1}); await insertar('whatsapp', {paciente_id:f.paciente_id, de:'lalachat', color:'verde', texto:`¡Gracias ${primer(pac(f.paciente_id).nombre)}! Ya quedó tu pago de ${f.concepto.toLowerCase()} 🙌`}); toast('Stripe: el cobro pasó en el reintento'); pintar(); return; }
+  if (d.abrirlc){ if (urlLalaChat) window.open(urlLalaChat, '_blank'); else toast('Falta la dirección del panel de LalaChat'); return; }
   if (d.envivo){ abrirCajon(); return; }
   if (d.portal){ window.open(location.pathname + '#portal/' + d.portal, '_blank'); return; }
   if (d.feedp){ cerrarCajon(); ir('lalachat', Number(d.feedp)); return; }
