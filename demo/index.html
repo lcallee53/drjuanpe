@@ -523,7 +523,7 @@ function vSemaforo(){
     <div class="leyenda">
       <div class="tarjeta"><span class="punto verde" style="margin-top:5px"></span><div><b>Verde · se responde solo</b><span>Agenda, recordatorios, guías de alimentación, dudas que ya respondiste antes.</span></div></div>
       <div class="tarjeta"><span class="punto amarillo" style="margin-top:5px"></span><div><b>Amarillo · borrador para ti</b><span>Exámenes, suplementos, cambios de plan. La IA escribe, tú apruebas.</span></div></div>
-      <div class="tarjeta"><span class="punto rojo" style="margin-top:5px"></span><div><b>Rojo · lo atiendes tú</b><span>Síntomas de alarma o medicamentos. LalaChat solo da la indicación de seguridad.</span></div></div>
+      <div class="tarjeta"><span class="punto rojo" style="margin-top:5px"></span><div><b>Rojo · lo atiendes tú</b><span>Síntomas de alarma o medicamentos. LalaChat solo da la indicación de seguridad. Si quieres responder tú, pausas el bot en esa conversación de LalaChat.</span></div></div>
     </div>
     <div class="pestanas">${['amarillo','rojo','verde'].map(c => `<button class="pestana ${filtroSem===c?'act':''}" data-sem="${c}"><span class="punto ${c}"></span>${COLORES[c][0]} · ${n(c)}</button>`).join('')}</div>
     ${lista.map(m => { const p = pac(m.paciente_id); return `<article class="tarjeta msj ${m.color}">
@@ -532,7 +532,7 @@ function vSemaforo(){
       ${m.color==='amarillo' && m.estado==='pendiente' ? `<textarea class="borrador" id="b${m.id}">${esc(m.respuesta)}</textarea>
         <div class="acciones"><button class="boton verde chico" data-aprobar="${m.id}">Aprobar y enviar</button><button class="boton sec chico" data-ir="pacientes" data-p="${p.id}">Ver expediente</button></div>` : ''}
       ${m.color==='rojo' && m.estado==='pendiente' ? `<textarea class="borrador" id="b${m.id}" placeholder="Escribe tu respuesta o déjala vacía si vas a llamar…">${esc(m.respuesta)}</textarea>
-        <div class="acciones"><button class="boton rojo chico" data-aprobar="${m.id}">Enviar mi respuesta</button><button class="boton sec chico" data-llamar="${m.id}">La llamo yo</button><button class="boton sec chico" data-ir="pacientes" data-p="${p.id}">Ver expediente</button></div>` : ''}
+        <div class="acciones"><button class="boton rojo chico" data-aprobar="${m.id}">Enviar mi respuesta</button><button class="boton sec chico" data-abrirlc="1">Pausar bot y responder en LalaChat</button><button class="boton sec chico" data-llamar="${m.id}">La llamo yo</button><button class="boton sec chico" data-ir="pacientes" data-p="${p.id}">Ver expediente</button></div>` : ''}
       ${m.estado!=='pendiente' ? `<div class="respondido"><b>${m.color==='verde'?'LalaChat respondió sola':'Respondido'}:</b> ${esc(m.respuesta || 'Lo atendiste por llamada.')}</div>` : ''}
     </article>`; }).join('') || '<p class="vacio">Nada por aquí.</p>'}`;
 }
@@ -595,7 +595,7 @@ function vLalaChat(){
     <div class="lalachat">
       <section class="tarjeta convs">${listaConvs(convs)}</section>
       <section class="wachat">
-        <div class="wa-cab">${bolita(p)}<div><b>${esc(p.nombre)}</b><span>${esc(p.telefono)} · atendida por LalaChat</span></div><div class="der" style="display:flex; gap:6px"><button class="boton chico sec" data-abrirlc="1" style="min-height:32px">Responder en LalaChat</button><button class="boton chico sec" data-ir="pacientes" data-p="${p.id}" style="min-height:32px">Expediente</button></div></div>
+        <div class="wa-cab">${bolita(p)}<div><b>${esc(p.nombre)}</b><span>${esc(p.telefono)} · atendida por LalaChat</span></div><div class="der" style="display:flex; gap:6px"><button class="boton chico sec" data-abrirlc="1" style="min-height:32px">Pausar bot y responder en LalaChat</button><button class="boton chico sec" data-ir="pacientes" data-p="${p.id}" style="min-height:32px">Expediente</button></div></div>
         <div class="mensajes" id="waMsjs">${msjs.map(w => `<div class="burbuja ${w.de!=='paciente'?'yo':''}">${w.de==='lalachat'?'<span class="quien">LalaChat</span>':w.de==='juanpe'?'<span class="quien" style="color:var(--azul)">Dr. Juanpe</span>':''}${esc(w.texto)}<span class="meta">${w.color && w.de==='lalachat' ? pastillaColor(w.color) : ''}${horaDe(w.creado)}</span></div>`).join('')}</div>
         <div class="wa-pie">
           <div class="modo"><button class="${modoWa==='paciente'?'act':''}" data-modo="paciente">Simular mensaje de ${esc(primer(p.nombre))}</button><button class="${modoWa==='juanpe'?'act':''}" data-modo="juanpe">Escribir yo</button></div>
