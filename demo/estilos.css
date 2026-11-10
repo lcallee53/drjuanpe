@@ -360,3 +360,58 @@ html{background:#f4f5f7;} body{background:#f4f5f7;}
   body.modo-portal .tabbar{display:none;}
 }
 @media (max-width:520px){ .cifras.pt-cifras{grid-template-columns:1fr;} .pt-cifras .cifra{min-height:0;} }
+
+/* ============ identidad propia de Dr. Juanpe + Vital ============ */
+/* Tonos tomados de su página: crema cálido y verde bosque. Menú claro, títulos con serif y el color reservado para lo que avisa algo. */
+:root{
+  --fondo:#f8f5ef; --tinta:#26302c; --gris:#5f6a64; --linea:#e9e4d9; --linea2:#efebe2;
+  --azul:#2f6b57; --azul2:#235243; --azulclaro:#eaf3ee;
+  --navy:#1e3a31; --navy2:#2a4c41; --navy3:#3c6356; --lima:#b9dd8d;
+}
+html,body{background:var(--fondo);}
+.titulo,.marca,#login h1,.pt-cab b,.pt-login h1{font-family:Fraunces,Georgia,serif; font-weight:600; letter-spacing:-.6px;}
+.titulo{font-size:clamp(30px,2.7vw,40px);}
+.cifra .v,.bio-val strong,.anillo strong{font-family:Fraunces,Georgia,serif; font-weight:600; letter-spacing:-.5px;}
+.tarjeta,.cifra,.dia,.bio{border-color:var(--linea); box-shadow:0 1px 2px #1e3a310a;}
+.tarjeta,.cifra,.dia{border-radius:16px;}
+
+/* menú claro */
+.lateral{background:#fffdf9; color:var(--tinta); border-right:1px solid var(--linea);}
+.marca{color:var(--tinta);} .marca small{color:var(--gris); font-family:Inter,sans-serif;}
+.marca .mono{border-color:#2f6b5755; color:var(--azul); background:var(--azulclaro); border-radius:11px;}
+.menu .grupo{color:#8b8676; font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; font-weight:700;}
+.enl{color:#3f4a45;} .enl .ic{color:#8b8676;}
+.enl:hover{background:#f3efe6; color:var(--tinta);}
+.enl.act{background:var(--azulclaro); border-color:transparent; box-shadow:inset 3px 0 var(--azul); color:var(--azul2);}
+.enl.act .ic{color:var(--azul);}
+.enl .num{background:var(--azul); color:#fff;} .enl .num.r{background:#d9634f;}
+.pie{border-top:1px solid var(--linea);} .pie b{color:var(--tinta);} .pie div > span{color:var(--gris);}
+.avatar{background:var(--azulclaro); color:var(--azul2); border-color:#cfe2d8;}
+.pie-acc button{color:#56615b;} .pie-acc button:hover{background:#f3efe6; color:var(--tinta);}
+
+/* botones, enlaces y detalles que eran azules */
+.boton{border-radius:11px;} .boton:hover{box-shadow:0 4px 12px #1e3a3126;}
+.boton.sec{border-color:#ddd6c8; background:#fffdf9;}
+.cifra:hover{box-shadow:0 8px 22px #1e3a3118;}
+.buscar{background:#fffdf9; border-color:var(--linea);} .buscar:focus-within{box-shadow:0 0 0 4px #2f6b571f;}
+.resultados{border-color:var(--linea);}
+.presente{background:var(--azulclaro); color:#24382f;}
+.fila.clic:hover{background:#f6f2ea;} tbody tr:hover{background:#f6f2ea;} th{background:#f6f2ea;}
+.columna{background:#efeadf;} .cita,.grafica,.cara,.semaforo div{background:#f6f2ea;}
+.chat{background:#f3efe6;} .chat .burbuja.yo{background:#dcebe2;} .chat-cab .ini{background:linear-gradient(135deg,var(--azul),#6fae8d);}
+.sugeridas button,.chat form input{border-color:#ddd6c8;}
+.lectura{background:#f7fbf8;} .borrador{border-color:#bfd3c8;} .post .resp{background:var(--azulclaro);}
+.conv:hover{background:#f6f2ea;} .conv.act{background:var(--azulclaro);}
+.pastilla{background:#efeadf; color:#56615b;}
+.barra,.regla{background:#ece7dc;} .anillo circle:first-child{stroke:#ece7dc;}
+.memoria{background:#fffdf9; border-color:#d9d2c0;}
+.aviso.carly{background:#f1ecf9;}
+.pt-cab .mono{border-color:#b9dd8d88;}
+#login form{border-radius:22px;} #login .mono{background:var(--azulclaro); border-color:#2f6b5755; color:var(--azul);}
+
+/* celular */
+@media (max-width:860px){
+  .lateral{border-right:0; border-bottom:1px solid var(--linea);}
+  body.menu-abierto .menu, body.menu-abierto .pie-acc{background:#fffdf9; border-color:var(--linea);}
+  .tabbar{background:#fffdf9; border-top-color:var(--linea);} .tabbar button{color:#8b8676;} .tabbar em{background:#d9634f;}
+}
