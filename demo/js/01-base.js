@@ -130,7 +130,7 @@ let actual = 'hoy', pacienteSel = null, convSel = null, filtroSem = 'amarillo', 
 const MENU = [
   ['Tu día', [['hoy','Reporte de hoy','hoy'], ['agenda','Agenda','age']]],
   ['Pacientes', [['pacientes','Expedientes','pac'], ['semaforo','Semáforo médico','sem'], ['lalachat','LalaChat · WhatsApp','wa'], ['circle','Circle','cir'], ['checkins','Check-ins del mes','chk']]],
-  ['Negocio', [['ventas','Ventas','ven'], ['cobros','Cobros · Stripe','cob'], ['integraciones','Conexiones','int']]]
+  ['Negocio', [['ventas','Entradas','ven'], ['cobros','Cobros · Stripe','cob'], ['integraciones','Conexiones','int']]]
 ];
 function pintarMenu(){
   const amar = D.mensajes.filter(m=>m.color==='amarillo' && m.estado==='pendiente').length;
@@ -145,7 +145,7 @@ function pintar(){
   if (!listo) return;
   if (esCarly() && ['semaforo','checkins','circle'].includes(actual)) actual = 'hoy';
   pintarMenu(); pintarPie();
-  const V = { hoy:vHoy, agenda:vAgenda, pacientes:vPacientes, semaforo:vSemaforo, lalachat:vLalaChat, ventas:vVentas, cobros:vCobros, checkins:vCheckins, integraciones:vIntegraciones, circle:vCircle };
+  const V = { hoy:vHoy, agenda:vAgenda, pacientes:vPacientes, semaforo:vSemaforo, lalachat:vLalaChat, ventas:vEntradas, cobros:vCobros, checkins:vCheckins, integraciones:vIntegraciones, circle:vCircle };
   document.getElementById('vista').innerHTML = avisoFuente() + V[actual]();
   if (actual==='lalachat'){ const m = document.getElementById('waMsjs'); if (m) m.scrollTop = m.scrollHeight; }
   pintarFeed();

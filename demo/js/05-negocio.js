@@ -1,22 +1,24 @@
-// Ventas y cobros.
+// Entradas (del pago a la app) y cobros.
 // Los archivos de js/ se cargan en orden y comparten variables (scripts clásicos, sin empaquetador).
-/* ============ VENTAS ============ */
-const ETAPAS = [['nuevo','Llegó por la landing (GoDaddy)'], ['llamada','Llamada de valoración'], ['propuesta','Link de pago enviado'], ['pagado','Pagó · ya es paciente']];
-function vVentas(){
-  return cab('Ventas', 'Tu pipeline desde que alguien llena tu landing de GoDaddy hasta que paga por Stripe. Cuando paga, la ficha, el expediente y la invitación a Circle se crean solos.') + `
-    <div class="tablero">${ETAPAS.map(([e,t],i) => { const ls = D.leads.filter(l=>l.etapa===e); return `<div class="columna"><h3>${t}<span class="c">${ls.length}</span></h3>
-      ${ls.map(l => `<div class="tarea ${e}"><div class="t">${esc(l.nombre)}</div><div class="s">${esc(l.fuente)} · ${usd(l.valor)}</div><div class="s">${esc(l.nota)}</div>
-        ${e!=='pagado' ? `<div class="mover">${i>0?`<button data-lead="${l.id}" data-a="${ETAPAS[i-1][0]}">← Atrás</button>`:''}<button data-lead="${l.id}" data-a="${ETAPAS[i+1][0]}">${i===2?'Marcar pagado ✓':'Avanzar →'}</button></div>` : ''}</div>`).join('')}</div>`; }).join('')}</div>`;
+/* ============ ENTRADAS (del pago a la app) ============ */
+// El pipeline de ventas, las landings y los formularios siguen en GoHighLevel. Aquí empieza el Sistema: cuando alguien paga.
+const PASOS_ENTRADA = [['Pagó o firmó', p => true], ['Ficha y expediente creados', p => true], ['Onboarding lleno', p => !(p.pendientes||[]).some(x=>/onboarding/i.test(x))],
+  ['Consentimiento firmado', p => !!p.consentimiento], ['Exámenes recibidos', p => !(p.pendientes||[]).some(x=>/exámenes/i.test(x))], ['Diagnóstico y plan aprobados', p => p.estado !== 'nuevo']];
+const NOMBRES_PRUEBA = ['Natalia Gómez','Esteban Cárdenas','Carolina Montoya','Mateo Sierra','Laura Toro'];
+function vEntradas(){
+  const nuevos = D.pacientes.filter(p => p.mes === 1).sort((a,b) => b.id - a.id);
+  return cab('Entradas', 'GoHighLevel sigue manejando todo lo de antes del pago: pipeline, landings, formularios y newsletters. Cuando alguien paga o firma allá o en Stripe, aquí se crean solos su ficha, su expediente y su checklist de entrada.',
+    `<button class="boton" data-entrada="1">Simular un pago en GoHighLevel</button>`) + `
+    ${nuevos.map(p => { const hechos = PASOS_ENTRADA.filter(([,f]) => f(p)).length; return `<section class="tarjeta seccion" style="margin-bottom:14px">
+      <div class="seccion-cab"><h2 style="display:flex; gap:10px; align-items:center">${bolita(p,34)}${esc(p.nombre)} <span class="pastilla ${hechos===PASOS_ENTRADA.length?'verde':'azul'}">${hechos} de ${PASOS_ENTRADA.length}</span></h2><button data-ir="pacientes" data-p="${p.id}">Abrir expediente →</button></div>
+      <div class="pasos" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px 16px">${PASOS_ENTRADA.map(([t,f]) => `<div class="paso ${f(p)?'ok':''}"><i>${f(p)?'✓':'·'}</i><span>${t}</span></div>`).join('')}</div></section>`; }).join('') || '<p class="vacio">No hay pacientes entrando este mes.</p>'}`;
 }
-async function moverLead(id, etapa){
-  const l = D.leads.find(x=>x.id===id);
-  if (etapa==='pagado'){
-    const nuevo = await insertar('pacientes', {nombre:l.nombre, edad:35, telefono:'+57 300 555 0199', programa:'Inicial 4 meses', mes:1, estado:'nuevo', color:'#0b7a8a', motivo:'Pendiente: llega con el onboarding de Google Forms.', tener_presente:'Paciente nuevo. Pagó hoy por Stripe. LalaChat le mandó la bienvenida y el onboarding.', puntajes:{Energía:0,Sueño:0,Nutrición:0,Estrés:0,Movimiento:0,Metabólico:0}, plan:['Borrador · después del onboarding'], pendientes:['Llenar el onboarding','Subir exámenes de sangre','Firmar consentimiento']});
-    await insertar('whatsapp', {paciente_id:nuevo.id, de:'lalachat', color:'verde', texto:`¡Hola ${primer(l.nombre)}, bienvenida al programa del Dr. Juanpe! 🙌 Ya quedó tu pago. Aquí está tu formulario de inicio: https://forms.gle/onboarding y en un momento te llega la invitación a Circle.`});
-    await actualizar('leads', id, {etapa, nota:'Pagó. Ficha, expediente y bienvenida por WhatsApp creados solos.'});
-    toast(`${primer(l.nombre)} ya es paciente: expediente creado y LalaChat le dio la bienvenida`);
-  } else await actualizar('leads', id, {etapa});
-  pintar();
+async function simularEntrada(){
+  const nombre = NOMBRES_PRUEBA.find(n => !D.pacientes.some(p => p.nombre === n)) || 'Paciente de prueba';
+  const nuevo = await insertar('pacientes', {nombre, edad:35, telefono:'+57 300 555 0199', pais:'Colombia', zona:'America/Bogota', consentimiento:false, codigo:String(1000 + Math.floor(Math.random()*9000)), programa:'Inicial 4 meses', mes:1, estado:'nuevo', color:'#0b7a8a', motivo:'Pendiente: llega con el onboarding de Google Forms.', tener_presente:'Paciente nuevo. Pagó hoy en GoHighLevel. Ya tiene ficha, expediente y checklist de entrada.', puntajes:{}, plan:['Borrador · después del onboarding'], pendientes:['Llenar el onboarding','Subir exámenes de sangre','Firmar consentimiento actualizado']});
+  await insertar('pagos', {paciente_id:nuevo.id, concepto:'Programa inicial · 50%', monto:1000, estado:'pagado', dia:0, intentos:1});
+  await insertar('whatsapp', {paciente_id:nuevo.id, de:'lalachat', color:'verde', texto:`¡Hola ${primer(nombre)}, qué alegría tenerte en el programa del Dr. Juanpe! 🙌 Ya quedó tu pago. Aquí está tu formulario de inicio: https://forms.gle/onboarding y en un momento te llega la invitación a Circle.`});
+  toast(`${primer(nombre)} pagó en GoHighLevel: ficha, expediente y checklist creados solos`); pintar();
 }
 
 /* ============ COBROS ============ */

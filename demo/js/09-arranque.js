@@ -44,7 +44,7 @@ document.addEventListener('click', async e => {
   if (d.modo){ modoWa = d.modo; pintar(); document.getElementById('waInput')?.focus(); return; }
   if (d.aprobar){ aprobar(Number(d.aprobar)); return; }
   if (d.llamar){ await actualizar('mensajes', Number(d.llamar), {estado:'atendido', respuesta:'Lo atendiste por llamada.'}); toast('Marcado como atendido por llamada'); pintar(); return; }
-  if (d.lead){ moverLead(Number(d.lead), d.a); return; }
+  if (d.entrada){ simularEntrada(); return; }
   if (d.cobrar){ recordarPago(Number(d.cobrar)); return; }
   if (d.reintentar){ const f = D.pagos.find(x=>x.id===Number(d.reintentar)); await actualizar('pagos', f.id, {estado:'pagado', intentos:f.intentos+1}); await insertar('whatsapp', {paciente_id:f.paciente_id, de:'lalachat', color:'verde', texto:`¡Gracias ${primer(pac(f.paciente_id).nombre)}! Ya quedó tu pago de ${f.concepto.toLowerCase()} 🙌`}); toast('Stripe: el cobro pasó en el reintento'); pintar(); return; }
   if (d.abrirlc){ if (urlLalaChat) window.open(urlLalaChat, '_blank'); else toast('Aquí se abre esta conversación en LalaChat, con el bot en pausa'); return; }
