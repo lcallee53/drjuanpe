@@ -16,9 +16,13 @@
     <div class="pie-acc" id="pieAcc"></div>
     <div class="pie"><span class="avatar" id="pieAvatar">JP</span><div><b id="pieNombre">Juan Pedro Montoya</b><span id="pieRol">Demo · ia con lala</span></div></div>
   </aside>
-  <main class="pagina"><div class="cont" id="vista"><div class="cargando"><i></i>Cargando tu día…</div></div></main>
+  <main class="pagina">
+    <header class="barra-sup"><div class="buscar"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><input id="buscarGlobal" placeholder="Buscar paciente…" autocomplete="off" aria-label="Buscar paciente"><kbd>/</kbd><div class="resultados" id="resultados"></div></div>
+      <span class="pastilla demo">Demo<span> · datos de prueba</span></span></header>
+    <div class="cont" id="vista"><div class="cargando"><i></i>Cargando tu día…</div></div></main>
 </div>
 
+ <nav class="tabbar" id="tabbar"></nav>
 <button class="flotante" id="abrirChat" aria-label="Pregúntale a tu asistente"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8zM18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></svg><span class="txt">Pregúntale a tu asistente</span></button>
 <section class="chat" id="chat" aria-label="Asistente">
   <div class="chat-cab"><span class="ini">IA</span><div><b>Tu asistente</b><span>Te responde aquí o por Telegram</span></div><button id="cerrarChat" aria-label="Cerrar"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>

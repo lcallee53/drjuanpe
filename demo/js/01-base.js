@@ -139,8 +139,12 @@ function pintarMenu(){
   const oculto = esCarly() ? ['semaforo','checkins','circle'] : [];
   document.getElementById('menu').innerHTML = MENU.map(([g, items]) => `<div class="grupo">${g}</div>` + items.filter(([id]) => !oculto.includes(id)).map(([id,t,i]) =>
     `<button class="enl ${actual===id?'act':''}" data-ir="${id}">${ic(i)}${t}${num[id]||''}</button>`).join('')).join('');
+  // Barra de abajo en celular: lo de todos los días a un toque, y "Más" abre el menú completo.
+  const fijos = esCarly() ? [['hoy','Hoy','hoy'],['agenda','Agenda','age'],['pacientes','Pacientes','pac'],['lalachat','LalaChat','wa']] : [['hoy','Hoy','hoy'],['pacientes','Pacientes','pac'],['semaforo','Semáforo','sem'],['lalachat','LalaChat','wa']];
+  document.getElementById('tabbar').innerHTML = fijos.map(([id,t,i]) => `<button class="${actual===id?'act':''}" data-ir="${id}">${ic(i)}<span>${t}</span>${id==='semaforo' && (amar+rojos) ? `<em>${amar+rojos}</em>` : ''}</button>`).join('') +
+    `<button class="${fijos.some(f=>f[0]===actual)?'':'act'}" data-masmenu="1">${ic('int')}<span>Más</span></button>`;
 }
-function ir(v, extra){ actual = v; if (v==='pacientes') pacienteSel = extra ?? null; if (v==='lalachat' && extra) convSel = extra; pintar(); window.scrollTo(0,0); }
+function ir(v, extra){ document.body.classList.remove('menu-abierto'); actual = v; if (v==='pacientes') pacienteSel = extra ?? null; if (v==='lalachat' && extra) convSel = extra; pintar(); window.scrollTo(0,0); }
 function pintar(){
   if (!listo) return;
   if (esCarly() && ['semaforo','checkins','circle'].includes(actual)) actual = 'hoy';
@@ -150,7 +154,6 @@ function pintar(){
   if (actual==='lalachat'){ const m = document.getElementById('waMsjs'); if (m) m.scrollTop = m.scrollHeight; }
   pintarFeed();
 }
-const avisoFuente = () => (vistaCarly ? `<div class="aviso carly"><span>Estás viendo la app como la ve Carly: agenda, cobros y pendientes, sin nada clínico.</span><button data-vercarly="1">Volver a mi vista</button></div>` : '') +
-  `<div class="aviso ${fuente==='supabase'?'ok':''}">Demo con datos de prueba · ningún paciente es real</div>`;
+const avisoFuente = () => vistaCarly ? `<div class="aviso carly"><span>Estás viendo la app como la ve Carly: agenda, cobros y pendientes, sin nada clínico.</span><button data-vercarly="1">Volver a mi vista</button></div>` : '';
 const cab = (t, p, acc='') => `<div class="cabecera"><div><h1 class="titulo">${t}</h1><p>${p}</p></div><div class="acciones">${acc}</div></div>`;
 

@@ -9,16 +9,33 @@ function vPacientes(){
     <div style="display:flex; gap:10px; margin-bottom:16px"><input class="buscador" id="busca" placeholder="Busca a un paciente…" value="${esc(busca)}"></div>
     <div class="pacientes">${lista.map(p => `<button class="tarjeta pac" data-ir="pacientes" data-p="${p.id}">${bolita(p,50)}<div><b>${esc(p.nombre)}</b><span>${esc(p.programa)} · mes ${p.mes} · ${esc(p.pais || '')}</span><span style="margin-top:6px">${estadoP(p)} ${p.consentimiento ? '' : pastillaCons(p)}</span></div></button>`).join('')}</div>`;
 }
+// Tarjeta de un marcador: valor grande, estado, tendencia y dónde cae dentro del rango.
 function grafica(ex){
   const pts = ex.slice().sort((a,b)=>a.dia-b.dia);
-  const vals = pts.map(e=>Number(e.valor)); const lo = Math.min(...vals, Number(ex[0].min)), hi = Math.max(...vals, Number(ex[0].max));
-  const pad = (hi-lo)*.15 || 1, y0 = lo-pad, y1 = hi+pad, W=260, H=100;
-  const X = i => 8 + i*(W-16)/Math.max(1,pts.length-1), Y = v => H - 8 - (v-y0)/(y1-y0)*(H-16);
-  const ult = vals[vals.length-1], ok = ult >= ex[0].min && ult <= ex[0].max;
-  return `<div class="grafica"><b>${esc(ex[0].marcador)}</b> <span>· ${ult} ${esc(ex[0].unidad)} · rango ${ex[0].min}–${ex[0].max}</span>
-    <svg viewBox="0 0 ${W} ${H}"><rect x="0" y="${Y(ex[0].max)}" width="${W}" height="${Math.max(2,Y(ex[0].min)-Y(ex[0].max))}" fill="#1e8e3e14"/>
-    <polyline fill="none" stroke="${ok?'#1e8e3e':'#d98a1c'}" stroke-width="2.4" points="${pts.map((e,i)=>`${X(i)},${Y(e.valor)}`).join(' ')}"/>
-    ${pts.map((e,i)=>`<circle cx="${X(i)}" cy="${Y(e.valor)}" r="4" fill="#fff" stroke="${ok?'#1e8e3e':'#d98a1c'}" stroke-width="2"/><text x="${X(i)}" y="${H-1}" font-size="9" text-anchor="${i===0?'start':i===pts.length-1?'end':'middle'}" fill="#6b6b6b">${fechaCorta(e.dia)}</text>`).join('')}</svg></div>`;
+  const min = Number(ex[0].min), max = Number(ex[0].max), vals = pts.map(e=>Number(e.valor));
+  const ult = vals[vals.length-1], prev = vals.length > 1 ? vals[vals.length-2] : null, ok = ult >= min && ult <= max;
+  const color = ok ? 'var(--verde)' : 'var(--ambar)';
+  // tendencia
+  const lo = Math.min(...vals, min), hi = Math.max(...vals, max), pad = (hi-lo)*.18 || 1, y0 = lo-pad, y1 = hi+pad, W = 260, H = 64;
+  const X = i => 6 + i*(W-12)/Math.max(1,pts.length-1), Y = v => H - 6 - (v-y0)/(y1-y0)*(H-12);
+  // regla del rango: la zona verde ocupa el centro y el punto muestra el valor actual
+  const ancho = (max-min) || 1, r0 = min - ancho*.5, r1 = max + ancho*.5, pos = v => Math.max(2, Math.min(98, (v-r0)/(r1-r0)*100));
+  const delta = prev === null ? '' : ult === prev ? 'Igual que el anterior' : `${ult > prev ? '▲' : '▼'} ${Math.abs(+(ult-prev).toFixed(2))} desde ${fechaCorta(pts[pts.length-2].dia)}`;
+  return `<div class="bio"><div class="bio-cab"><b>${esc(ex[0].marcador)}</b><span class="pastilla ${ok?'verde':'ambar'}">${ok?'En rango':'Fuera de rango'}</span></div>
+    <div class="bio-val"><strong>${ult}</strong><span>${esc(ex[0].unidad)}</span><em>${delta}</em></div>
+    ${pts.length > 1 ? `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Tendencia de ${esc(ex[0].marcador)}"><rect x="0" y="${Y(max)}" width="${W}" height="${Math.max(2,Y(min)-Y(max))}" rx="3" fill="#1e8e3e12"/>
+      <polyline fill="none" stroke="${color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" points="${pts.map((e,i)=>`${X(i)},${Y(e.valor)}`).join(' ')}"/>
+      ${pts.map((e,i)=>`<circle cx="${X(i)}" cy="${Y(e.valor)}" r="${i===pts.length-1?4.5:3}" fill="${i===pts.length-1?color:'#fff'}" stroke="${color}" stroke-width="2"/>`).join('')}</svg>` : ''}
+    <div class="regla"><i style="left:${pos(min)}%; width:${pos(max)-pos(min)}%"></i><b style="left:${pos(ult)}%; background:${color}"></b></div>
+    <div class="regla-pie"><span>${min}</span><span>tu rango</span><span>${max}</span></div></div>`;
+}
+// Anillo con el puntaje general (promedio de las áreas) al lado de las barras por área.
+function diagnostico(puntajes){
+  const e = Object.entries(puntajes||{}); if (!e.length) return '';
+  const col = v => v>=70 ? 'var(--verde)' : v>=50 ? 'var(--ambar)' : 'var(--rojo)';
+  const prom = Math.round(e.reduce((a,[,v])=>a+Number(v),0)/e.length), C = 2*Math.PI*42;
+  return `<div class="diag"><div class="anillo"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="#eef0f4" stroke-width="9"/><circle cx="50" cy="50" r="42" fill="none" stroke="${col(prom)}" stroke-width="9" stroke-linecap="round" stroke-dasharray="${C*prom/100} ${C}" transform="rotate(-90 50 50)"/></svg><div><strong>${prom}</strong><span>general</span></div></div>
+    <div class="areas">${e.map(([k,v]) => `<div class="area"><span>${k}</span><div class="barra"><i style="width:${v}%; background:${col(v)}"></i></div><b>${v}</b></div>`).join('')}</div></div>`;
 }
 let lectura = null;   // examen recién leído que espera la aprobación del médico
 const PANEL_EJEMPLO = [['Vitamina D','ng/mL',30,80,36],['Ferritina','ng/mL',30,150,41],['Glucosa','mg/dL',70,99,91],['HbA1c','%',4,5.6,5.4],['TSH','µUI/mL',0.4,4,2.6],['LDL','mg/dL',0,130,128]];
@@ -93,7 +110,7 @@ function vExpediente(p){
       ${p.quien ? `<div class="memoria" style="margin-top:14px"><h3>🧠 Lo que LalaChat recuerda · memoria-juanpe/pacientes/${slug(p.nombre)}.md</h3><p><b>Quién es:</b> ${esc(p.quien)}</p><p><b>Cómo hablarle:</b> ${esc(p.como_hablarle)}</p><p style="margin:0"><b>Código del portal:</b> ${esc(p.codigo)}</p></div>` : ''}</div>
     <div class="grilla2">
       <section class="tarjeta seccion"><div class="seccion-cab"><h2>Diagnóstico por áreas</h2><span class="pastilla azul">Con tu sistema de puntaje</span></div>
-        <div class="areas">${Object.entries(p.puntajes||{}).map(([k,v]) => `<div class="area"><span>${k}</span><div class="barra"><i style="width:${v}%; background:${col(v)}"></i></div><b>${v}</b></div>`).join('')}</div></section>
+        ${diagnostico(p.puntajes)}</section>
       <section class="tarjeta seccion"><div class="seccion-cab"><h2>Plan macro a 4 meses</h2>${p.estado==='nuevo' ? '<button data-aprobarplan="'+p.id+'">Aprobar borrador →</button>' : '<span class="pastilla verde">Aprobado por ti</span>'}</div>
         <div class="pasos">${plan.map((x,i) => `<div class="paso ${i+1<p.mes?'ok':i+1===p.mes?'ahora':''}"><i>${i+1<p.mes?'✓':i+1}</i><span>${esc(x)}</span></div>`).join('')}</div></section>
     </div>

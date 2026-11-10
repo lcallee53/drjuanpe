@@ -290,4 +290,73 @@ body.modo-portal .app, body.modo-portal .flotante, body.modo-portal .envivo-btn,
   .pagina{padding:20px 16px 110px;}
 }
 .pt-cifras{grid-template-columns:repeat(3,minmax(0,1fr));}
-@media (max-width:520px){ .pt-cifras{grid-template-columns:1fr;}  .cifras{grid-template-columns:1fr 1fr; gap:10px;} .cifra{padding:16px; min-height:120px;} .cifra .v{font-size:32px;} .dias{grid-template-columns:1fr;} }
+@media (max-width:520px){  .cifras{grid-template-columns:1fr 1fr; gap:10px;} .cifra{padding:16px; min-height:120px;} .cifra .v{font-size:32px;} .dias{grid-template-columns:1fr;} }
+
+/* ============ pulido de diseño ============ */
+/* Foco visible para teclado y menos movimiento para quien lo pide. */
+:focus-visible{outline:2.5px solid var(--azul); outline-offset:2px; border-radius:6px;}
+@media (prefers-reduced-motion:reduce){ *{animation:none !important; transition:none !important;} }
+html{background:#f4f5f7;} body{background:#f4f5f7;}
+.tarjeta,.cifra,.dia{border-color:#e6e8ec; box-shadow:0 1px 2px #142d4e0a;}
+.titulo{font-weight:700; letter-spacing:-1.3px;}
+.seccion-cab h2{letter-spacing:-.2px;}
+.fila.clic{border-radius:10px; margin:0 -10px; padding-left:10px; padding-right:10px; transition:background .12s;}
+.fila.clic:hover{background:#f6f8fb;}
+
+/* barra superior */
+.barra-sup{display:flex; gap:14px; align-items:center; justify-content:space-between; max-width:1280px; margin-bottom:24px;}
+.buscar{position:relative; flex:1; min-width:0; max-width:440px; display:flex; align-items:center; gap:10px; background:#fff; border:1px solid #e1e4e9; border-radius:11px; padding:0 12px; min-height:44px; color:var(--gris); transition:border-color .15s, box-shadow .15s;}
+.buscar:focus-within{border-color:var(--azul); box-shadow:0 0 0 4px #2457a71a;}
+.buscar input{flex:1; border:0; outline:0; background:none; min-width:0; font-size:14.5px;}
+.buscar kbd{font:600 11.5px Inter,sans-serif; color:#8a8f98; border:1px solid #e1e4e9; border-radius:6px; padding:1px 7px; background:#f7f8fa;}
+.resultados{display:none; position:absolute; left:0; right:0; top:calc(100% + 6px); background:#fff; border:1px solid #e1e4e9; border-radius:12px; box-shadow:0 16px 40px #142d4e24; padding:6px; z-index:25;}
+.resultados.ver{display:block;}
+.resultados button{display:flex; gap:10px; align-items:center; width:100%; padding:8px 10px; border-radius:8px; text-align:left;}
+.resultados button:hover,.resultados button:focus-visible{background:var(--azulclaro);}
+.resultados b{display:block; font-size:14.5px; color:var(--tinta);} .resultados small{font-size:12.5px; color:var(--gris);}
+.resultados p{padding:10px; font-size:14px; color:var(--gris);}
+.pastilla.demo{flex:none; background:#fff8e6; color:#7a5410; border:1px solid #f1d9a6; font-size:12px; padding:5px 11px;}
+
+/* marcadores de exámenes */
+.graficas{grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:14px;}
+.bio{background:#fff; border:1px solid #e6e8ec; border-radius:14px; padding:16px 16px 12px; transition:border-color .15s, box-shadow .15s;}
+.bio:hover{border-color:#cfd6e0; box-shadow:0 6px 18px #142d4e12;}
+.bio-cab{display:flex; justify-content:space-between; align-items:center; gap:8px;} .bio-cab b{font-size:14px; font-weight:600; color:var(--gris);}
+.bio-val{display:flex; align-items:baseline; gap:6px; margin:6px 0 2px; flex-wrap:wrap;}
+.bio-val strong{font-size:32px; font-weight:700; letter-spacing:-1px; line-height:1.1; font-variant-numeric:tabular-nums;}
+.bio-val span{font-size:13px; color:var(--gris);} .bio-val em{font-style:normal; font-size:12px; color:#8a8f98; margin-left:auto;}
+.bio svg{width:100%; height:auto; display:block; margin:6px 0 10px;}
+.regla{position:relative; height:6px; background:#eef0f4; border-radius:99px; margin-top:8px;}
+.regla i{position:absolute; top:0; bottom:0; background:#1e8e3e55; border-radius:99px;}
+.regla b{position:absolute; top:50%; width:12px; height:12px; border-radius:50%; border:2.5px solid #fff; box-shadow:0 0 0 1px #0002; transform:translate(-50%,-50%);}
+.regla-pie{display:flex; justify-content:space-between; font-size:11px; color:#8a8f98; margin-top:5px; font-variant-numeric:tabular-nums;}
+
+/* diagnóstico con anillo */
+.diag{display:grid; grid-template-columns:132px minmax(0,1fr); gap:22px; align-items:center; padding-top:16px;}
+.diag .areas{padding-top:0;}
+.anillo{position:relative; width:132px; height:132px;} .anillo svg{width:100%; height:100%;}
+.anillo div{position:absolute; inset:0; display:grid; place-content:center; text-align:center;}
+.anillo strong{font-size:34px; font-weight:700; letter-spacing:-1px; line-height:1;} .anillo span{font-size:12px; color:var(--gris);}
+@media (max-width:520px){ .diag{grid-template-columns:1fr; justify-items:center;} .diag .areas{width:100%;} }
+
+/* celular: barra de abajo y menú completo en "Más" */
+.tabbar{display:none;}
+@media (max-width:860px){
+  .lateral{position:static;}
+  .menu{display:none;}
+  body.menu-abierto .menu{display:block; position:fixed; inset:0 0 62px 0; z-index:28; background:var(--navy); overflow-y:auto; padding:14px 14px 20px;}
+  body.menu-abierto .menu .grupo{display:block;}
+  body.menu-abierto .menu .enl{width:100%; white-space:normal; min-height:48px; margin:3px 0;}
+  body.menu-abierto .pie-acc{display:flex; position:fixed; left:0; right:0; bottom:62px; z-index:29; background:var(--navy); border-top:1px solid #ffffff1f; padding:8px 14px;}
+  body.menu-abierto .flotante, body.menu-abierto .envivo-btn{display:none;}
+  .tabbar{display:grid; grid-template-columns:repeat(5,1fr); position:fixed; left:0; right:0; bottom:0; z-index:30; background:#fff; border-top:1px solid #e1e4e9; padding:6px 4px calc(6px + env(safe-area-inset-bottom));}
+  .tabbar button{position:relative; display:flex; flex-direction:column; align-items:center; gap:2px; min-height:50px; justify-content:center; font-size:11px; font-weight:600; color:#8a8f98; border-radius:10px;}
+  .tabbar button.act{color:var(--azul);} .tabbar .ic{width:22px; height:22px;}
+  .tabbar em{position:absolute; top:3px; left:calc(50% + 6px); font-style:normal; background:#f0816f; color:#fff; font-size:10px; font-weight:800; border-radius:99px; padding:0 5px;}
+  .pagina{padding:16px 16px 190px;}
+  .flotante{bottom:76px;} .envivo-btn{bottom:138px;}
+  .barra-sup{margin-bottom:16px;} .buscar kbd{display:none;} .pastilla.demo{font-size:11px; padding:4px 9px;} .pastilla.demo span{display:none;}
+  .toast{bottom:84px; max-width:calc(100vw - 32px);}
+  body.modo-portal .tabbar{display:none;}
+}
+@media (max-width:520px){ .cifras.pt-cifras{grid-template-columns:1fr;} .pt-cifras .cifra{min-height:0;} }

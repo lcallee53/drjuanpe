@@ -48,6 +48,8 @@ document.addEventListener('click', async e => {
   if (d.cobrar){ recordarPago(Number(d.cobrar)); return; }
   if (d.reintentar){ const f = D.pagos.find(x=>x.id===Number(d.reintentar)); await actualizar('pagos', f.id, {estado:'pagado', intentos:f.intentos+1}); await insertar('whatsapp', {paciente_id:f.paciente_id, de:'lalachat', color:'verde', texto:`¡Gracias ${primer(pac(f.paciente_id).nombre)}! Ya quedó tu pago de ${f.concepto.toLowerCase()} 🙌`}); toast('Stripe: el cobro pasó en el reintento'); pintar(); return; }
   if (d.abrirlc){ if (urlLalaChat) window.open(urlLalaChat, '_blank'); else toast('Aquí se abre esta conversación en LalaChat, con el bot en pausa'); return; }
+  if (d.masmenu){ document.body.classList.toggle('menu-abierto'); return; }
+  if (d.buscado){ document.getElementById('buscarGlobal').value = ''; document.getElementById('buscarGlobal').blur(); pintarResultados(''); ir('pacientes', Number(d.buscado)); return; }
   if (d.envivo){ abrirCajon(); return; }
   if (d.reiniciar){ reiniciarDemo(); return; }
   if (d.subirexamen){ const f = document.getElementById('archivoExamen'); f.dataset.pid = d.subirexamen; f.click(); return; }
@@ -70,7 +72,22 @@ document.addEventListener('change', async e => {
   if (e.target.id === 'miZona'){ miZona = e.target.value; try { localStorage.setItem('miZona', miZona); } catch {} pintar(); return; }
   const t = e.target; if (t.dataset.pend){ const p = pac(Number(t.dataset.pend)); const pend = (p.pendientes||[]).filter((_,i)=>i!==Number(t.dataset.i)); await actualizar('pacientes', p.id, {pendientes:pend}); toast('Pendiente cerrado'); pintar(); }
 });
-document.addEventListener('input', e => { if (e.target.id==='busca'){ busca = e.target.value; const pos = e.target.selectionStart; pintar(); const i = document.getElementById('busca'); i.focus(); i.setSelectionRange(pos,pos); } });
+// Buscador de arriba: encuentra pacientes por nombre desde cualquier pantalla ("/" lo enfoca).
+function pintarResultados(q){
+  const r = document.getElementById('resultados'); q = q.trim().toLowerCase();
+  const sinTilde = x => x.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const lista = q && D.pacientes ? D.pacientes.filter(p => sinTilde(p.nombre).includes(sinTilde(q))).slice(0,6) : [];
+  r.innerHTML = lista.map(p => `<button data-buscado="${p.id}">${bolita(p,30)}<span><b>${esc(p.nombre)}</b><small>${esc(p.programa)} · mes ${p.mes}</small></span></button>`).join('') || (q ? '<p>Nadie con ese nombre.</p>' : '');
+  r.classList.toggle('ver', !!q);
+}
+document.addEventListener('keydown', e => {
+  const b = document.getElementById('buscarGlobal');
+  if ((e.key === '/' || (e.key.toLowerCase() === 'k' && (e.metaKey || e.ctrlKey))) && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){ e.preventDefault(); b.focus(); }
+  if (e.key === 'Escape'){ b.value = ''; pintarResultados(''); b.blur(); document.body.classList.remove('menu-abierto'); }
+  if (e.key === 'Enter' && document.activeElement === b){ const p = document.querySelector('#resultados [data-buscado]'); if (p) p.click(); }
+});
+document.addEventListener('input', e => {
+  if (e.target.id === 'buscarGlobal'){ pintarResultados(e.target.value); return; } if (e.target.id==='busca'){ busca = e.target.value; const pos = e.target.selectionStart; pintar(); const i = document.getElementById('busca'); i.focus(); i.setSelectionRange(pos,pos); } });
 document.addEventListener('submit', e => {
   e.preventDefault();
   if (e.target.id==='waForm'){ const i = document.getElementById('waInput'); const t = i.value.trim(); if (t) enviarWa(t); i.value=''; }
